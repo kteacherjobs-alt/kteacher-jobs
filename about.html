@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소개 · 의견 · K-Teacher Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1F2937;
+    --primary-dark: #111827;
+    --primary-light: #475569;
+    --accent: #F59E0B;
+    --accent-soft: #FCD34D;
+    --success: #2A9D8F;
+    --bg: #FAFAFA;
+    --bg-soft: #FFFFFF;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+    --text-secondary: #6B7280;
+    --text-light: #9CA3AF;
+    --border: #E5E7EB;
+    --border-soft: #F3F4F6;
+    --shadow: 0 2px 8px rgba(30, 58, 95, 0.08);
+    --shadow-lg: 0 8px 32px rgba(30, 58, 95, 0.12);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans KR', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  input, textarea { font-family: inherit; }
+
+  /* Header */
+  header {
+    background: rgba(255,255,255,0.95);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; justify-self: start; }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 900; font-size: 18px; font-family: 'Inter';
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-en { font-weight: 700; font-size: 17px; color: var(--primary); font-family: 'Inter'; }
+  .logo-ko { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  nav ul { display: flex; list-style: none; gap: 60px; align-items: center; }
+  nav { justify-self: center; }
+  nav a { font-size: 14px; font-weight: 500; color: var(--text); transition: color 0.2s; }
+  nav a:hover, nav a.active { color: var(--accent); }
+  nav a.active { font-weight: 600; }
+  .header-actions { display: flex; gap: 8px; align-items: center; justify-self: end; }
+  .btn-ghost { padding: 8px 16px; font-size: 14px; font-weight: 500; border-radius: 8px; }
+  .btn-ghost:hover { background: var(--border-soft); }
+  .btn-primary {
+    padding: 8px 18px; font-size: 14px; font-weight: 600;
+    background: var(--primary); color: white;
+    border-radius: 8px;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  /* Hero */
+  .hub-hero {
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--bg) 100%);
+    padding: 40px 24px 28px;
+    text-align: center;
+  }
+  .hub-hero-inner { max-width: 720px; margin: 0 auto; }
+  .hub-eyebrow {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--border-soft);
+    color: var(--primary);
+    border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    margin-bottom: 14px; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .hub-hero h1 {
+    font-size: 32px; font-weight: 900; color: var(--primary);
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 14px;
+  }
+  .hub-hero p {
+    font-size: 15px; color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Container */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* Section common */
+  section.block { margin: 56px 0; text-align: center; }
+  section.block h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  section.block .lead {
+    font-size: 15.5px;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+    line-height: 1.65;
+  }
+
+  /* Feature grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .feature {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+  }
+  .feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--border-soft);
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .feature h3 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .feature p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Steps */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .step {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    position: relative;
+    text-align: center;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+    font-family: 'Inter';
+    margin-bottom: 12px;
+  }
+  .step h3 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Data policy box */
+  .data-policy {
+    background: var(--border-soft);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .data-policy h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .data-policy ul {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .data-policy li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* Operator section */
+  .operator-card {
+    background: var(--primary);
+    color: white;
+    border-radius: 14px;
+    padding: 30px 28px;
+    text-align: center;
+    position: relative;
+  }
+  .operator-card::before {
+    content: "“";
+    position: absolute;
+    top: 8px;
+    left: 18px;
+    font-size: 44px;
+    line-height: 1;
+    color: rgba(255,255,255,0.18);
+    font-family: Georgia, serif;
+    font-weight: 700;
+  }
+  .operator-card p {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.95);
+    margin: 0 auto 6px;
+    max-width: 560px;
+  }
+  .operator-card p:last-of-type { margin-bottom: 0; }
+  .operator-card .signature {
+    margin-top: 14px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.7);
+    font-style: normal;
+    letter-spacing: 0.02em;
+  }
+
+  /* === 함께 운영 중인 서비스 카드 === */
+  .companion-card {
+    background: var(--card, #fff);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .companion-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .companion-body { min-width: 0; }
+  .companion-eyebrow {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #FEF3C7;
+    color: #92400E;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .companion-body h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .companion-status {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--border-soft);
+    color: var(--text-light);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .companion-body p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .companion-cta {
+    padding: 12px 22px;
+    background: var(--text);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .companion-cta:hover { background: var(--primary); }
+  .companion-cta.disabled {
+    background: var(--border-soft);
+    color: var(--text-light);
+    cursor: not-allowed;
+  }
+  @media (max-width: 720px) {
+    .companion-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding: 28px 24px;
+    }
+    .companion-icon { margin: 0 auto; }
+    .companion-body h3 { justify-content: center; }
+  }
+  /* (구버전 operator-card 스타일 제거됨 - 위쪽 새 디자인 사용) */
+  .operator-avatar-old-removed {
+    display: none;
+    position: relative;
+    z-index: 1;
+  }
+  /* Form section */
+  .form-section-head {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .form-section-head h2 {
+    margin-bottom: 8px;
+  }
+  .form-section-head .lead {
+    margin-bottom: 0;
+  }
+  .form-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    text-align: left;
+  }
+  .form-card form {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 36px;
+    align-items: start;
+  }
+  .form-col { min-width: 0; text-align: left; }
+  .form-col-right .form-group:last-of-type { margin-bottom: 16px; }
+  .form-card .submit-btn { width: 100%; }
+  @media (max-width: 820px) {
+    .form-card form {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+  .reply-info {
+    margin: 28px 0 0;
+    text-align: left;
+  }
+  .form-group { margin-bottom: 24px; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .cat-options { display: flex; flex-direction: column; gap: 8px; }
+  .cat-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cat-option:hover { border-color: var(--primary-light); background: var(--bg); }
+  .cat-option input[type="radio"] {
+    margin-top: 3px;
+    accent-color: var(--primary);
+    width: 16px; height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .cat-option:has(input:checked) {
+    border-color: var(--primary);
+    background: var(--bg);
+  }
+  .cat-option strong {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .cat-option span {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  textarea, input[type="email"], input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    background: white;
+    resize: vertical;
+  }
+  textarea:focus, input:focus { border-color: var(--primary-light); }
+  textarea::placeholder, input::placeholder { color: var(--text-light); }
+  textarea { min-height: 160px; line-height: 1.6; }
+  .form-helper {
+    font-size: 12.5px;
+    color: var(--text-light);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .checkbox-line {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .checkbox-line input { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .submit-btn:hover { background: var(--primary-dark); }
+
+  .reply-info {
+    background: var(--border-soft);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 20px;
+  }
+  .reply-info h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .reply-info ul { padding: 0; margin: 0; list-style: none; }
+  .reply-info li {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .reply-info li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  /* Quick anchor */
+  .hero-cta {
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 22px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .hero-cta:hover { background: var(--primary-dark); }
+
+  /* Footer */
+  footer {
+    background: var(--primary-dark);
+    color: rgba(255,255,255,0.7);
+    padding: 32px 24px;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 64px;
+  }
+  footer a { color: rgba(255,255,255,0.9); margin: 0 12px; }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .hub-hero h1 { font-size: 28px; }
+    .hub-hero p { font-size: 14px; }
+    section.block { margin: 40px 0; }
+    section.block h2 { font-size: 20px; }
+    .form-card { padding: 24px; }
+    .operator-card { padding: 28px; }
+    .operator-card p { font-size: 14px; }
+    nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">K</div>
+      <div class="logo-text">
+        <div class="logo-en">K-Teacher Jobs</div>
+        <div class="logo-ko">한국어 강사 채용정보 허브</div>
+      </div>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">채용공고</a></li>
+        <li><a href="institutions.html">기관 둘러보기</a></li>
+        <li><a href="library.html">자료실</a></li>
+        <li><a href="#" class="active">소개 · 의견</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hub-hero">
+  <div class="hub-hero-inner">
+    <span class="hub-eyebrow">📖 소개 · 의견</span>
+    <h1>K-Teacher Jobs 이야기</h1>
+    <p>이 사이트가 어떤 곳이고 어떻게 운영되는지 소개할게요.<br>그리고 함께 만들어가실 수 있는 방법도 알려드려요.</p>
+    <a href="#feedback" class="hero-cta">의견부터 바로 보내기 →</a>
+  </div>
+</section>
+
+<div class="container">
+
+  <section class="block">
+    <h2>이 사이트는 어떤 곳인가요?</h2>
+    <p class="lead">K-Teacher Jobs는 국내·해외의 한국어 강사 채용공고를 한곳에 모은 정보 허브예요.<br>한국어 교육 관련 채용 공고를 한국어 교육 현장에 맞게 세밀하게 분류해서 보여드려요.</p>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-icon">🎯</span>
+        <h3>한국어 강사 전용 분류</h3>
+        <p>근무지, 기관 유형, 고용 형태, 자격 요건, 비자 지원 여부까지 — 한국어 교육자에게 꼭 필요한 조건으로 정밀하게 필터링할 수 있어요.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📊</span>
+        <h3>기관별 채용 패턴</h3>
+        <p>각 기관이 언제, 어떤 자격으로, 어떤 시급에 채용해왔는지 한눈에 비교할 수 있어요. 다음 채용을 미리 준비하는 데 도움이 돼요.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📚</span>
+        <h3>커리어 자료실</h3>
+        <p>한국어 강사가 되는 법, 자격증, 비자, 이력서 작성 등 한국어 교육자에게 필요한 정보를 한곳에서 정리해서 제공해요.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>어떻게 운영되나요?</h2>
+    <p class="lead">한 명의 운영자가 직접 채용공고를 수집하고 검수합니다.</p>
+    <div class="steps-grid">
+      <div class="step">
+        <span class="step-num">1</span>
+        <h3>매주 수집</h3>
+        <p>대학 한국어교육원, 세종학당, 해외 한국학과, 온라인 플랫폼의 채용 페이지를 매주 모니터링해요.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <h3>검수·표준화</h3>
+        <p>자격 요건, 시급, 마감일 등을 동일한 양식으로 정리하고 원문 링크를 확인합니다.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <h3>발행·자동 관리</h3>
+        <p>새 공고는 등록 후 곧바로 노출되고, 마감된 공고는 자동으로 기관 페이지 이력으로 이동해요.</p>
+      </div>
+    </div>
+    <div class="data-policy">
+      <h4>📌 데이터 정책</h4>
+      <ul>
+        <li>모든 공고는 원문 출처와 함께 표시합니다</li>
+        <li>기관 요청 시 공고는 즉시 삭제됩니다</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="operator-card">
+      <p>한국어 강사에 특화된 채용 정보가 없어서 직접 만들기 시작한 1인 프로젝트예요.</p>
+      <p>부족한 부분은 사용자 의견 받아가며 천천히 키워가고 싶어요.</p>
+      <p>같은 길 걷고 계신 분들의 응원과 제보가 큰 힘이 됩니다.</p>
+      <p class="signature">— 운영자 드림</p>
+    </div>
+  </section>
+
+  <section class="block" id="feedback">
+    <div class="form-section-head">
+      <span class="hub-eyebrow">💌 의견 보내기</span>
+      <h2>여러분의 의견을 들려주세요</h2>
+      <p class="lead">제안, 아이디어, 부족한 점 — 운영자에게 직접 전달돼요.<br>작은 의견 하나가 사이트를 키워가는 큰 힘이 됩니다.</p>
+    </div>
+
+    <div class="form-card">
+      <form id="feedbackForm">
+
+        <div class="form-col form-col-left">
+          <div class="form-group">
+            <label class="form-label">어떤 종류의 의견인가요?</label>
+            <div class="cat-options">
+              <label class="cat-option">
+                <input type="radio" name="category" value="job" checked>
+                <div>
+                  <strong>📢 새 채용공고 제보</strong>
+                  <span>이 사이트에 추가됐으면 하는 채용공고가 있어요</span>
+                </div>
+              </label>
+              <label class="cat-option">
+                <input type="radio" name="category" value="feature">
+                <div>
+                  <strong>🛠️ 사이트 기능 제안</strong>
+                  <span>이런 기능 있었으면 좋겠어요 · 이게 불편해요</span>
+                </div>
+              </label>
+              <label class="cat-option">
+                <input type="radio" name="category" value="content">
+                <div>
+                  <strong>📚 자료실 주제 제안</strong>
+                  <span>자료실에서 다뤄줬으면 하는 주제가 있어요</span>
+                </div>
+              </label>
+              <label class="cat-option">
+                <input type="radio" name="category" value="report">
+                <div>
+                  <strong>⚠️ 잘못된 정보 신고</strong>
+                  <span>채용공고나 기관 정보에 오류가 있어요</span>
+                </div>
+              </label>
+              <label class="cat-option">
+                <input type="radio" name="category" value="other">
+                <div>
+                  <strong>💬 자유 의견</strong>
+                  <span>그 외 자유로운 한 마디</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-col form-col-right">
+          <div class="form-group">
+            <label class="form-label" for="msg">내용</label>
+            <textarea id="msg" placeholder="자유롭게 작성해주세요. 채용공고 제보라면 기관명, 직무, 마감일, 원문 링크를 함께 알려주시면 큰 도움이 돼요."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">이메일 (선택)</label>
+            <input type="email" id="email" placeholder="답변이 꼭 필요한 내용이라면 남겨주세요">
+            <p class="form-helper">기관 담당자거나 협업·제휴처럼 회신이 필요한 경우에 입력해주세요. 일반 의견은 회신이 어려울 수 있어요. 입력하지 않으셔도 의견은 잘 전달돼요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-line">
+              <input type="checkbox" id="anon">
+              <span>익명으로 보내기</span>
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn">의견 보내기</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="reply-info">
+      <h4>📬 솔직한 안내</h4>
+      <ul>
+        <li>모든 의견은 운영자가 한 명씩 다 읽어요</li>
+        <li>채용공고나 정보 오류 제보는 보통 빠르게 반영해요</li>
+        <li>기능·자료실 제안은 다 살펴보지만 시간상 모두 반영하긴 어려워요</li>
+        <li>답장은 운영자가 필요하다고 판단될 때만 드려요 (대부분은 조용히 반영돼요)</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div>© 2026 K-Teacher Jobs · 한국어 강사 채용정보 모음</div>
+  <div style="margin-top: 12px;">
+    <a href="index.html">채용공고</a>
+    <a href="library.html">자료실</a>
+    <a href="#">개인정보 처리방침</a>
+    <a href="#feedback">의견 보내기</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('feedbackForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const cat = document.querySelector('input[name="category"]:checked').nextElementSibling.querySelector('strong').textContent;
+  alert(`의견 잘 받았어요! 감사합니다 🙏\n\n[카테고리] ${cat}\n\n(시안 데모 — 실제로는 운영자에게 메일로 전달돼요)`);
+  e.target.reset();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "kteacher-jobs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "K-Teacher Jobs — 한국어 강사 채용공고 허브",
+  "scripts": {
+    "build": "node build/fetch-airtable.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
