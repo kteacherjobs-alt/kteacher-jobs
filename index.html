@@ -1,69 +1,2022 @@
-K
-K-Teacher Jobs
-한국어 강사 채용정보 허브
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-Teacher Jobs · 한국어교육 채용정보 허브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1F2937;
+    --primary-dark: #111827;
+    --primary-light: #475569;
+    --accent: #F59E0B;
+    --accent-soft: #FCD34D;
+    --success: #2A9D8F;
+    --warning: #E9C46A;
+    --bg: #FAFAFA;
+    --bg-soft: #FFFFFF;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+    --text-secondary: #6B7280;
+    --text-light: #9CA3AF;
+    --border: #E5E7EB;
+    --border-soft: #F3F4F6;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 2px 8px rgba(30, 58, 95, 0.08);
+    --shadow-lg: 0 8px 32px rgba(30, 58, 95, 0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  input { font-family: inherit; }
 
-저장함 0
-한국어교육 채용정보를 한눈에
-강사부터 행정·출판·연구까지 — 한국어교육 분야 모든 채용
-🎓 한국어 강사 채용 (14)
-💼 기타 직군 (6)
-전체
-대학·대학원
-어학당
-초등학교
-중·고등학교
-다문화·가족
-사설학원
-세종학당
-국제학교
-온라인 플랫폼
-기업 출강
-기타
+  /* === Header === */
+  header {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.95);
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; justify-self: start; }
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 900;
+    font-size: 18px;
+    font-family: 'Inter';
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-en { font-weight: 700; font-size: 17px; color: var(--primary); font-family: 'Inter'; }
+  .logo-ko { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  nav ul { display: flex; list-style: none; gap: 60px; align-items: center; }
+  nav { justify-self: center; }
+  nav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent); }
+  .header-actions { display: flex; gap: 8px; align-items: center; justify-self: end; }
+  .btn-ghost {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .btn-ghost:hover { background: var(--border-soft); }
+  .btn-primary {
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-bookmark {
+    padding: 8px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--border-soft);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    border: 1.5px solid transparent;
+  }
+  .btn-bookmark:hover {
+    background: white;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-bookmark.has-saved {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+  .btn-bookmark.has-saved:hover {
+    background: #FDE68A;
+  }
+
+  /* === Hero === */
+  .hero {
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--bg) 100%);
+    padding: 40px 24px 28px;
+  }
+  .hero-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+  }
+  .search-box {
+    max-width: 640px;
+    margin: 0 auto 20px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 6px 6px 6px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+  }
+  .search-box:focus-within { border-color: var(--primary-light); }
+  .search-box svg { color: var(--text-light); flex-shrink: 0; }
+  .search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 12px 0;
+    background: transparent;
+    color: var(--text);
+  }
+  .search-box input::placeholder { color: var(--text-light); }
+  .search-btn {
+    padding: 12px 28px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+  .search-btn:hover { background: var(--primary-dark); }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 12px;
+  }
+  .hero-stats strong { color: var(--accent); font-weight: 700; }
+
+  /* === Quick filters === */
+  .quick-filters {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    position: sticky;
+    top: 69px;
+    z-index: 50;
+  }
+  .quick-filters-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .quick-filters-inner::-webkit-scrollbar { display: none; }
+  .chip {
+    padding: 8px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: white;
+    white-space: nowrap;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .chip:hover { border-color: var(--primary-light); color: var(--primary); }
+  .chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .chip-icon { margin-right: 4px; }
+
+  /* === Main layout === */
+  .main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .main > section { display: block; width: 100%; }
+
+  /* === Sidebar filters === */
+  /* === 가로 필터 박스 === */
+  .filter-bar {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .filter-bar-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    min-width: 240px;
+    max-height: 420px;
+    overflow-y: auto;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    z-index: 50;
+  }
+  .fb-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    background: var(--bg);
+    border-radius: 10px;
+    min-width: 240px;
+    border: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .fb-search:focus-within { border-color: var(--primary-light); }
+  .fb-search svg { color: var(--text-light); flex-shrink: 0; }
+  .fb-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    padding: 6px 0;
+  }
+  .fb-search input::placeholder { color: var(--text-light); }
+  .fb-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+  }
+  .reset-link {
+    padding: 6px 12px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  .reset-link:hover { color: var(--primary); }
+
+  
+  /* filter-group을 가로 드롭다운으로 */
+  details.filter-group {
+    position: relative;
+    border: none;
+    padding: 0;
+  }
+  details.filter-group > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 8px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  details.filter-group > summary::-webkit-details-marker { display: none; }
+  details.filter-group > summary::after {
+    content: "▾";
+    font-size: 10px;
+    color: var(--text-light);
+    margin-left: 2px;
+  }
+  details.filter-group[open] > summary {
+    border-color: var(--primary);
+    background: var(--bg);
+  }
+  details.filter-group[open] > summary::after { content: "▴"; color: var(--text); }
+  details.filter-group > summary:hover { border-color: var(--primary-light); }
+
+  .filter-list { display: flex; flex-direction: column; gap: 6px; }
+  .region-tree { display: flex; flex-direction: column; gap: 4px; }
+  .region-section { border-radius: 6px; }
+  .region-section > .region-summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 500;
+    border-radius: 6px;
+    user-select: none;
+  }
+  .region-section > .region-summary::-webkit-details-marker { display: none; }
+  .region-section > .region-summary:hover { background: var(--border-soft); }
+  .region-chevron {
+    display: inline-block;
+    font-size: 10px;
+    color: var(--text-secondary);
+    transition: transform 0.15s;
+    width: 10px;
+  }
+  .region-section[open] > .region-summary .region-chevron { transform: rotate(90deg); }
+  .region-section .region-label { flex: 1; }
+  .region-section .region-children {
+    padding: 4px 0 4px 20px;
+    gap: 4px;
+  }
+  .region-flat-list { padding-left: 0; }
+  .region-section .filter-item { font-size: 13px; }
+  .filter-subhead {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    margin: 12px 0 4px 2px;
+  }
+  .filter-group > .filter-subhead:first-of-type { margin-top: 4px; }
+  .filter-item.is-hidden { display: none; }
+  /* 0건이어도 표시되는 시·도 항목은 살짝 흐리게 */
+  .filter-item[data-keep-empty="1"][data-count="0"] { color: var(--text-light); }
+  .filter-item[data-keep-empty="1"][data-count="0"] .count { opacity: 0.5; }
+  .filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  .filter-item:hover { background: var(--border-soft); }
+  .filter-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .filter-item .count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-light);
+  }
+  .reset-link { margin-left: 4px; }
+  .reset-btn {
+    margin-left: auto;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .reset-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* === Results === */
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .results-count {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .results-count strong { color: var(--primary); font-weight: 700; }
+  .sort-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+    cursor: pointer;
+    color: var(--text);
+    font-family: inherit;
+  }
+
+  /* === Card grid === */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+  }
+  .card:hover {
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .card-institution {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .card-institution:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .bookmark-btn {
+    color: var(--text-light);
+    padding: 2px;
+    transition: color 0.15s;
+  }
+  .bookmark-btn:hover { color: var(--accent); }
+  .bookmark-btn.active { color: var(--accent); }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 44px;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .tag {
+    font-size: 11.5px;
+    padding: 3px 9px;
+    background: var(--border-soft);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-meta {
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .meta-line {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-line strong { color: var(--text); font-weight: 600; }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .badge.salary { background: #DCFCE7; color: #166534; }
+  .badge.visa { background: #E0E7FF; color: #3730A3; }
+  .badge.urgent { background: #FEE2E2; color: #991B1B; }
+  .badge.junior { background: #FEF3C7; color: #92400E; }
+  .badge.verified { background: #E0F2FE; color: #075985; }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .deadline {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .deadline.normal { color: var(--text-secondary); font-weight: 600; }
+  .view-btn {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .view-btn:hover { background: var(--border-soft); }
+
+  /* === Newsletter === */
+  .newsletter {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    padding: 56px 24px;
+    margin-top: 64px;
+  }
+  .newsletter-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .newsletter h2 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .newsletter p {
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 24px;
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 8px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .newsletter-form input {
+    flex: 1;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+  }
+  .newsletter-form button {
+    padding: 14px 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: background 0.2s;
+  }
+  .newsletter-form button:hover { background: #d05a3e; }
+
+  /* === Footer === */
+  footer {
+    background: var(--primary-dark);
+    color: rgba(255,255,255,0.7);
+    padding: 32px 24px;
+    text-align: center;
+    font-size: 13px;
+  }
+  footer a { color: rgba(255,255,255,0.9); margin: 0 12px; }
+
+  /* === Modal === */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 40px 16px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 720px;
+    width: 100%;
+    padding: 32px;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    margin: auto;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+    padding-right: 40px;
+  }
+  .modal-original-title {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: -4px;
+    margin-bottom: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding-left: 8px;
+    border-left: 2px solid var(--border);
+  }
+  .modal-institution {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .modal-section {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .modal-section:last-child { border-bottom: none; }
+  .modal-section h4 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .modal-section p, .modal-section li {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .modal-section ul { padding-left: 18px; }
+  .modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 20px;
+  }
+  .modal-grid-item .label {
+    font-size: 11.5px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .modal-grid-item .value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .modal-cta {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .modal-cta a, .modal-cta button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14.5px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .modal-cta .primary-cta {
+    background: var(--primary);
+    color: white;
+  }
+  .modal-cta .primary-cta:hover { background: var(--primary-dark); }
+  .modal-cta .secondary-cta {
+    background: var(--border-soft);
+    color: var(--text);
+  }
+  .modal-cta .secondary-cta:hover { background: var(--border); }
+
+  /* Institution modal */
+  .inst-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .inst-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .inst-info h2 { margin-bottom: 4px; padding-right: 0; }
+  .inst-info p { font-size: 13px; color: var(--text-secondary); }
+  .pattern-box {
+    background: linear-gradient(135deg, #FEF3E2, #FFF7ED);
+    border: 1px solid #FBD7A8;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .pattern-box h4 {
+    color: #92400E;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .pattern-item {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  .pattern-item .num {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .pattern-item .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .history-item {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .history-item:hover { background: var(--border-soft); }
+  .history-item.active-job {
+    border-color: var(--success);
+    background: #F0FDF4;
+  }
+  .history-item-left h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .history-item-left .meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .status-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .status-pill.active { background: #DCFCE7; color: #166534; }
+  .status-pill.closed { background: var(--border-soft); color: var(--text-secondary); }
+
+  /* Empty state */
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+  /* Responsive */
+  @media (max-width: 968px) {
+    .main { padding: 16px; gap: 16px; }
+    .filter-bar { padding: 12px; }
+    .hero h1 { font-size: 28px; }
+    .hero p { font-size: 14px; }
+    nav { display: none; }
+    .newsletter-form { flex-direction: column; }
+    .modal { padding: 24px; }
+    .modal-grid { grid-template-columns: 1fr; }
+    .pattern-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .hero { padding: 32px 16px 20px; }
+    .grid { grid-template-columns: 1fr; }
+    .quick-filters { top: 65px; }
+  }
+
+  /* === 모드 토글 (A안) === */
+  .mode-toggle {
+    display: inline-flex;
+    gap: 4px;
+    background: var(--border-soft);
+    padding: 4px;
+    border-radius: 10px;
+    margin: 0 auto;
+  }
+  .mode-btn {
+    padding: 8px 18px;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+  }
+  .mode-btn:hover { color: var(--text); }
+  .mode-btn.active {
+    background: white;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .mode-btn .mode-count {
+    font-size: 11.5px;
+    opacity: 0.75;
+    margin-left: 2px;
+  }
+
+  /* === Bookmark Toast === */
+  .bookmark-toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: var(--primary);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 200;
+    text-align: center;
+    max-width: 380px;
+    width: calc(100vw - 40px);
+    pointer-events: none;
+  }
+  .bookmark-toast .small {
+    font-weight: 400;
+    font-size: 12.5px;
+    opacity: 0.85;
+    display: block;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .bookmark-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* === Theme Switcher === */@media (max-width: 768px) {}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">K</div>
+      <div class="logo-text">
+        <div class="logo-en">K-Teacher Jobs</div>
+        <div class="logo-ko">한국어 강사 채용정보 허브</div>
+      </div>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#">채용공고</a></li>
+        <li><a href="institutions.html">기관 둘러보기</a></li>
+        <li><a href="library.html">자료실</a></li>
+        <li><a href="about.html">소개 · 의견</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-bookmark" id="headerBookmarkBtn" onclick="showBookmarked()" title="저장한 공고 보기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span id="headerBookmarkCount">저장함 0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>한국어교육 채용정보를 한눈에</h1>
+    <p>강사부터 행정·출판·연구까지 — 한국어교육 분야 모든 채용</p>
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="teacher">🎓 한국어 강사 채용 <span class="mode-count">(14)</span></button>
+      <button class="mode-btn" data-mode="other">💼 기타 직군 <span class="mode-count">(6)</span></button>
+    </div>
+  </div>
+</section>
+
+<div class="quick-filters">
+  <div class="quick-filters-inner" id="quickFilters">
+    <!-- 강사 모드 칩 -->
+    <button class="chip active" data-quick="all" data-modegroup="teacher">전체</button>
+    <button class="chip" data-quick="type:대학·대학원" data-modegroup="teacher">대학·대학원</button>
+    <button class="chip" data-quick="type:대학 어학당" data-modegroup="teacher">어학당</button>
+    <button class="chip" data-quick="type:초등학교" data-modegroup="teacher">초등학교</button>
+    <button class="chip" data-quick="type:중·고등학교" data-modegroup="teacher">중·고등학교</button>
+    <button class="chip" data-quick="type:다문화·가족센터" data-modegroup="teacher">다문화·가족</button>
+    <button class="chip" data-quick="type:사설 어학원" data-modegroup="teacher">사설학원</button>
+    <button class="chip" data-quick="type:세종학당" data-modegroup="teacher">세종학당</button>
+    <button class="chip" data-quick="type:국제학교" data-modegroup="teacher">국제학교</button>
+    <button class="chip" data-quick="type:온라인 플랫폼" data-modegroup="teacher">온라인 플랫폼</button>
+    <button class="chip" data-quick="type:기업 출강" data-modegroup="teacher">기업 출강</button>
+    <button class="chip" data-quick="type:기타" data-modegroup="teacher">기타</button>
+    <!-- 기타 직군 모드 칩 -->
+    <button class="chip active" data-quick="all" data-modegroup="other" style="display:none;">전체</button>
+    <button class="chip" data-quick="admin" data-modegroup="other" style="display:none;">행정·운영</button>
+    <button class="chip" data-quick="publishing" data-modegroup="other" style="display:none;">교재·출판</button>
+    <button class="chip" data-quick="content" data-modegroup="other" style="display:none;">콘텐츠 제작</button>
+    <button class="chip" data-quick="research" data-modegroup="other" style="display:none;">연구·평가</button>
+    <button class="chip" data-quick="policy" data-modegroup="other" style="display:none;">정책·국제교류</button>
+  </div>
+</div>
+
+<main class="main">
+  <div class="filter-bar">
+    <div class="fb-search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="기관명, 직무, 지역 등으로 검색해보세요">
+    </div>
+    <span class="fb-divider"></span>
+    <details class="filter-group">
+      <summary>근무 지역</summary>
+      <div class="filter-panel">
+        <div class="region-tree">
+          <details class="region-section">
+            <summary class="region-summary">
+              <span class="region-chevron">▸</span>
+              <span class="region-label">국내</span>
+              <span class="count" data-role="group-count">0</span>
+            </summary>
+            <div class="filter-list region-children" id="regionKR"></div>
+          </details>
+          <details class="region-section">
+            <summary class="region-summary">
+              <span class="region-chevron">▸</span>
+              <span class="region-label">해외</span>
+              <span class="count" data-role="group-count">0</span>
+            </summary>
+            <div class="filter-list region-children" id="regionOV"></div>
+          </details>
+          <details class="region-section">
+            <summary class="region-summary">
+              <span class="region-chevron">▸</span>
+              <span class="region-label">온라인</span>
+              <span class="count" data-role="group-count">0</span>
+            </summary>
+            <div class="filter-list region-children">
+              <label class="filter-item"><input type="checkbox" data-filter="region" value="online">재택 <span class="count">0</span></label>
+            </div>
+          </details>
+        </div>
+      </div>
+    </details>
+    <details class="filter-group">
+      <summary>자격증</summary>
+      <div class="filter-panel">
+        <div class="filter-list">
+          <label class="filter-item"><input type="checkbox" data-filter="cert" value="필수">자격증 필수 <span class="count">0</span></label>
+          <label class="filter-item"><input type="checkbox" data-filter="cert" value="우대">자격증 무관 <span class="count">0</span></label>
+        </div>
+      </div>
+    </details>
+    <details class="filter-group">
+      <summary>학위</summary>
+      <div class="filter-panel">
+        <div class="filter-list">
+          <label class="filter-item"><input type="checkbox" data-filter="degree" value="무관">무관 <span class="count">0</span></label>
+          <label class="filter-item"><input type="checkbox" data-filter="degree" value="석사이상">석사 이상 <span class="count">0</span></label>
+          <label class="filter-item"><input type="checkbox" data-filter="degree" value="박사수료이상">박사수료 이상 <span class="count">0</span></label>
+          <label class="filter-item"><input type="checkbox" data-filter="degree" value="박사이상">박사 이상 <span class="count">0</span></label>
+        </div>
+      </div>
+    </details>
+    <details class="filter-group">
+      <summary>경력</summary>
+      <div class="filter-panel">
+        <div class="filter-list">
+          <label class="filter-item"><input type="checkbox" data-filter="experience" value="신입가능">신입 가능 <span class="count">0</span></label>
+        </div>
+      </div>
+    </details>
+    <span class="reset-link" id="resetBtn">초기화</span>
+  </div>
+
+  <section>
+    <div class="results-header">
+      <div class="results-count">총 <strong id="resultCount">14</strong>개의 공고</div>
+      <select class="sort-select" id="sortSelect">
+        <option value="latest">최신순</option>
+        <option value="deadline">마감 임박순</option>
+        <option value="salary">급여 공개 우선</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer>
+  <div>© 2026 K-Teacher Jobs · 한국어 강사 채용정보 모음</div>
+  <div style="margin-top: 12px;">
+    <a href="#">서비스 소개</a>
+    <a href="#">공고 제보</a>
+    <a href="#">개인정보 처리방침</a>
+    <a href="#">문의하기</a>
+  </div>
+</footer>
+
+<!-- Job Detail Modal -->
+<div class="modal-overlay" id="jobModal" onclick="if(event.target===this) closeModal('jobModal')">
+  <div class="modal" id="jobModalContent"></div>
+</div>
+
+<!-- Institution Modal -->
+<div class="modal-overlay" id="instModal" onclick="if(event.target===this) closeModal('instModal')">
+  <div class="modal" id="instModalContent"></div>
+</div>
+
+<script>
+// === 로컬 미리보기용 fallback 데이터 ===
+var institutions = {
+  snu: { name: '서울대학교 언어교육원', type: '대학 어학당', country: '한국', city: '서울 관악구', website: 'lei.snu.ac.kr', desc: '서울대학교 부설 한국어 교육기관. 외국인 유학생 대상 정규/단기 한국어 과정을 운영합니다.' },
+  yonsei: { name: '연세대학교 한국어학당', type: '대학 어학당', country: '한국', city: '서울 서대문구', website: 'ko.yonsei.ac.kr', desc: '국내 최대 규모의 한국어 교육기관 중 하나. 정규 과정과 다양한 특별 과정을 운영합니다.' },
+  ewha: { name: '이화여자대학교 언어교육원', type: '대학 어학당', country: '한국', city: '서울 서대문구', website: 'elc.ewha.ac.kr', desc: '이화여자대학교 부설 어학원으로 한국어 교육 과정을 운영합니다.' },
+  sejong: { name: '세종학당재단', type: '세종학당', country: '한국', city: '서울 종로구', website: 'ksif.or.kr', desc: '전 세계 84개국 244개소의 세종학당을 운영하는 한국어 보급 공공기관.' },
+  ucla: { name: 'UCLA Asian Languages & Cultures', type: '대학·대학원', country: '미국', city: 'Los Angeles, CA', website: 'alc.ucla.edu', desc: 'UCLA의 아시아 언어·문화학과. 한국학 전공 학생 대상 한국어 강의 운영.' },
+  toronto: { name: 'University of Toronto, East Asian Studies', type: '대학·대학원', country: '캐나다', city: 'Toronto, ON', website: 'eas.utoronto.ca', desc: '캐나다 최대 한국학 프로그램 중 하나를 운영하는 동아시아학과.' },
+  waseda: { name: '와세다대학 한국어교육연구센터', type: '대학·대학원', country: '일본', city: '도쿄', website: 'waseda.jp', desc: '와세다대학에서 한국어 교육과 한국학 연구를 진행하는 센터.' },
+  sydney: { name: 'University of Sydney, Korean Studies', type: '대학·대학원', country: '호주', city: 'Sydney, NSW', website: 'sydney.edu.au', desc: '호주 시드니대학교 아시아학과 내 한국학 프로그램.' },
+  hochiminh: { name: '호치민 인문사회과학대학 한국학과', type: '대학·대학원', country: '베트남', city: '호치민', website: 'hcmussh.edu.vn', desc: '베트남 호치민 지역의 대표적인 한국학 학과.' },
+  gangnam: { name: '강남 토픽 한국어학원', type: '사설 어학원', country: '한국', city: '서울 강남구', website: 'gangnamtopik.kr', desc: 'TOPIK 시험 대비 및 비즈니스 한국어 전문 어학원.' },
+  italki: { name: 'Lingoo Korean (온라인 플랫폼)', type: '온라인 플랫폼', country: '온라인', city: '온라인', website: 'lingookorean.com', desc: '전 세계 학습자와 한국어 튜터를 연결하는 1:1 화상 수업 플랫폼.' },
+  preply: { name: 'KoreanGo (온라인 플랫폼)', type: '온라인 플랫폼', country: '온라인', city: '온라인', website: 'koreango.com', desc: '한국어 학습 전문 1:1 온라인 튜터링 플랫폼.' },
+  samsung: { name: '삼성전자 글로벌인재개발팀', type: '기업 출강', country: '한국', city: '경기 수원', website: 'samsung.com', desc: '삼성전자 임직원 및 해외 주재원·외국인 직원 대상 한국어 교육 운영.' },
+  goyang: { name: '고양초등학교', type: '초등학교', country: '한국', city: '경기 고양시 덕양구', website: 'goyang.es.kr', desc: '경기도 고양시 소재 초등학교. 중도입국자녀·다문화학생 대상 한국어교실을 운영합니다.' },
+  caritas: { name: '인천 까리따스 이주민문화센터', type: '다문화·가족센터', country: '한국', city: '인천', website: 'caritas-ic.or.kr', desc: '인천 지역 이주민·결혼이민자 대상 사회통합프로그램과 한국어 교육을 운영하는 다문화센터.' },
+  darakwon: { name: '다락원 한국어교재', type: '출판사', country: '한국', city: '서울 마포', website: 'darakwon.co.kr', desc: '한국어 교재 출판 전문 출판사. 외국인 학습자용 다양한 한국어 교재 발간.' },
+  ebs: { name: 'EBS 한국어 콘텐츠팀', type: '방송사', country: '한국', city: '경기 고양', website: 'ebs.co.kr', desc: 'EBS 한국어 학습 콘텐츠(방송·온라인) 기획·제작 부서.' },
+  nikl: { name: '국립국어원', type: '연구기관', country: '한국', city: '서울 강서', website: 'korean.go.kr', desc: '국립국어원 한국어교육 정책 연구 및 TOPIK·교재 평가.' },
+  kccuk: { name: '주영국 한국문화원', type: '공공기관', country: '영국', city: 'London', website: 'kccuk.org.uk', desc: '주영국 한국문화원 한국어 강좌 운영 및 교육 프로그램 기획.' },
+  kef: { name: '한국어교육진흥재단', type: '연구기관', country: '한국', city: '서울', website: 'kef.or.kr', desc: '한국어교육 정책 연구·사업 기획 재단법인.' },
+};
+
+var jobs = [
+  {
+    id: 1, inst: 'snu',
+    title: '한국어 정규과정 시간강사 모집 (2026 가을학기)',
+    country: '한국', region: '서울', type: '대학 어학당', employment: '시간강사', category: '강사', mode: '대면',
+    salary: '시급 60,000원 (수업 기준)', salaryDisclosed: true,
+    cert: '필수', degree: '석사', experience: '경력필수', visa: false,
+    deadline: 8, posted: '3일 전', verified: true,
+    desc: '서울대학교 언어교육원 한국어 정규과정에서 외국인 학습자를 대상으로 한국어를 강의할 시간강사를 모집합니다.',
+    quals: '- 한국어교원자격증 2급 이상 소지자\n- 한국어교육학(또는 외국어로서의 한국어교육) 석사 학위 소지자\n- 외국인 대상 한국어 강의 경력 2년 이상',
+    preferred: '박사 학위 소지자, 영어 가능자, 3급 이상 자격증 소지자',
+    apply: '본 기관 홈페이지 채용공고 게시판에서 지원서·자기소개서·이력서를 이메일로 접수',
+    badges: ['salary','urgent','verified']
+  },
+  {
+    id: 2, inst: 'yonsei',
+    title: '한국어학당 비전임 강사 채용 (영주권자 포함)',
+    country: '한국', region: '서울', type: '대학 어학당', employment: '초빙·비전임', category: '강사', mode: '대면',
+    salary: '월 350~400만원 (경력 협의)', salaryDisclosed: true,
+    cert: '필수', degree: '석사', experience: '경력필수', visa: false,
+    deadline: 21, posted: '5일 전', verified: true,
+    desc: '연세대학교 한국어학당 정규과정 및 특별과정 강의를 담당할 비전임 강사를 모집합니다.',
+    quals: '- 한국어교육 관련 석사 이상\n- 한국어교원자격증 2급 이상\n- 외국인 대상 한국어 강의 경력 3년 이상',
+    preferred: '영어·중국어·일본어 등 외국어 가능자',
+    apply: '한국어학당 홈페이지 양식 다운로드 후 이메일 제출',
+    badges: ['salary','verified']
+  },
+  {
+    id: 3, inst: 'ewha',
+    title: '이화여대 한국어 단기과정 강사 (여름학기)',
+    country: '한국', region: '서울', type: '대학 어학당', employment: '시간강사', category: '강사', mode: '하이브리드',
+    salary: '협의', salaryDisclosed: false,
+    cert: '우대', degree: '석사', experience: '신입가능', visa: false,
+    deadline: 4, posted: '1일 전', verified: true,
+    desc: '여름 단기 한국어 집중과정 강의를 담당할 시간강사를 모집합니다. 일부 수업은 온라인 병행 운영.',
+    quals: '- 한국어교육 관련 석사 과정 이수 중 또는 수료\n- 외국인 대상 한국어 수업 경험',
+    preferred: '한국어교원자격증 보유자',
+    apply: '언어교육원 채용 페이지에서 지원',
+    badges: ['urgent','junior','verified']
+  },
+  {
+    id: 4, inst: 'sejong',
+    title: '2026년 해외 세종학당 파견 한국어교원 모집',
+    country: '한국', region: '해외 파견', type: '세종학당', employment: '센터 강사', category: '강사', mode: '대면',
+    salary: '월 250~350만원 + 항공·체재비 지원', salaryDisclosed: true,
+    cert: '필수', degree: '학사', experience: '경력필수', visa: true,
+    deadline: 35, posted: '오늘', verified: true,
+    desc: '전 세계 세종학당에 파견되어 한국어 및 한국문화 강의를 담당할 한국어교원을 모집합니다. (총 60명)',
+    quals: '- 대한민국 국적자\n- 한국어교원자격증 2급 이상\n- 외국인 대상 한국어 강의 경력 1년 이상',
+    preferred: '파견 국가 언어 가능자, 해외 거주·체류 경험자',
+    apply: '세종학당재단 채용 시스템(ksif.or.kr) 온라인 지원',
+    badges: ['salary','visa','verified']
+  },
+  {
+    id: 5, inst: 'ucla',
+    title: 'Korean Language Lecturer (Full-time)',
+    country: '미국', region: 'Los Angeles, CA', type: '대학·대학원', employment: '초빙·비전임', category: '강사', mode: '대면',
+    salary: 'USD 65,000~78,000 / year', salaryDisclosed: true,
+    cert: '우대', degree: '박사', experience: '경력필수', visa: true,
+    deadline: 28, posted: '2일 전', verified: true,
+    desc: 'UCLA Asian Languages & Cultures 학부에서 학부생 대상 한국어 강의(초급~고급)를 담당할 정년 트랙 외 강사를 모집합니다.',
+    quals: '- 한국어교육·한국학 박사 학위 (또는 임용 시점 박사 학위 예정자)\n- 대학에서 한국어 강의 경력 3년 이상\n- 영어 강의 가능자',
+    preferred: '미국 대학 강의 경험, 교재 개발 경험',
+    apply: 'UCLA Recruit 시스템에서 CV, Teaching Statement, Reference 3인 제출',
+    badges: ['salary','visa','verified']
+  },
+  {
+    id: 6, inst: 'toronto',
+    title: 'Sessional Korean Language Instructor',
+    country: '캐나다', region: 'Toronto, ON', type: '대학·대학원', employment: '시간강사', category: '강사', mode: '대면',
+    salary: 'CAD 9,200 / course', salaryDisclosed: true,
+    cert: '우대', degree: '석사', experience: '경력필수', visa: false,
+    deadline: 14, posted: '4일 전', verified: true,
+    desc: 'University of Toronto 동아시아학과에서 한국어 강의를 담당할 Sessional Instructor를 모집합니다.',
+    quals: '- 한국어 교육 관련 석사 이상\n- 캐나다 영주권 또는 시민권 (또는 합법적 근로 비자 보유자)\n- 영어 강의 가능',
+    preferred: '북미 대학 강의 경험자',
+    apply: '학과 홈페이지에서 CV, Cover letter, Reference 제출',
+    badges: ['salary','verified']
+  },
+  {
+    id: 7, inst: 'waseda',
+    title: '와세다대학 한국어 강의전임강사 (객원)',
+    country: '일본', region: '도쿄', type: '대학·대학원', employment: '초빙·비전임', category: '강사', mode: '대면',
+    salary: '협의 (연봉제)', salaryDisclosed: false,
+    cert: '필수', degree: '석사', experience: '경력필수', visa: true,
+    deadline: 45, posted: '6일 전', verified: true,
+    desc: '와세다대학교 한국어 강의를 담당할 객원 강의전임강사를 모집합니다. 1년 계약 후 갱신 가능.',
+    quals: '- 한국어교육 또는 한국학 석사 이상\n- 대학 강의 경력 2년 이상\n- 일본어 또는 영어로 강의 가능',
+    preferred: '일본어 능력 N1 이상, 일본 대학 강의 경험자',
+    apply: '학과 사무실 이메일 제출, 서류 통과 시 화상 면접',
+    badges: ['visa','verified']
+  },
+  {
+    id: 8, inst: 'sydney',
+    title: 'Sessional Korean Tutor (Part-time, Semester 2)',
+    country: '호주', region: 'Sydney, NSW', type: '대학·대학원', employment: '시간강사', category: '강사', mode: '대면',
+    salary: 'AUD 75~95 / hour', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
+    deadline: 18, posted: '오늘', verified: true,
+    desc: '시드니대학교 한국학 프로그램에서 학부생 한국어 튜토리얼을 담당할 시간강사를 모집합니다.',
+    quals: '- 한국어 또는 한국학 관련 학사 이상\n- 호주 합법 근로 비자\n- 영어 가능',
+    preferred: '한국어교원자격증 보유자, 한국어 교육 경력자',
+    apply: 'Sydney Careers 포털에서 지원',
+    badges: ['salary','junior','verified']
+  },
+  {
+    id: 9, inst: 'hochiminh',
+    title: '호치민 한국학과 정규 교수 채용 (정년트랙)',
+    country: '베트남', region: '호치민', type: '대학·대학원', employment: '전임교원', category: '강사', mode: '대면',
+    salary: '월 USD 1,800~2,500 + 주거 지원', salaryDisclosed: true,
+    cert: '필수', degree: '박사', experience: '경력필수', visa: true,
+    deadline: 60, posted: '7일 전', verified: false,
+    desc: '베트남 호치민 인문사회과학대학 한국학과에서 한국어·한국학 강의를 담당할 정규 교수를 모집합니다.',
+    quals: '- 한국학·한국어교육 박사 학위\n- 대학 강의 경력 5년 이상\n- 영어 강의 가능',
+    preferred: '베트남어 가능자, 동남아 거주 경험자',
+    apply: '학과 이메일로 CV·연구실적·자기소개서 제출',
+    badges: ['salary','visa']
+  },
+  {
+    id: 10, inst: 'gangnam',
+    title: 'TOPIK 전문 한국어 강사 (강남)',
+    country: '한국', region: '서울 강남구', type: '사설 어학원', employment: '시간강사', category: '강사', mode: '대면',
+    salary: '시급 45,000~55,000원', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
+    deadline: 12, posted: '2일 전', verified: false,
+    desc: '강남 토픽 한국어학원에서 TOPIK 시험 대비반 강사를 모집합니다. 평일 저녁 및 주말 수업.',
+    quals: '- 한국어 또는 한국어교육 관련 전공 학사 이상\n- TOPIK 시험 또는 시험 대비 강의 경험',
+    preferred: '한국어교원자격증 소지자, 영어·중국어 가능자',
+    apply: '학원 홈페이지 채용 양식 제출',
+    badges: ['salary','junior']
+  },
+  {
+    id: 11, inst: 'italki',
+    title: '온라인 1:1 한국어 튜터 모집 (전 세계 학습자 대상)',
+    country: '온라인', region: '온라인', type: '온라인 플랫폼', employment: '프리랜서', category: '강사', mode: '온라인',
+    salary: '시급 본인 설정 (USD 15~40 권장)', salaryDisclosed: false,
+    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
+    deadline: 90, posted: '오늘', verified: false,
+    desc: '전 세계 한국어 학습자와 1:1 화상 수업을 진행할 한국어 튜터를 상시 모집합니다. 본인이 일정·수업료를 자유롭게 설정.',
+    quals: '- 한국어 원어민 또는 그에 준하는 능력\n- 영어 의사소통 가능\n- 안정적인 화상 수업 환경 (PC, 마이크, 인터넷)',
+    preferred: '한국어교원자격증, 외국어 교습 경력',
+    apply: '플랫폼 홈페이지에서 튜터 신청 → 영상 자기소개 업로드',
+    badges: ['junior']
+  },
+  {
+    id: 12, inst: 'preply',
+    title: 'KoreanGo 정식 튜터 모집 (수업 매칭 지원)',
+    country: '온라인', region: '온라인', type: '온라인 플랫폼', employment: '프리랜서', category: '강사', mode: '온라인',
+    salary: '시급 USD 20~35 (수익 분배 모델)', salaryDisclosed: true,
+    cert: '필수', degree: '학사', experience: '경력필수', visa: false,
+    deadline: 6, posted: '4일 전', verified: false,
+    desc: '한국어 학습 전문 플랫폼 KoreanGo의 정식 인증 튜터를 모집합니다. 플랫폼이 학습자 매칭과 결제를 관리합니다.',
+    quals: '- 한국어교원자격증 보유자\n- 1:1 또는 그룹 한국어 수업 경력 1년 이상\n- 영어 소통 가능',
+    preferred: 'TOPIK 대비, 비즈니스 한국어 가능자',
+    apply: '플랫폼 가입 → 수업 시연 영상 제출 → 심사 통과',
+    badges: ['salary','urgent']
+  },
+  {
+    id: 13, inst: 'goyang',
+    title: '고양초등학교 중도입국자녀·다문화학생 한국어교실 지도강사 채용',
+    country: '한국', region: '경기 고양시', type: '초등학교', employment: '학교 강사', category: '강사', mode: '대면',
+    salary: '시간당 32,000원', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
+    deadline: 6, posted: '오늘', verified: true,
+    desc: '고양초등학교에서 중도입국자녀 및 다문화학생을 대상으로 한국어교실을 운영할 지도강사를 모집합니다. 학교 일과 시간 중 진행.',
+    quals: '- 한국어 학습지도가 가능한 자\n- 한국어교원 자격증 소지자 또는 한국어교실 강사 경력자 우대\n- 퇴직교원 또는 관련 교원자격증 소지자',
+    preferred: '맞춤형 한국어 학습지도 및 기초학력 지도 가능자',
+    apply: '이메일 접수: pignet76@korea.kr (우편·방문도 가능)',
+    badges: ['salary','urgent','junior']
+  },
+  {
+    id: 14, inst: 'caritas',
+    title: '인천 까리따스 이주민문화센터 사회통합프로그램 강사 모집',
+    country: '한국', region: '인천', type: '다문화·가족센터', employment: '센터 강사', category: '강사', mode: '대면',
+    salary: '협의 (사회통합프로그램 강사 보수 기준)', salaryDisclosed: false,
+    cert: '필수', degree: '학사', experience: '경력필수', visa: false,
+    deadline: 10, posted: '3일 전', verified: false,
+    desc: '인천 까리따스 이주민문화센터에서 결혼이민자·이주민을 대상으로 사회통합프로그램 한국어 강의를 담당할 강사를 모집합니다.',
+    quals: '- 한국어교원자격증 필수\n- 사회통합프로그램 강사 양성과정 이수자 우대\n- 외국인 대상 한국어 강의 경력 1년 이상',
+    preferred: '다양한 국적 학습자 대상 강의 경험자, 영어·중국어 등 외국어 가능자',
+    apply: '센터 이메일로 이력서·자기소개서 제출',
+    badges: ['junior']
+  }  ,
+  {
+    id: 15, inst: 'sejong',
+    title: '세종학당재단 본부 한국어교육사업 운영원',
+    country: '한국', region: '서울 종로', type: '세종학당', employment: '계약직', category: '행정·운영', mode: '대면',
+    salary: '월 280~320만원', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '경력필수', visa: false,
+    deadline: 14, posted: '3일 전', verified: true,
+    desc: '세종학당재단 본부에서 해외 세종학당 교원 파견·운영 등 한국어교육 사업 행정을 담당할 직원을 모집합니다.',
+    quals: '- 학사 이상\n- 한국어교육 또는 행정 관련 경력 2년 이상\n- 영어 가능자',
+    preferred: '한국어교원자격증 보유자, 해외 거주 경험자',
+    apply: '재단 채용 시스템 온라인 지원',
+    badges: ['salary']
+  },
+  {
+    id: 16, inst: 'darakwon',
+    title: '다락원 한국어 교재 편집자 (정규직)',
+    country: '한국', region: '서울 마포', type: '출판사', employment: '정규직', category: '교재·출판', mode: '대면',
+    salary: '연봉 3,800~4,500만원', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '경력필수', visa: false,
+    deadline: 21, posted: '5일 전', verified: true,
+    desc: '외국인 학습자용 한국어 교재 편집·기획을 담당할 편집자를 모집합니다. 신간 교재 개발 + 기존 교재 개정.',
+    quals: '- 한국어교육·국문학·교육공학 학사 이상\n- 출판 또는 교재 기획 경력 2년 이상',
+    preferred: '한국어교원자격증, 출판사 근무 경험',
+    apply: '이메일 지원: jobs@darakwon.co.kr',
+    badges: ['salary']
+  },
+  {
+    id: 17, inst: 'ebs',
+    title: 'EBS 한국어 학습 콘텐츠 PD (계약직)',
+    country: '한국', region: '경기 고양', type: '방송사', employment: '계약직', category: '콘텐츠 제작', mode: '대면',
+    salary: '월 350~400만원', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '경력필수', visa: false,
+    deadline: 10, posted: '2일 전', verified: true,
+    desc: 'EBS 한국어 학습 콘텐츠 기획·제작을 담당할 PD. 방송, 유튜브, 학습 앱 콘텐츠 등.',
+    quals: '- 학사 이상\n- 방송·영상 제작 경력 또는 한국어교육 경력 3년 이상',
+    preferred: '한국어교육 콘텐츠 기획 경험, 영상 편집 가능자',
+    apply: 'EBS 채용 페이지에서 지원',
+    badges: ['salary','urgent']
+  },
+  {
+    id: 18, inst: 'nikl',
+    title: '국립국어원 한국어교육 전문연구원',
+    country: '한국', region: '서울 강서', type: '연구기관', employment: '계약직', category: '연구·평가', mode: '대면',
+    salary: '월 320~400만원', salaryDisclosed: true,
+    cert: '필수', degree: '박사', experience: '경력필수', visa: false,
+    deadline: 28, posted: '오늘', verified: true,
+    desc: '국립국어원에서 한국어교육 정책 연구, TOPIK 시험 개발, 교재 평가 등을 담당할 전문연구원을 모집합니다.',
+    quals: '- 한국어교육·국어학 박사 학위\n- 한국어교육 관련 연구·논문 실적\n- 한국어교원자격증 보유',
+    preferred: 'TOPIK 출제 경험, 영어 가능자',
+    apply: '국립국어원 채용 공고 페이지',
+    badges: ['salary']
+  },
+  {
+    id: 19, inst: 'kccuk',
+    title: '주영국 한국문화원 한국어 교육 코디네이터',
+    country: '영국', region: 'London', type: '공공기관', employment: '계약직', category: '정책·국제교류', mode: '대면',
+    salary: 'GBP 28,000~32,000 / year', salaryDisclosed: true,
+    cert: '우대', degree: '학사', experience: '경력필수', visa: true,
+    deadline: 35, posted: '4일 전', verified: true,
+    desc: '주영국 한국문화원에서 한국어 강좌 운영, 강사 관리, 한국어교육 프로그램 기획을 담당할 코디네이터.',
+    quals: '- 학사 이상\n- 한국어교육 또는 국제교류 경력 2년 이상\n- 영어 능통',
+    preferred: '한국어교원자격증, 해외 거주·근무 경험',
+    apply: '문화원 이메일 지원',
+    badges: ['salary','visa']
+  },
+  {
+    id: 20, inst: 'kef',
+    title: '한국어교육진흥재단 정책 연구원 (정규직)',
+    country: '한국', region: '서울', type: '연구기관', employment: '정규직', category: '연구·평가', mode: '대면',
+    salary: '연봉 4,500~5,500만원', salaryDisclosed: true,
+    cert: '우대', degree: '석사', experience: '경력필수', visa: false,
+    deadline: 45, posted: '6일 전', verified: true,
+    desc: '한국어교육 진흥 재단에서 정책 연구, 사업 기획, 보고서 작성 등을 담당할 정규직 연구원을 모집합니다.',
+    quals: '- 한국어교육·교육정책 석사 이상\n- 정책 연구·보고서 작성 경력 3년 이상',
+    preferred: '한국어교육 관련 학회 활동 경험, 영어 가능자',
+    apply: '재단 홈페이지에서 지원',
+    badges: ['salary']
+  }
+];
+</script>
+<script src="data.js"></script>
+<script>
+// === Render ===
+const grid = document.getElementById('grid');
+let activeQuickFilter = 'all';
+let activeFilters = {};
+let currentMode = 'teacher';
+
+// === Bookmark ===
+const BOOKMARK_KEY = 'ktj_bookmarks';
+const TOAST_SEEN_KEY = 'ktj_seen_bookmark_toast';
+let bookmarks = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
+function isBookmarked(id) { return bookmarks.includes(id); }
+function toggleBookmark(id) {
+  if (bookmarks.includes(id)) bookmarks = bookmarks.filter(b => b !== id);
+  else { bookmarks.push(id); if (!localStorage.getItem(TOAST_SEEN_KEY)) { showBookmarkToast(); localStorage.setItem(TOAST_SEEN_KEY, '1'); } }
+  localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarks));
+  updateHeaderBookmarkCount();
+  renderGrid();
+}
+function updateHeaderBookmarkCount() {
+  const cnt = document.getElementById('headerBookmarkCount');
+  const btn = document.querySelector('.btn-bookmark');
+  if (!cnt || !btn) return;
+  cnt.textContent = `저장함 ${bookmarks.length}`;
+  if (bookmarks.length > 0) btn.classList.add('has-saved');
+  else btn.classList.remove('has-saved');
+}
+function showBookmarked() {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  activeQuickFilter = 'bookmarked';
+  renderGrid();
+  document.getElementById('grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function showBookmarkToast() {
+  const toast = document.createElement('div');
+  toast.className = 'bookmark-toast';
+  toast.innerHTML = '🔖 저장됐어요!<span class="small">이 책갈피는 <strong>당신의 브라우저에만</strong> 저장돼요.</span>';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
+// === Helpers ===
+function deadlineText(d) {
+  if (d <= 0) return { text: '마감', urgent: false };
+  if (d <= 7) return { text: `D-${d}`, urgent: true };
+  return { text: `D-${d}`, urgent: false };
+}
+function countryIcon(c) {
+  const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
+  return map[c] || '🌐';
+}
+function modeIcon(m) {
+  if (m === '온라인') return '💻';
+  if (m === '하이브리드') return '🔄';
+  return '🏢';
+}
+
+function renderCard(job) {
+  const inst = institutions[job.inst];
+  const dl = deadlineText(job.deadline);
+  return `
+    <div class="card" data-id="${job.id}">
+      <div class="card-top">
+        <span class="card-institution" onclick="event.stopPropagation(); openInstitution('${job.inst}')">${inst ? inst.name : ''}</span>
+        <button class="bookmark-btn ${isBookmarked(job.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleBookmark(${job.id})">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${isBookmarked(job.id) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-title">${job.title}</h3>
+      <div class="card-meta">
+        <div class="meta-line">${countryIcon(job.country)} ${job.country}${job.region && job.country !== '온라인' ? ' · ' + job.region : ''}</div>
+        <div class="meta-line">🏫 ${job.type}</div>
+        <div class="meta-line">📄 ${job.employment}</div>
+      </div>
+      <div class="card-salary">${job.salaryDisclosed ? job.salary : '급여 비공개'}</div>
+      <div class="card-footer">
+        <span class="deadline ${dl.urgent ? 'urgent' : 'normal'}">⏰ ${dl.text}</span>
+        <button class="view-btn">자세히 보기 →</button>
+      </div>
+    </div>`;
+}
+
+function renderGrid() {
+  let filtered = jobs.filter(matchesFilters);
+  document.getElementById('resultCount').textContent = filtered.length;
+  const activeCountEl = document.getElementById('activeCount');
+  if (activeCountEl) activeCountEl.textContent = filtered.length + '건';
+
+  // sort
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'deadline') filtered.sort((a,b) => a.deadline - b.deadline);
+  else if (sort === 'salary') filtered.sort((a,b) => (b.salaryDisclosed?1:0) - (a.salaryDisclosed?1:0));
+  // latest = 기본 순서 유지
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><p>조건에 맞는 공고가 없어요</p><p style="margin-top:8px; font-size:13px;">필터를 줄이거나 다른 조건으로 검색해보세요</p></div>`;
+  } else {
+    grid.innerHTML = filtered.map(renderCard).join('');
+    grid.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => openJob(parseInt(card.dataset.id)));
+    });
+  }
+}
+
+function matchesFilters(job) {
+  // 모드 매칭 (A안: 강사 vs 기타직)
+  if (currentMode === 'teacher' && job.category !== '강사') return false;
+  if (currentMode === 'other' && job.category === '강사') return false;
+  // search
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  if (q) {
+    const inst = institutions[job.inst];
+    const haystack = (job.title + ' ' + inst.name + ' ' + job.region + ' ' + job.type + ' ' + job.country).toLowerCase();
+    if (!haystack.includes(q)) return false;
+  }
+  // quick filter (chips)
+  if (activeQuickFilter !== 'all') {
+    if (activeQuickFilter.startsWith('type:')) {
+      if (job.type !== activeQuickFilter.slice(5)) return false;
+    } else if (activeQuickFilter === 'bookmarked' && !bookmarks.includes(job.id)) return false;
+    else if (activeQuickFilter === 'admin' && job.category !== '행정·운영') return false;
+    else if (activeQuickFilter === 'publishing' && job.category !== '교재·출판') return false;
+    else if (activeQuickFilter === 'content' && job.category !== '콘텐츠 제작') return false;
+    else if (activeQuickFilter === 'research' && job.category !== '연구·평가') return false;
+    else if (activeQuickFilter === 'policy' && job.category !== '정책·국제교류') return false;
+  }
+  // sidebar filters
+  for (const key in activeFilters) {
+    const vals = activeFilters[key];
+    if (!vals.length) continue;
+    if (key === 'region') {
+      const ok = vals.some(v => regionMatches(job, v));
+      if (!ok) return false;
+    }
+    if (key === 'employment' && !vals.includes(job.employment)) return false;
+    if (key === 'cert' && !vals.includes(job.cert)) return false;
+    if (key === 'degree' && !vals.some(v => matchesDegree(job, v))) return false;
+    if (key === 'experience' && !vals.includes(job.experience)) return false;
+    if (key === 'badge' && !vals.some(b => job.badges.includes(b))) return false;
+  }
+  return true;
+}
+
+// 지역 매칭 헬퍼
+function getSido(region) {
+  if (!region) return '';
+  return region.trim().split(/\s+/)[0];
+}
+function matchesDegree(job, val) {
+  const j = job.degree || '무관';
+  if (val === '무관') return j === '무관' || j === '학사';
+  if (val === '석사이상') return j === '석사' || j === '박사수료' || j === '박사';
+  if (val === '박사수료이상') return j === '박사수료' || j === '박사';
+  if (val === '박사이상') return j === '박사';
+  return false;
+}
+function regionMatches(job, val) {
+  if (val === 'online') return job.country === '온라인';
+  if (val.startsWith('kr-')) {
+    if (job.country !== '한국') return false;
+    return getSido(job.region) === val.slice(3);
+  }
+  if (val.startsWith('ov-')) {
+    return job.country === val.slice(3);
+  }
+  return false;
+}
+
+// === Filter events ===
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeQuickFilter = chip.dataset.quick;
+    renderGrid();
+  });
+});
+// (사이드바 input 이벤트는 하단에서 위임 방식으로 처리 - 동적 생성된 지역 항목 대응)
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.querySelectorAll('.filter-item input').forEach(i => i.checked = false);
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('.chip[data-quick="all"]').classList.add('active');
+  activeFilters = {};
+  activeQuickFilter = 'all';
+  document.getElementById('searchInput').value = '';
+  renderGrid();
+});
+document.getElementById('searchInput').addEventListener('input', renderGrid);
+document.getElementById('sortSelect').addEventListener('change', renderGrid);
+
+// === Job Modal ===
+function openJob(id) {
+  const job = jobs.find(j => j.id === id);
+  const inst = institutions[job.inst];
+  const dl = deadlineText(job.deadline);
+  const content = document.getElementById('jobModalContent');
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal('jobModal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h2>${job.title}</h2>
+    ${job.original_title && job.original_title !== job.title ? `<div class="modal-original-title">원문 제목: ${job.original_title}</div>` : ''}
+    <div class="modal-institution" onclick="closeModal('jobModal'); openInstitution('${job.inst}')" style="cursor:pointer;">${inst.name} 기관 페이지 보기 →</div>
+    <div class="modal-tags">
+      <span class="tag">${countryIcon(job.country)} ${job.country}${job.region && job.country !== '온라인' ? ' · ' + job.region : ''}</span>
+      <span class="tag">${modeIcon(job.mode)} ${job.mode}</span>
+      <span class="tag">🏫 ${job.type}</span>
+      <span class="tag">📄 ${job.employment}</span>
+    </div>
+    <div class="modal-section">
+      <h4>핵심 정보</h4>
+      <div class="modal-grid">
+        <div class="modal-grid-item"><div class="label">기관 유형</div><div class="value">${job.type}</div></div>
+        <div class="modal-grid-item"><div class="label">고용 형태</div><div class="value">${job.employment}</div></div>
+        <div class="modal-grid-item"><div class="label">급여</div><div class="value">${job.salaryDisclosed ? job.salary : '비공개'}</div></div>
+        <div class="modal-grid-item"><div class="label">마감일</div><div class="value" style="color:${dl.urgent?'var(--accent)':'inherit'}">${dl.text}</div></div>
+        <div class="modal-grid-item"><div class="label">자격증</div><div class="value">${job.cert}</div></div>
+        <div class="modal-grid-item"><div class="label">학위</div><div class="value">${job.degree} 이상</div></div>
+        <div class="modal-grid-item"><div class="label">경력</div><div class="value">${job.experience === '신입가능' ? '신입 가능' : '경력 필수'}</div></div>
+        <div class="modal-grid-item"><div class="label">비자 지원</div><div class="value">${job.visa ? '지원' : '해당없음'}</div></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>담당 업무</h4>
+      <p>${job.desc}</p>
+    </div>
+    <div class="modal-section">
+      <h4>자격 요건</h4>
+      <p style="white-space:pre-line;">${job.quals}</p>
+    </div>
+    <div class="modal-section">
+      <h4>우대 사항</h4>
+      <p>${job.preferred}</p>
+    </div>
+    <div class="modal-section">
+      <h4>지원 방법</h4>
+      <p>${job.apply}</p>
+    </div>
+    <div style="font-size:12px; color:var(--text-light); margin-bottom:12px;">
+      등록: ${job.posted}
+    </div>
+    <div class="modal-cta">
+      <a href="#" class="primary-cta" onclick="alert('시안 데모: 실제로는 원문 채용공고로 이동합니다')">원문 보기 / 지원하기</a>
+      <button class="secondary-cta" onclick="alert('시안 데모: 로그인 후 저장 가능')">💾 저장</button>
+    </div>
+  `;
+  document.getElementById('jobModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+// === Institution Modal ===
+function openInstitution(key) {
+  const inst = institutions[key];
+  const instJobs = jobs.filter(j => j.inst === key);
+  const activeJobs = instJobs.filter(j => j.deadline > 0);
+  // 과거 공고는 가상으로 생성
+  const pastJobs = generatePastJobs(key, inst);
+
+  const allCerts = instJobs.map(j => j.cert);
+  const certRate = Math.round(allCerts.filter(c => c==='필수'||c==='우대').length / allCerts.length * 100);
+
+  const content = document.getElementById('instModalContent');
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal('instModal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="inst-header">
+      <div class="inst-logo">${inst.name.charAt(0)}</div>
+      <div class="inst-info">
+        <h2>${inst.name}</h2>
+        <p>${countryIcon(inst.country)} ${inst.country} · ${inst.city} · 🏫 ${inst.type} · 🔗 <a href="https://${inst.website}" target="_blank" style="color:var(--primary-light)">${inst.website}</a></p>
+      </div>
+    </div>
+    <div class="modal-section">
+      <p style="font-size:14.5px;">${inst.desc}</p>
+    </div>
+    <div class="pattern-box">
+      <h4>📊 이 기관의 채용 패턴</h4>
+      <div class="pattern-grid">
+        <div class="pattern-item">
+          <div class="num">${instJobs.length + pastJobs.length}</div>
+          <div class="label">누적 등록 공고</div>
+        </div>
+        <div class="pattern-item">
+          <div class="num">${activeJobs.length}</div>
+          <div class="label">현재 진행 중</div>
+        </div>
+        <div class="pattern-item">
+          <div class="num">${getAvgDeadline(key)}일</div>
+          <div class="label">평균 모집 기간</div>
+        </div>
+        <div class="pattern-item">
+          <div class="num">${certRate}%</div>
+          <div class="label">교원자격증 필수/우대</div>
+        </div>
+      </div>
+      <p style="font-size:12.5px; color:#92400E; margin-top:12px;">
+        💡 이 기관은 주로 <strong>${getHiringSeason(key)}</strong>에 채용을 진행하는 편이에요. 미리 준비해두면 좋아요.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h4>현재 진행 중인 채용 (${activeJobs.length}건)</h4>
+      <div class="history-list">
+        ${activeJobs.length === 0 ? '<p style="color:var(--text-light); font-size:13px;">현재 진행 중인 공고가 없어요. 알림 신청을 해두시면 새 공고가 올라올 때 알려드릴게요.</p>' :
+          activeJobs.map(j => `
+            <div class="history-item active-job" onclick="closeModal('instModal'); openJob(${j.id})">
+              <div class="history-item-left">
+                <h5>${j.title}</h5>
+                <div class="meta">${j.employment} · ${j.mode} · 마감 D-${j.deadline}</div>
+              </div>
+              <span class="status-pill active">진행 중</span>
+            </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h4>과거 채용 이력 (${pastJobs.length}건)</h4>
+      <div class="history-list">
+        ${pastJobs.map(p => `
+          <div class="history-item">
+            <div class="history-item-left">
+              <h5>${p.title}</h5>
+              <div class="meta">${p.period} · ${p.employment} · ${p.summary}</div>
+            </div>
+            <span class="status-pill closed">마감</span>
+          </div>`).join('')}
+      </div>
+      <p style="font-size:12px; color:var(--text-light); margin-top:10px;">
+        ※ 마감된 공고는 메인 화면에서는 보이지 않지만 기관 페이지에서 이력으로 확인할 수 있어요.
+      </p>
+    </div>
+
+    <div class="modal-cta">
+      <button class="primary-cta" onclick="alert('시안 데모: 이 기관 새 공고 알림 설정')">🔔 이 기관 새 공고 알림 받기</button>
+      <button class="secondary-cta" onclick="alert('시안 데모: 기관 정보 정정 제보')">정보 정정 제보</button>
+    </div>
+  `;
+  document.getElementById('instModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function getAvgDeadline(key) {
+  // 데모용 더미 데이터
+  const map = {snu:24, yonsei:28, ewha:18, sejong:35, ucla:42, toronto:30, waseda:45, sydney:21, hochiminh:60, gangnam:14, italki:0, preply:10, samsung:21};
+  return map[key] || 21;
+}
+function getHiringSeason(key) {
+  const map = {
+    snu:'학기 시작 2~3개월 전 (6월, 12월)',
+    yonsei:'분기마다 (3·6·9·12월)',
+    ewha:'여름·겨울방학 직전',
+    sejong:'매년 1월, 6월',
+    ucla:'1월~3월 (가을학기 임용)',
+    toronto:'4월, 10월',
+    waseda:'1월, 7월',
+    sydney:'6월, 12월',
+    hochiminh:'비정기 (2~3년에 1회)',
+    gangnam:'상시 (주로 분기 초)',
+    italki:'상시',
+    preply:'상시',
+    samsung:'연 1~2회 (1월·7월)'
+  };
+  return map[key] || '비정기';
+}
+
+function generatePastJobs(key, inst) {
+  // 데모용 — 실제로는 DB에서 조회
+  const templates = {
+    snu: [
+      {title:'2026 봄학기 한국어 정규과정 시간강사', period:'2025.12 ~ 2026.01', employment:'시간강사', summary:'시급 60,000원 · 자격증 필수'},
+      {title:'2025 여름 단기과정 강사', period:'2025.05 ~ 2025.06', employment:'시간강사', summary:'시급 55,000원 · 신입 가능'},
+      {title:'2025 가을학기 한국어 정규과정', period:'2025.06 ~ 2025.07', employment:'시간강사', summary:'시급 58,000원 · 자격증 필수'},
+      {title:'2025 봄학기 한국어 강사', period:'2024.12 ~ 2025.01', employment:'시간강사', summary:'시급 58,000원'},
+    ],
+    yonsei: [
+      {title:'2026 봄학기 비전임 강사', period:'2025.12 ~ 2026.01', employment:'계약직', summary:'월 350~400만원 · 경력 3년+'},
+      {title:'단기과정 (여름) 강사', period:'2025.04 ~ 2025.05', employment:'시간강사', summary:'시급 협의'},
+      {title:'2025 가을학기 비전임 강사', period:'2025.06 ~ 2025.07', employment:'계약직', summary:'월 350~400만원'},
+    ],
+    ewha: [
+      {title:'2026 봄학기 단기과정 강사', period:'2025.12', employment:'시간강사', summary:'협의 · 신입 가능'},
+      {title:'2025 겨울 집중과정 강사', period:'2025.10 ~ 2025.11', employment:'시간강사', summary:'협의'},
+    ],
+    sejong: [
+      {title:'2025 해외 세종학당 파견 한국어교원', period:'2024.10 ~ 2024.11', employment:'계약직', summary:'월 250~330만원 + 항공·체재비'},
+      {title:'2024 해외 세종학당 파견 한국어교원', period:'2023.10 ~ 2023.11', employment:'계약직', summary:'월 230~300만원 + 지원'},
+    ],
+    ucla: [
+      {title:'Korean Language Lecturer (2024-2025)', period:'2024.01 ~ 2024.03', employment:'계약직', summary:'USD 62,000~75,000'},
+    ],
+    toronto: [
+      {title:'Sessional Korean Instructor (Winter 2025)', period:'2024.10 ~ 2024.11', employment:'시간강사', summary:'CAD 9,000 / course'},
+      {title:'Sessional Korean Tutor (Fall 2024)', period:'2024.04 ~ 2024.05', employment:'시간강사', summary:'CAD 8,800 / course'},
+    ],
+    waseda: [
+      {title:'한국어 강의전임강사 2025', period:'2024.06 ~ 2024.08', employment:'계약직', summary:'연봉 협의'},
+    ],
+    sydney: [
+      {title:'Sessional Korean Tutor (Semester 1, 2025)', period:'2024.12 ~ 2025.01', employment:'파트타임', summary:'AUD 72~92 / hour'},
+    ],
+    hochiminh: [
+      {title:'한국학과 전임강사 (2023)', period:'2022.09 ~ 2022.12', employment:'정규직', summary:'월 USD 1,500~2,200'},
+    ],
+    gangnam: [
+      {title:'TOPIK 강사 (1분기)', period:'2026.01 ~ 2026.02', employment:'시간강사', summary:'시급 45,000원'},
+      {title:'비즈니스 한국어 강사', period:'2025.09 ~ 2025.10', employment:'파트타임', summary:'시급 50,000원'},
+      {title:'TOPIK 주말반 강사', period:'2025.06 ~ 2025.07', employment:'파트타임', summary:'시급 45,000원'},
+    ],
+    italki: [],
+    preply: [
+      {title:'한국어 튜터 모집 (2025 4분기)', period:'2025.09 ~ 2025.11', employment:'프리랜서', summary:'수익 분배 모델'},
+    ],
+    samsung: [
+      {title:'주재원 가족 한국어 강사', period:'2025.06 ~ 2025.07', employment:'파트타임', summary:'시급 60,000원'},
+    ],
+  };
+  return templates[key] || [];
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal('jobModal');
+    closeModal('instModal');
+  }
+});
+
+// === Theme Switcher ===
+// 모드 토글 핸들러
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    // 빠른 칩 표시/숨김 (0건 칩은 계속 숨김 유지)
+    document.querySelectorAll('.chip[data-modegroup]').forEach(c => {
+      if (c.dataset.modegroup === currentMode) {
+        c.style.display = c.dataset.zero === '1' ? 'none' : '';
+      } else {
+        c.style.display = 'none';
+      }
+      c.classList.remove('active');
+    });
+    document.querySelector(`.chip[data-modegroup="${currentMode}"][data-quick="all"]`).classList.add('active');
+    activeQuickFilter = 'all';
+    renderGrid();
+  });
+});
+
+// === 지역 sub-item 자동 생성 (한국 17개 시·도 항상 표시 / 해외는 데이터 있는 국가만) ===
+const KR_SIDO_ALL = ['서울','부산','대구','인천','광주','대전','울산','세종','경기','강원','충북','충남','전북','전남','경북','경남','제주'];
+function buildRegionFilters() {
+  const ovSet = new Set();
+  jobs.forEach(job => {
+    if (job.country && job.country !== '한국' && job.country !== '온라인') {
+      ovSet.add(job.country);
+    }
+  });
+  const krBox = document.getElementById('regionKR');
+  const ovBox = document.getElementById('regionOV');
+  if (krBox) {
+    krBox.innerHTML = KR_SIDO_ALL
+      .map(s => `<label class="filter-item" data-keep-empty="1"><input type="checkbox" data-filter="region" value="kr-${s}">${s} <span class="count">0</span></label>`).join('');
+  }
+  if (ovBox) {
+    ovBox.innerHTML = Array.from(ovSet).sort((a,b) => a.localeCompare(b,'ko'))
+      .map(c => `<label class="filter-item"><input type="checkbox" data-filter="region" value="ov-${c}">${c} <span class="count">0</span></label>`).join('');
+  }
+}
+
+// === Sidebar 카운트 자동 계산 + 0건 숨김 + 정렬 ===
+function recalcSidebarCounts() {
+  document.querySelectorAll('.filter-bar .filter-list').forEach(list => {
+    const items = Array.from(list.querySelectorAll('.filter-item'));
+    items.forEach(item => {
+      const input = item.querySelector('input');
+      const key = input.dataset.filter;
+      const val = input.value;
+      let count = 0;
+      jobs.forEach(job => {
+        if (key === 'region' && regionMatches(job, val)) count++;
+        else if (key === 'employment' && job.employment === val) count++;
+        else if (key === 'cert' && job.cert === val) count++;
+        else if (key === 'degree' && matchesDegree(job, val)) count++;
+        else if (key === 'experience' && job.experience === val) count++;
+        else if (key === 'badge' && job.badges && job.badges.includes(val)) count++;
+      });
+      const countEl = item.querySelector('.count');
+      if (countEl) countEl.textContent = count;
+      item.dataset.count = count;
+      const labelText = (item.textContent || '').replace(/\s*\d+\s*$/, '').trim();
+      item.dataset.label = labelText;
+      // data-keep-empty 항목(국내 시·도 등)은 0건이어도 표시
+      const keepEmpty = item.dataset.keepEmpty === '1';
+      item.classList.toggle('is-hidden', count === 0 && !keepEmpty);
+    });
+    // 카운트 내림차순, 동률은 가나다순
+    items.sort((a, b) => {
+      const ca = parseInt(a.dataset.count) || 0;
+      const cb = parseInt(b.dataset.count) || 0;
+      if (cb !== ca) return cb - ca;
+      return (a.dataset.label || '').localeCompare(b.dataset.label || '', 'ko');
+    });
+    items.forEach(item => list.appendChild(item));
+  });
+  // 지역 그룹 카운트(국내/해외/온라인 합계) 갱신
+  let krCount = 0, ovCount = 0, onCount = 0;
+  jobs.forEach(job => {
+    if (job.country === '한국') krCount++;
+    else if (job.country === '온라인') onCount++;
+    else ovCount++;
+  });
+  const groupCounts = [krCount, ovCount, onCount];
+  document.querySelectorAll('.region-section').forEach((sec, idx) => {
+    const c = sec.querySelector('[data-role="group-count"]');
+    if (c) c.textContent = groupCounts[idx] ?? 0;
+  });
+}
+
+// === 위쪽 칩 0건 숨김 ===
+function recalcChipCounts() {
+  document.querySelectorAll('.chip[data-quick]').forEach(chip => {
+    const q = chip.dataset.quick;
+    if (q === 'all') return;
+    let count = 0;
+    if (q.startsWith('type:')) {
+      const t = q.slice(5);
+      count = jobs.filter(j => j.type === t && j.category === '강사').length;
+    } else if (q === 'admin') count = jobs.filter(j => j.category === '행정·운영').length;
+    else if (q === 'publishing') count = jobs.filter(j => j.category === '교재·출판').length;
+    else if (q === 'content') count = jobs.filter(j => j.category === '콘텐츠 제작').length;
+    else if (q === 'research') count = jobs.filter(j => j.category === '연구·평가').length;
+    else if (q === 'policy') count = jobs.filter(j => j.category === '정책·국제교류').length;
+    else return;
+    // 0건이면 숨김 (mode 토글 시 다시 표시 결정은 별도 처리)
+    chip.dataset.zero = count === 0 ? '1' : '0';
+    if (count === 0) chip.style.display = 'none';
+  });
+}
+
+// === 사이드바 input 이벤트 위임 (동적 생성 대응) ===
+document.querySelector('.filter-bar').addEventListener('change', (e) => {
+  const input = e.target;
+  if (!input.matches('.filter-item input[type="checkbox"]')) return;
+  const key = input.dataset.filter;
+  if (!key) return;
+  if (!activeFilters[key]) activeFilters[key] = [];
+  if (input.checked) activeFilters[key].push(input.value);
+  else activeFilters[key] = activeFilters[key].filter(v => v !== input.value);
+  renderGrid();
+});
+
+
+// 드롭다운: 하나 열면 다른 건 닫기 + 바깥 클릭 시 닫기
+document.querySelectorAll('.filter-bar details.filter-group').forEach(d => {
+  d.addEventListener('toggle', () => {
+    if (d.open) {
+      document.querySelectorAll('.filter-bar details.filter-group').forEach(other => {
+        if (other !== d) other.open = false;
+      });
+    }
+  });
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.filter-bar details.filter-group')) {
+    document.querySelectorAll('.filter-bar details.filter-group').forEach(d => d.open = false);
+  }
+});
 
 
 
-근무 지역
-▸
-국내
-0
-▸
-해외
-0
-▸
-온라인
-0
+// Initial render
+buildRegionFilters();
+recalcSidebarCounts();
+recalcChipCounts();
+renderGrid();
+updateHeaderBookmarkCount();
+</script>
 
-재택
-0
-자격증
-
-자격증 필수
-0
-
-자격증 무관
-0
-학위
-
-무관
-0
-
-석사 이상
-0
-
-박사수료 이상
-0
-
-박사 이상
-0
-경력
-
-신입 가능
-0
-초기화
-총 14개의 공고
-        최신순
-        마감 임박순
-        급여 공개 우선
-      
-© 2026 K-Teacher Jobs · 한국어 강사 채용정보 모음
-서비스 소개 공고 제보 개인정보 처리방침 문의하기
+</body>
+</html>
