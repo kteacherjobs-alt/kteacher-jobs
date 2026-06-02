@@ -62,6 +62,7 @@ const normBadges = (arr) => Array.isArray(arr) ? arr.map(b => BADGE_MAP[b] || b)
 
 function instSlug(rec) {
   const f = rec.fields;
+  if (f.institution_id) return String(f.institution_id);
   if (f.inst_id) return String(f.inst_id);
   if (f.slug) return String(f.slug);
   return rec.id;
@@ -70,7 +71,8 @@ function instSlug(rec) {
 function mapInstitution(rec) {
   const f = rec.fields;
   return {
-    name: f.name || '',
+    name: f.name_ko || f.name_en || f.name || '',
+    name_en: f.name_en || '',
     type: f.institution_type || f.type || '',
     country: f.country || '',
     city: f.city || f.region || '',
@@ -81,9 +83,17 @@ function mapInstitution(rec) {
 
 function mapJob(rec, idx, instLookup) {
   const f = rec.fields;
-  const linked = f.institution || f.Institutions || [];
-  const instRecId = Array.isArray(linked) ? linked[0] : linked;
-  const inst = instLookup[instRecId] || 'unknown';
+  const linked = f.institution || f.Institutions || '';
+  let inst;
+  if (Array.isArray(linked)) {
+    // linked record case: array of record IDs
+    inst = instLookup[linked[0]] || linked[0] || 'unknown';
+  } else if (typeof linked === 'string' && linked) {
+    // text slug case (e.g. "tukorea")
+    inst = linked;
+  } else {
+    inst = 'unknown';
+  }
   return {
     id: idx + 1,
     inst,
@@ -121,6 +131,7 @@ function mapJob(rec, idx, instLookup) {
     instRecs.forEach(rec => {
       const slug = instSlug(rec);
       instLookup[rec.id] = slug;
+      instLookup[slug] = slug; // also map slug → slug so text-based institution refs work
       institutions[slug] = mapInstitution(rec);
     });
     console.log(`   ${instRecs.length}개 기관`);
