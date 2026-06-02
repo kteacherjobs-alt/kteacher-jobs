@@ -1126,7 +1126,6 @@
       <select class="sort-select" id="sortSelect">
         <option value="latest">최신순</option>
         <option value="deadline">마감 임박순</option>
-        <option value="salary">급여 공개 우선</option>
       </select>
     </div>
     <div class="grid" id="grid"></div>
@@ -1534,7 +1533,6 @@ function renderGrid() {
   // sort
   const sort = document.getElementById('sortSelect').value;
   if (sort === 'deadline') filtered.sort((a,b) => a.deadline - b.deadline);
-  else if (sort === 'salary') filtered.sort((a,b) => (b.salaryDisclosed?1:0) - (a.salaryDisclosed?1:0));
   // latest = 기본 순서 유지
 
   if (filtered.length === 0) {
