@@ -1674,8 +1674,10 @@ function openJob(id) {
       등록: ${job.posted}
     </div>
     <div class="modal-cta">
-      <a href="#" class="primary-cta" onclick="alert('시안 데모: 실제로는 원문 채용공고로 이동합니다')">원문 보기 / 지원하기</a>
-      <button class="secondary-cta" onclick="alert('시안 데모: 로그인 후 저장 가능')">💾 저장</button>
+      ${job.apply_url
+        ? `<a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="primary-cta">원문 보기 / 지원하기 ↗</a>`
+        : `<span class="primary-cta" style="opacity:0.5; cursor:not-allowed;" title="원문 링크가 등록되지 않았습니다. 위 '지원 방법' 안내를 참고해주세요.">원문 링크 없음</span>`
+      }
     </div>
   `;
   document.getElementById('jobModal').classList.add('show');
