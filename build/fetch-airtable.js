@@ -118,6 +118,7 @@ function mapJob(rec, idx, instLookup) {
     quals: f.qualifications || '',
     preferred: f.preferred || '',
     apply: f.how_to_apply || '',
+    apply_url: f.application_url || '',
     badges: normBadges(f.quality_badges),
   };
 }
