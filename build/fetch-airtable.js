@@ -9,6 +9,7 @@ const PAT = process.env.AIRTABLE_PAT;
 const BASE_ID = process.env.AIRTABLE_BASE_ID;
 const JOBS_TABLE = process.env.AIRTABLE_JOBS_TABLE || 'Jobs';
 const INST_TABLE = process.env.AIRTABLE_INSTITUTIONS_TABLE || 'Institutions';
+const EVENTS_TABLE = process.env.AIRTABLE_EVENTS_TABLE || 'Events';
 
 if (!PAT || !BASE_ID) {
   console.log('⚠️  Airtable 환경변수 없음 (AIRTABLE_PAT / AIRTABLE_BASE_ID).');
@@ -81,6 +82,23 @@ function mapInstitution(rec) {
   };
 }
 
+function mapEvent(rec, idx) {
+  const f = rec.fields;
+  return {
+    id: idx + 1,
+    title: f.title || '',
+    organizer: f.organizer || f.host || '',
+    event_date: f.event_date || f.date || '',
+    event_end_date: f.event_end_date || f.end_date || '',
+    location: f.location || f.venue || '',
+    format: f.format || f.event_format || '',
+    deadline: f.registration_deadline || f.deadline || '',
+    registration_url: f.registration_url || f.url || '',
+    description: f.description || '',
+    status: f.status || 'open',
+  };
+}
+
 function mapJob(rec, idx, instLookup) {
   const f = rec.fields;
   const linked = f.institution || f.Institutions || '';
@@ -150,6 +168,23 @@ function mapJob(rec, idx, instLookup) {
       `var jobs = ${JSON.stringify(jobs, null, 2)};\n`;
     fs.writeFileSync(out, content, 'utf8');
     console.log(`✅ data.js 저장 완료 (${content.length} bytes, ${jobRecs.length}공고 + ${instRecs.length}기관)`);
+
+    // Events 테이블은 선택사항 — 없으면 빈 배열로 진행
+    console.log('📥 Events 가져오는 중...');
+    let events = [];
+    try {
+      const eventRecs = await fetchAll(EVENTS_TABLE);
+      events = eventRecs.map((rec, idx) => mapEvent(rec, idx));
+      console.log(`   ${events.length}개 행사`);
+    } catch (e) {
+      console.log(`   ⚠️  Events 테이블 없음 또는 접근 불가 — 빈 events.js 생성. (${e.message})`);
+    }
+    const eventsOut = path.join(__dirname, '..', 'events.js');
+    const eventsContent =
+      `// events.js — Airtable에서 자동 생성됨 (${new Date().toISOString()})\n` +
+      `var events = ${JSON.stringify(events, null, 2)};\n`;
+    fs.writeFileSync(eventsOut, eventsContent, 'utf8');
+    console.log(`✅ events.js 저장 완료 (${events.length}건)`);
   } catch (e) {
     console.error('❌ 빌드 실패:', e.message);
     process.exit(1);
