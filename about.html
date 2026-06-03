@@ -562,6 +562,7 @@
     <nav>
       <ul>
         <li><a href="index.html">채용공고</a></li>
+        <li><a href="events.html">학회 · 세미나</a></li>
         <li><a href="institutions.html">기관 둘러보기</a></li>
         <li><a href="library.html">자료실</a></li>
         <li><a href="#" class="active">소개 · 의견</a></li>
@@ -745,8 +746,19 @@
 document.getElementById('feedbackForm').addEventListener('submit', e => {
   e.preventDefault();
   const cat = document.querySelector('input[name="category"]:checked').nextElementSibling.querySelector('strong').textContent;
-  alert(`의견 잘 받았어요! 감사합니다 🙏\n\n[카테고리] ${cat}\n\n(시안 데모 — 실제로는 운영자에게 메일로 전달돼요)`);
-  e.target.reset();
+  const msg = document.getElementById('msg').value.trim();
+  const email = document.getElementById('email').value.trim();
+  if (!msg) {
+    alert('내용을 입력해주세요.');
+    return;
+  }
+  const subject = `[K-Teacher Jobs 의견] ${cat}`;
+  const body =
+    `[카테고리] ${cat}\n\n` +
+    `[내용]\n${msg}\n\n` +
+    (email ? `[회신용 이메일] ${email}\n` : '');
+  const mailto = `mailto:jhkim234@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
 });
 </script>
 

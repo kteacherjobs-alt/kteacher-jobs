@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>학회 · 세미나 · K-Teacher Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1F2937;
+    --primary-dark: #111827;
+    --primary-light: #475569;
+    --accent: #F59E0B;
+    --accent-soft: #FCD34D;
+    --bg: #FAFAFA;
+    --bg-soft: #FFFFFF;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+    --text-secondary: #6B7280;
+    --text-light: #9CA3AF;
+    --border: #E5E7EB;
+    --border-soft: #F3F4F6;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 2px 8px rgba(30, 58, 95, 0.08);
+    --shadow-lg: 0 8px 32px rgba(30, 58, 95, 0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+
+  /* === Header === */
+  header {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-weight: 900;
+    font-size: 16px;
+  }
+  .logo-text { font-weight: 900; font-size: 18px; }
+  .logo-sub { font-size: 11px; color: var(--text-secondary); }
+  nav ul { list-style: none; display: flex; gap: 28px; align-items: center; }
+  nav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    transition: color 0.15s;
+  }
+  nav a:hover, nav a.active { color: var(--primary); }
+  nav a.active { font-weight: 700; }
+
+  /* === Hero === */
+  .hero {
+    text-align: center;
+    padding: 56px 24px 28px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  /* === Results bar === */
+  .results-wrap { max-width: 1200px; margin: 0 auto; padding: 12px 24px 48px; }
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .results-count { font-size: 14px; color: var(--text-secondary); }
+  .results-count strong { color: var(--primary); font-weight: 700; }
+  .sort-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+    cursor: pointer;
+    color: var(--text);
+    font-family: inherit;
+  }
+
+  /* === Card grid === */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .card-organizer {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .meta-line { display: flex; align-items: center; gap: 6px; }
+  .card-deadline {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 4px;
+  }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 14px;
+  }
+  .dday {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .dday.urgent { background: #FEE2E2; color: #B91C1C; }
+  .dday.normal { background: #F3F4F6; color: var(--text-secondary); }
+  .dday.closed { background: #E5E7EB; color: var(--text-light); }
+  .view-btn {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* === Empty state === */
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-secondary);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty p { font-size: 15px; }
+
+  /* === Modal === */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    max-width: 640px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    color: var(--text-secondary);
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+  }
+  .modal-close:hover { background: var(--border-soft); }
+  .modal h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; padding-right: 40px; }
+  .modal .organizer-line { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+  .modal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px 20px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 20px;
+  }
+  .modal-grid .label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+  .modal-grid .value { font-size: 14px; color: var(--text); font-weight: 500; }
+  .modal-desc { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 24px; white-space: pre-line; }
+  .modal-cta { display: flex; gap: 10px; }
+  .primary-cta {
+    flex: 1;
+    background: var(--primary);
+    color: white;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .primary-cta:hover { background: var(--primary-dark); }
+
+  /* === Footer === */
+  footer {
+    background: var(--primary-dark);
+    color: rgba(255,255,255,0.7);
+    padding: 32px 24px;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    nav ul { gap: 16px; }
+    .hero h1 { font-size: 24px; }
+    nav a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">K</div>
+      <div>
+        <div class="logo-text">K-Teacher Jobs</div>
+        <div class="logo-sub">한국어 강사 채용정보 허브</div>
+      </div>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">채용공고</a></li>
+        <li><a href="#" class="active">학회 · 세미나</a></li>
+        <li><a href="institutions.html">기관 둘러보기</a></li>
+        <li><a href="library.html">자료실</a></li>
+        <li><a href="about.html">소개 · 의견</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>학회 · 세미나 공고</h1>
+    <p>한국어교육 관련 학회, 세미나, 워크숍 소식을 한곳에서</p>
+  </section>
+
+  <section class="results-wrap">
+    <div class="results-header">
+      <div class="results-count">총 <strong id="resultCount">0</strong>건</div>
+      <select class="sort-select" id="sortSelect">
+        <option value="upcoming">행사 임박순</option>
+        <option value="deadline">신청 마감 임박순</option>
+        <option value="latest">최신 등록순</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer>
+  <div>© 2026 K-Teacher Jobs · 한국어 강사 채용정보 모음</div>
+</footer>
+
+<!-- Event Detail Modal -->
+<div class="modal-backdrop" id="eventModal">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script src="events.js"></script>
+<script>
+  // events.js가 events 변수를 정의. 없으면 빈 배열.
+  var events = (typeof events !== 'undefined' && Array.isArray(events)) ? events : [];
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return iso;
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function formatDateRange(start, end) {
+    if (!start) return '';
+    if (!end || end === start) return formatDate(start);
+    return `${formatDate(start)} ~ ${formatDate(end)}`;
+  }
+  function daysFromToday(iso) {
+    if (!iso) return null;
+    const t = new Date(iso);
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    t.setHours(0,0,0,0);
+    return Math.round((t - now) / 86400000);
+  }
+  function ddayLabel(deadlineIso) {
+    const d = daysFromToday(deadlineIso);
+    if (d === null) return { text: '상시 모집', cls: 'normal' };
+    if (d < 0) return { text: '마감', cls: 'closed' };
+    if (d === 0) return { text: '오늘 마감', cls: 'urgent' };
+    if (d <= 7) return { text: `D-${d}`, cls: 'urgent' };
+    return { text: `D-${d}`, cls: 'normal' };
+  }
+
+  function renderCard(ev) {
+    const dl = ddayLabel(ev.deadline);
+    const dateRange = formatDateRange(ev.event_date, ev.event_end_date);
+    return `
+      <div class="card" onclick="openModal(${ev.id})">
+        <div class="card-top">
+          <span class="card-organizer">${ev.organizer || ''}</span>
+        </div>
+        <h3 class="card-title">${ev.title}</h3>
+        <div class="card-meta">
+          ${dateRange ? `<div class="meta-line">📅 ${dateRange}</div>` : ''}
+          ${ev.location ? `<div class="meta-line">📍 ${ev.location}</div>` : ''}
+          ${ev.format ? `<div class="meta-line">🖥️ ${ev.format}</div>` : ''}
+        </div>
+        ${ev.deadline ? `<div class="card-deadline">신청 마감: ${formatDate(ev.deadline)}</div>` : ''}
+        <div class="card-footer">
+          <span class="dday ${dl.cls}">${dl.text}</span>
+          <span class="view-btn">자세히 →</span>
+        </div>
+      </div>`;
+  }
+
+  function renderGrid() {
+    const sort = document.getElementById('sortSelect').value;
+    let list = [...events];
+    if (sort === 'upcoming') {
+      list.sort((a, b) => {
+        const da = daysFromToday(a.event_date) ?? 999;
+        const db = daysFromToday(b.event_date) ?? 999;
+        return da - db;
+      });
+    } else if (sort === 'deadline') {
+      list.sort((a, b) => {
+        const da = daysFromToday(a.deadline) ?? 999;
+        const db = daysFromToday(b.deadline) ?? 999;
+        return da - db;
+      });
+    }
+    document.getElementById('resultCount').textContent = list.length;
+    const grid = document.getElementById('grid');
+    if (list.length === 0) {
+      grid.innerHTML = `
+        <div class="empty" style="grid-column: 1 / -1;">
+          <div class="empty-icon">📚</div>
+          <p>등록된 행사가 없어요.</p>
+          <p style="margin-top:8px; font-size:13px;">곧 한국어교육 학회·세미나 공고가 차례로 올라옵니다.</p>
+        </div>`;
+    } else {
+      grid.innerHTML = list.map(renderCard).join('');
+    }
+  }
+
+  function openModal(id) {
+    const ev = events.find(e => e.id === id);
+    if (!ev) return;
+    const dl = ddayLabel(ev.deadline);
+    const dateRange = formatDateRange(ev.event_date, ev.event_end_date);
+    document.getElementById('modalContent').innerHTML = `
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <h2>${ev.title}</h2>
+      <div class="organizer-line">${ev.organizer || ''}</div>
+      <div class="modal-grid">
+        ${dateRange ? `<div><div class="label">행사 일자</div><div class="value">${dateRange}</div></div>` : ''}
+        ${ev.location ? `<div><div class="label">장소</div><div class="value">${ev.location}</div></div>` : ''}
+        ${ev.format ? `<div><div class="label">진행 방식</div><div class="value">${ev.format}</div></div>` : ''}
+        ${ev.deadline ? `<div><div class="label">신청 마감</div><div class="value">${formatDate(ev.deadline)} <span class="dday ${dl.cls}" style="margin-left:6px;">${dl.text}</span></div></div>` : ''}
+      </div>
+      ${ev.description ? `<div class="modal-desc">${ev.description}</div>` : ''}
+      <div class="modal-cta">
+        ${ev.registration_url
+          ? `<a href="${ev.registration_url}" target="_blank" rel="noopener noreferrer" class="primary-cta">신청 페이지 / 자세히 보기 ↗</a>`
+          : `<span class="primary-cta" style="opacity:0.5; cursor:not-allowed;" title="신청 링크가 등록되지 않았습니다.">신청 링크 없음</span>`
+        }
+      </div>`;
+    document.getElementById('eventModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('eventModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('eventModal').addEventListener('click', (e) => {
+    if (e.target.id === 'eventModal') closeModal();
+  });
+  document.getElementById('sortSelect').addEventListener('change', renderGrid);
+
+  renderGrid();
+</script>
+</body>
+</html>
