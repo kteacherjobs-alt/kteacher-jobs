@@ -1,0 +1,25 @@
+name: Auto rebuild from Airtable
+
+# 매시간 Vercel Deploy Hook을 호출해서 Airtable 변경사항을 자동으로 사이트에 반영합니다.
+# 즉시 반영하고 싶을 때는 GitHub Actions 탭 → 이 워크플로 → "Run workflow" 버튼을 누르세요.
+
+on:
+  schedule:
+    # 매시간 정각 (UTC 기준, KST는 +9시간)
+    - cron: '0 * * * *'
+  workflow_dispatch:  # GitHub UI에서 수동 실행 가능
+
+jobs:
+  trigger-vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Deploy Hook
+        run: |
+          echo "🚀 Triggering Vercel rebuild..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}")
+          if [ "$response" -eq 200 ] || [ "$response" -eq 201 ]; then
+            echo "✅ Vercel rebuild triggered successfully (HTTP $response)"
+          else
+            echo "❌ Failed to trigger Vercel rebuild (HTTP $response)"
+            exit 1
+          fi
