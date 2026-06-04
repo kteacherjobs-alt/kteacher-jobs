@@ -1956,25 +1956,11 @@ function recalcSidebarCounts() {
   });
 }
 
-// === 위쪽 칩 0건 숨김 ===
+// === 위쪽 칩은 항상 표시 (기관 둘러보기와 일관성) ===
+// 데이터가 0건이어도 칩을 숨기지 않습니다.
 function recalcChipCounts() {
-  document.querySelectorAll('.chip[data-quick]').forEach(chip => {
-    const q = chip.dataset.quick;
-    if (q === 'all') return;
-    let count = 0;
-    if (q.startsWith('type:')) {
-      const t = q.slice(5);
-      count = jobs.filter(j => j.type === t && j.category === '강사').length;
-    } else if (q === 'admin') count = jobs.filter(j => j.category === '행정·운영').length;
-    else if (q === 'publishing') count = jobs.filter(j => j.category === '교재·출판').length;
-    else if (q === 'content') count = jobs.filter(j => j.category === '콘텐츠 제작').length;
-    else if (q === 'research') count = jobs.filter(j => j.category === '연구·평가').length;
-    else if (q === 'policy') count = jobs.filter(j => j.category === '정책·국제교류').length;
-    else return;
-    // 0건이면 숨김 (mode 토글 시 다시 표시 결정은 별도 처리)
-    chip.dataset.zero = count === 0 ? '1' : '0';
-    if (count === 0) chip.style.display = 'none';
-  });
+  // 칩 카테고리는 사이트의 정보 구조이므로 데이터 유무와 무관하게 고정 노출.
+  // (모드 토글 시 강사/기타 직군 그룹 전환은 별도 로직에서 처리)
 }
 
 // === 사이드바 input 이벤트 위임 (동적 생성 대응) ===
