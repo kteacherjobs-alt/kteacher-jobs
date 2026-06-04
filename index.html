@@ -750,6 +750,30 @@
     line-height: 1.65;
   }
   .modal-section ul { padding-left: 18px; }
+  /* === 자동 구조화 텍스트 (지원방법/자격요건 등) === */
+  .rich-text {
+    white-space: pre-line;
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .rich-text .rt-section {
+    display: block;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-size: 13.5px;
+  }
+  .rich-text .rt-section:first-child { margin-top: 0; }
+  .rich-text .rt-note {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    padding-left: 14px;
+    text-indent: -14px;
+  }
+  .rich-text a { color: var(--accent); text-decoration: underline; }
   .modal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1490,6 +1514,41 @@ function modeIcon(m) {
   return '🏢';
 }
 
+// === 모달용 자동 구조화 텍스트 포맷터 ===
+// 입력 텍스트를 HTML-escape한 뒤, [섹션] 헤더 / ※ 노트 / ①②③ 번호 / 이메일·URL을
+// 패턴 매칭으로 자동 줄바꿈·강조해서 보기 좋게 만듭니다.
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+function formatRichText(s) {
+  if (!s) return '';
+  let t = escapeHtml(s).replace(/\r\n/g, '\n');
+  // [섹션 헤더] 앞뒤 줄바꿈
+  t = t.replace(/\s*(\[[^\]\n]+\])\s*/g, '\n$1\n');
+  // ※ 노트 앞에 줄바꿈
+  t = t.replace(/([^\n])\s*(※)/g, '$1\n$2');
+  // ①②③ 번호 앞에 줄바꿈
+  t = t.replace(/([^\n])\s*([①②③④⑤⑥⑦⑧⑨⑩⑪⑫])/g, '$1\n$2');
+  // 이메일 자동 링크
+  t = t.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+    '<a href="mailto:$1">$1</a>');
+  // URL 자동 링크
+  t = t.replace(/(https?:\/\/[^\s<]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  // 3개 이상 연속 줄바꿈 정리
+  t = t.replace(/\n{3,}/g, '\n\n');
+  // [섹션] 헤더 스타일링
+  t = t.replace(/(\[[^\]\n]+\])/g, '<span class="rt-section">$1</span>');
+  // ※ 노트 스타일링 (줄 시작에서만)
+  t = t.replace(/(^|\n)(※[^\n]+)/g, '$1<span class="rt-note">$2</span>');
+  return t.trim();
+}
+
 function renderCard(job) {
   const inst = institutions[job.inst];
   const dl = deadlineText(job.deadline);
@@ -1655,19 +1714,19 @@ function openJob(id) {
     </div>
     <div class="modal-section">
       <h4>담당 업무</h4>
-      <p>${job.desc}</p>
+      <p class="rich-text">${formatRichText(job.desc)}</p>
     </div>
     <div class="modal-section">
       <h4>자격 요건</h4>
-      <p style="white-space:pre-line;">${job.quals}</p>
+      <p class="rich-text">${formatRichText(job.quals)}</p>
     </div>
     <div class="modal-section">
       <h4>우대 사항</h4>
-      <p>${job.preferred}</p>
+      <p class="rich-text">${formatRichText(job.preferred)}</p>
     </div>
     <div class="modal-section">
       <h4>지원 방법</h4>
-      <p>${job.apply}</p>
+      <p class="rich-text">${formatRichText(job.apply)}</p>
     </div>
     <div style="font-size:12px; color:var(--text-light); margin-bottom:12px;">
       등록: ${job.posted}
