@@ -500,6 +500,13 @@
   }
   .pattern-rows { text-align: left; }
 
+
+  /* === 실데이터 전환: 공사중 요소 숨김 + 추가 스타일 === */
+  .construction-banner, .preview-footer { display: none !important; }
+  .badge.verified { display:inline-block; font-size:11px; font-weight:600; color:#2A9D8F; background:rgba(42,157,143,.12); padding:1px 7px; border-radius:999px; margin-left:4px; vertical-align:middle; }
+  .inst-site { display:inline-block; margin-top:4px; font-size:12px; color:#2563EB; }
+  .inst-site:hover { text-decoration:underline; }
+
 </style>
 </head>
 <body>
@@ -574,272 +581,6 @@
 
   <div class="inst-grid" id="instGrid">
 
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">서</div>
-        <div class="inst-info">
-          <div class="inst-name">서울대학교 언어교육원</div>
-          <div class="inst-meta">🇰🇷 서울 · 🏫 대학 어학당</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">매년 6월·12월</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">시급 레인지</span><span class="pat-value">시급 58,000~60,000원</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">자격증 필수 · 석사+</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 5건</span><span class="last">최근 3일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">연</div>
-        <div class="inst-info">
-          <div class="inst-name">연세대학교 한국어학당</div>
-          <div class="inst-meta">🇰🇷 서울 · 🏫 대학 어학당</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">분기마다 (3·6·9·12월)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">월급 레인지</span><span class="pat-value">월 350~400만원</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">자격증 필수 · 경력 3년+</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 4건</span><span class="last">최근 5일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">이</div>
-        <div class="inst-info">
-          <div class="inst-name">이화여자대학교 언어교육원</div>
-          <div class="inst-meta">🇰🇷 서울 · 🏫 대학 어학당</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">학기 시작 1~2개월 전</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">급여</span><span class="pat-value">협의 (비공개)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">자격증 우대 · 석사 과정+</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 3건</span><span class="last">최근 1일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">세</div>
-        <div class="inst-info">
-          <div class="inst-name">세종학당재단</div>
-          <div class="inst-meta">🌏 해외 파견 · 🌏 세종학당</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">매년 1월·6월</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">월급 레인지</span><span class="pat-value">월 250~350만 + 항공·체재비</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">자격증 필수 · 학사+ · 경력 1년+</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 3건</span><span class="last">최근 오늘</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">U</div>
-        <div class="inst-info">
-          <div class="inst-name">UCLA Asian Languages & Cultures</div>
-          <div class="inst-meta">🇺🇸 LA · 🎓 대학·대학원</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">1~3월 (가을학기 임용)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">연봉 레인지</span><span class="pat-value">USD 65,000~78,000 / year</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">박사 + 강의 경력 3년+</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 2건</span><span class="last">최근 2일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">T</div>
-        <div class="inst-info">
-          <div class="inst-name">University of Toronto, East Asian Studies</div>
-          <div class="inst-meta">🇨🇦 Toronto · 🎓 대학·대학원</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">4월·10월</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">강의료</span><span class="pat-value">CAD 8,800~9,200 / course</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">석사 + 영주권/시민권</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 3건</span><span class="last">최근 4일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">와</div>
-        <div class="inst-info">
-          <div class="inst-name">와세다대학 한국어교육연구센터</div>
-          <div class="inst-meta">🇯🇵 도쿄 · 🎓 대학·대학원</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">1월·7월 (비정기)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">급여</span><span class="pat-value">연봉 협의 (비공개)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">자격증 필수 · 석사+ · 일본어 N1</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 2건</span><span class="last">최근 6일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">S</div>
-        <div class="inst-info">
-          <div class="inst-name">University of Sydney, Korean Studies</div>
-          <div class="inst-meta">🇦🇺 Sydney · 🎓 대학·대학원</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">6월·12월 (학기 전)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">시급 레인지</span><span class="pat-value">AUD 75~95 / hour</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">학사+ · 자격증 우대 · 신입 가능</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 2건</span><span class="last">최근 오늘</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">호</div>
-        <div class="inst-info">
-          <div class="inst-name">호치민 인문사회과학대학 한국학과</div>
-          <div class="inst-meta">🇻🇳 호치민 · 🎓 대학·대학원</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">2~3년에 1회</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">월급 레인지</span><span class="pat-value">월 USD 1,800~2,500 + 주거</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">박사 + 경력 5년+ · 영어 강의</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 2건</span><span class="last">최근 7일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">L</div>
-        <div class="inst-info">
-          <div class="inst-name">Lingoo Korean</div>
-          <div class="inst-meta">💻 온라인 플랫폼</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">상시 (가입형)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">시급 레인지</span><span class="pat-value">USD 15~40 (본인 설정)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">원어민 + 자격증 우대 · 신입 가능</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 1건</span><span class="last">최근 오늘</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">K</div>
-        <div class="inst-info">
-          <div class="inst-name">KoreanGo</div>
-          <div class="inst-meta">💻 온라인 플랫폼</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">상시 (분기별 심사)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">시급 레인지</span><span class="pat-value">USD 20~35 / hour</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">자격증 필수 · 경력 1년+</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 2건</span><span class="last">최근 4일 전</span></div>
-    </div>
-
-    <div class="inst-card" onclick="showSample()">
-<div class="inst-card-top">
-        <div class="inst-logo">강</div>
-        <div class="inst-info">
-          <div class="inst-name">강남 토픽 한국어학원</div>
-          <div class="inst-meta">🇰🇷 서울 강남 · 🎯 사설 어학원</div>
-        </div>
-      </div>
-      <div class="pattern-rows">
-        <div class="pattern-row">
-          <span class="pat-icon">📅</span><span class="pat-label">채용 시기</span><span class="pat-value">분기 초 (1·4·7·10월)</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">💰</span><span class="pat-label">시급 레인지</span><span class="pat-value">시급 45,000~55,000원</span>
-        </div>
-        <div class="pattern-row">
-          <span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">학사+ · 자격증 우대 · 신입 가능</span>
-        </div>
-      </div>
-      <div class="inst-footer-line"><span>누적 4건</span><span class="last">최근 2일 전</span></div>
-    </div>
-
-  </div>
-
   <div class="empty-state" id="emptyState">
     <div class="empty-icon">🔍</div>
     <h3>찾으시는 기관이 아직 등록되어 있지 않아요</h3>
@@ -865,7 +606,74 @@
   </div>
 </footer>
 
+<script src="data.js"></script>
 <script>
+
+/* === 기관 둘러보기: data.js 기반 실데이터 렌더링 (공고 누적 집계) === */
+(function renderInstitutions(){
+  var grid = document.getElementById('instGrid');
+  if (!grid || typeof institutions === 'undefined') return;
+  var jobsArr = (typeof jobs !== 'undefined' && Array.isArray(jobs)) ? jobs : [];
+  var FLAG = {'한국':'🇰🇷','미국':'🇺🇸','캐나다':'🇨🇦','일본':'🇯🇵','중국':'🇨🇳','호주':'🇦🇺','베트남':'🇻🇳','영국':'🇬🇧','독일':'🇩🇪','프랑스':'🇫🇷','온라인':'🌐'};
+  function flag(c){ return FLAG[c] || '🏫'; }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function recencyVal(t){ return /오늘/.test(t) ? 0 : parseInt((String(t).match(/\d+/)||['999'])[0],10); }
+
+  var keys = Object.keys(institutions);
+  keys.sort(function(a,b){ return String(institutions[a].name).localeCompare(String(institutions[b].name),'ko'); });
+
+  var html = keys.map(function(key){
+    var inst = institutions[key];
+    var myJobs = jobsArr.filter(function(j){ return j.inst === key; });
+    var count = myJobs.length;
+
+    var recentLabel = '준비 중';
+    if (count){
+      var best = null, bestv = 1e9;
+      myJobs.forEach(function(j){ var v = recencyVal(j.posted); if (v < bestv){ bestv = v; best = j.posted; } });
+      recentLabel = '최근 ' + (best || '—');
+    }
+
+    var rows;
+    if (count){
+      var emps = [];
+      myJobs.forEach(function(j){ if (j.employment && emps.indexOf(j.employment) < 0) emps.push(j.employment); });
+      var latest = myJobs.slice().sort(function(a,b){ return recencyVal(a.posted) - recencyVal(b.posted); })[0];
+      var sal = (latest && latest.salaryDisclosed && latest.salary) ? latest.salary : '공고 참고';
+      var req = [ (latest && latest.cert) ? ('자격증 ' + latest.cert) : '', (latest && latest.degree) ? latest.degree : '' ].filter(Boolean).join(' · ') || '공고 참고';
+      rows =
+        '<div class="pattern-row"><span class="pat-icon">🧾</span><span class="pat-label">고용 형태</span><span class="pat-value">' + esc(emps.join(' · ') || '—') + '</span></div>' +
+        '<div class="pattern-row"><span class="pat-icon">💰</span><span class="pat-label">최근 급여</span><span class="pat-value">' + esc(sal) + '</span></div>' +
+        '<div class="pattern-row"><span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">' + esc(req) + '</span></div>';
+    } else {
+      var d = inst.desc ? (inst.desc.length > 60 ? inst.desc.slice(0,60) + '…' : inst.desc) : '소개 준비 중';
+      rows =
+        '<div class="pattern-row"><span class="pat-icon">🏫</span><span class="pat-label">소개</span><span class="pat-value">' + esc(d) + '</span></div>' +
+        '<div class="pattern-row"><span class="pat-icon">📋</span><span class="pat-label">등록 공고</span><span class="pat-value">아직 없음</span></div>';
+    }
+
+    var badge = inst.verified ? ' <span class="badge verified">✓ 검수</span>' : '';
+    var site = inst.website ? '<a class="inst-site" href="https://' + esc(inst.website) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + esc(inst.website) + ' ↗</a>' : '';
+    var logoChar = esc((String(inst.name||'·').trim().charAt(0)) || '·');
+    var meta = flag(inst.country) + ' ' + esc(inst.city || inst.country || '') + ' · 🏫 ' + esc(inst.type || '');
+    var onclick = inst.website ? ' onclick="window.open(\'https://' + esc(inst.website) + '\',\'_blank\')" style="cursor:pointer"' : '';
+
+    return '<div class="inst-card"' + onclick + '>' +
+      '<div class="inst-card-top">' +
+        '<div class="inst-logo">' + logoChar + '</div>' +
+        '<div class="inst-info">' +
+          '<div class="inst-name">' + esc(inst.name) + badge + '</div>' +
+          '<div class="inst-meta">' + meta + '</div>' + site +
+        '</div>' +
+      '</div>' +
+      '<div class="pattern-rows">' + rows + '</div>' +
+      '<div class="inst-footer-line"><span>누적 ' + count + '건</span><span class="last">' + esc(recentLabel) + '</span></div>' +
+    '</div>';
+  }).join('');
+
+  grid.innerHTML = html || '';
+})();
+
 function showSample() {
   alert('이 기관의 참고 페이지가 열릴 자리예요 🏫\n\n실제 운영에서는 다음 정보가 모두 정리돼서 나와요:\n\n• 과거 채용 시기 (월별 분포)\n• 시급/월급 레인지 변화\n• 자주 요구하는 자격 / 우대 사항\n• 모집 기간(공고 게시 → 마감) 패턴\n• 지금까지의 모든 채용 이력 목록\n• 다음 채용 예상 시기\n\n채용공고를 찾는 곳이 아니라, "이 기관은 어떤 곳이고 어떻게 준비해야 할까"를 파악하는 참고 페이지예요.\n\n시안에서는 홈 화면에서 기관명을 클릭하면 이 페이지의 기본형을 미리 볼 수 있어요.');
 }
