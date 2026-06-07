@@ -755,6 +755,22 @@
   .status-pill.active { background: #DCFCE7; color: #166534; }
   .status-pill.closed { background: var(--border-soft); color: var(--text-secondary); }
 
+
+/* === .tag (공고 모달 태그) === */
+  .tag {
+    font-size: 11.5px;
+    padding: 3px 9px;
+    background: var(--border-soft);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .chips{margin:12px 0 0}
+  .fchip{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#EFF6FF;color:#1D4ED8}
 </style>
 </head>
 <body>
@@ -856,120 +872,179 @@
 
 <script src="data.js"></script>
 <script>
-
-/* === 기관 모달 (채용공고 페이지 디자인 + 실제 통계) === */
-function countryIcon(c){ var m={'한국':'🇰🇷','미국':'🇺🇸','일본':'🇯🇵','캐나다':'🇨🇦','호주':'🇦🇺','베트남':'🇻🇳','영국':'🇬🇧','온라인':'💻'}; return m[c]||'🌐'; }
-function _daysAgo(t){ return /오늘/.test(t)?0:parseInt((String(t).match(/\d+/)||['0'])[0],10); }
-function _postMonth(t){ var d=new Date(); d.setDate(d.getDate()-_daysAgo(t)); return d.getMonth()+1; }
-function _esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function openInstitution(key){
-  var inst=institutions[key]; if(!inst) return;
-  var all=jobs.filter(function(j){return j.inst===key;});
-  var active=all.filter(function(j){return j.deadline>0;});
-  var past=all.filter(function(j){return !(j.deadline>0);});
-
-  // 평균 모집 기간 = (게시 경과일 + 마감까지 D-day) 평균
-  var spans=all.map(function(j){return (parseInt(j.deadline,10)||0)+_daysAgo(j.posted);}).filter(function(s){return s>0;});
-  var avg=spans.length?Math.round(spans.reduce(function(a,b){return a+b;},0)/spans.length):null;
-  // 자격증 필수/우대 비율
-  var certs=all.map(function(j){return j.cert;});
-  var certHit=certs.filter(function(c){return /필수|우대/.test(String(c));}).length;
-  var certRate=certs.length?Math.round(certHit/certs.length*100):null;
-  // 채용 시기 — 공고 3건 이상일 때만 (실제 게시월)
-  var months=[]; all.forEach(function(j){ var m=_postMonth(j.posted); if(months.indexOf(m)<0) months.push(m); });
-  months.sort(function(a,b){return a-b;});
-
-  function stat(num,label){ return '<div class="pattern-item"><div class="num">'+num+'</div><div class="label">'+label+'</div></div>'; }
-
-  var seasonTip = (all.length>=3 && months.length)
-    ? '<p style="font-size:12.5px; color:#92400E; margin-top:12px;">💡 최근 공고는 주로 <strong>'+months.map(function(m){return m+'월';}).join(', ')+'</strong>에 올라왔어요.</p>'
-    : '';
-
-  var activeHtml = active.length===0
-    ? '<p style="color:var(--text-light); font-size:13px;">현재 진행 중인 공고가 없어요. 알림 신청을 해두시면 새 공고가 올라올 때 알려드릴게요.</p>'
-    : active.map(function(j){
-        return '<div class="history-item active-job" onclick="location.href=\'index.html\'">'+
-          '<div class="history-item-left"><h5>'+_esc(j.title)+'</h5>'+
-          '<div class="meta">'+_esc(j.employment||'')+' · '+_esc(j.mode||'')+' · 마감 D-'+j.deadline+'</div></div>'+
-          '<span class="status-pill active">진행 중</span></div>';
-      }).join('');
-
-  var pastHtml = past.length===0
-    ? '<p style="font-size:13px; color:var(--text-light);">아직 마감된 공고 이력이 없어요.</p>'
-    : past.map(function(j){
-        var sub=[_esc(j.employment||''), (j.salaryDisclosed&&j.salary)?_esc(j.salary):''].filter(Boolean).join(' · ');
-        return '<div class="history-item"><div class="history-item-left"><h5>'+_esc(j.title)+'</h5>'+
-          '<div class="meta">'+sub+'</div></div><span class="status-pill closed">마감</span></div>';
-      }).join('');
-
-  var content=document.getElementById('instModalContent');
-  content.innerHTML=
-    '<button class="modal-close" onclick="closeModal(\'instModal\')">'+
-      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>'+
-    '<div class="inst-header"><div class="inst-logo">'+_esc(inst.name.charAt(0))+'</div>'+
-      '<div class="inst-info"><h2>'+_esc(inst.name)+'</h2>'+
-      '<p>'+countryIcon(inst.country)+' '+_esc(inst.country)+' · '+_esc(inst.city)+' · 🏫 '+_esc(inst.type)+
-        (inst.website?(' · 🔗 <a href="https://'+_esc(inst.website)+'" target="_blank" style="color:var(--primary-light)">'+_esc(inst.website)+'</a>'):'')+
-      '</p></div></div>'+
-    '<div class="pattern-box"><h4>📊 이 기관의 채용 패턴</h4><div class="pattern-grid">'+
-      stat(all.length,'누적 등록 공고')+
-      stat(active.length,'현재 진행 중')+
-      stat(avg!=null?(avg+'일'):'—','평균 모집 기간')+
-      stat(certRate!=null?(certRate+'%'):'—','교원자격증 필수/우대')+
-    '</div>'+seasonTip+'</div>'+
-    '<div class="modal-section"><h4>현재 진행 중인 채용 ('+active.length+'건)</h4><div class="history-list">'+activeHtml+'</div></div>'+
-    '<div class="modal-section"><h4>과거 채용 이력 ('+past.length+'건)</h4><div class="history-list">'+pastHtml+'</div></div>'+
-    '<div class="modal-cta">'+
-      '<button class="primary-cta" onclick="alert(\'준비 중: 새 공고 알림\')">🔔 이 기관 새 공고 알림 받기</button>'+
-      '<button class="secondary-cta" onclick="alert(\'준비 중: 정보 정정 제보\')">정보 정정 제보</button>'+
-    '</div>';
-  document.getElementById('instModal').classList.add('show');
-  document.body.style.overflow='hidden';
+function deadlineText(d) {
+  if (d <= 0) return { text: '마감', urgent: false };
+  if (d <= 7) return { text: `D-${d}`, urgent: true };
+  return { text: `D-${d}`, urgent: false };
+}
+function countryIcon(c) {
+  const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
+  return map[c] || '🌐';
+}
+function modeIcon(m) {
+  if (m === '온라인') return '💻';
+  if (m === '하이브리드') return '🔄';
+  return '🏢';
 }
 
-function closeModal(id){ var el=document.getElementById(id); if(!el)return; el.classList.remove('show'); document.body.style.overflow=''; }
-document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal('instModal'); });
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+function formatRichText(s) {
+  if (!s) return '';
+  let t = escapeHtml(s).replace(/\r\n/g, '\n');
+  // [섹션 헤더] 앞뒤 줄바꿈
+  t = t.replace(/\s*(\[[^\]\n]+\])\s*/g, '\n$1\n');
+  // ※ 노트 앞에 줄바꿈
+  t = t.replace(/([^\n])\s*(※)/g, '$1\n$2');
+  // ①②③ 번호 앞에 줄바꿈
+  t = t.replace(/([^\n])\s*([①②③④⑤⑥⑦⑧⑨⑩⑪⑫])/g, '$1\n$2');
+  // 이메일 자동 링크
+  t = t.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+    '<a href="mailto:$1">$1</a>');
+  // URL 자동 링크
+  t = t.replace(/(https?:\/\/[^\s<]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  // 3개 이상 연속 줄바꿈 정리
+  t = t.replace(/\n{3,}/g, '\n\n');
+  // [섹션] 헤더 스타일링
+  t = t.replace(/(\[[^\]\n]+\])/g, '<span class="rt-section">$1</span>');
+  // ※ 노트 스타일링 (줄 시작에서만)
+  t = t.replace(/(^|\n)(※[^\n]+)/g, '$1<span class="rt-note">$2</span>');
+  return t.trim();
+}
+
+function openJob(id) {
+  const job = jobs.find(j => j.id === id);
+  const inst = institutions[job.inst];
+  const dl = deadlineText(job.deadline);
+  const content = document.getElementById('jobModalContent');
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal('jobModal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h2>${job.title}</h2>
+    ${job.original_title && job.original_title !== job.title ? `<div class="modal-original-title">원문 제목: ${job.original_title}</div>` : ''}
+    <div class="modal-institution" onclick="closeModal('jobModal'); openInstitution('${job.inst}')" style="cursor:pointer;">${inst.name} 기관 페이지 보기 →</div>
+    <div class="modal-tags">
+      <span class="tag">${countryIcon(job.country)} ${job.country}${job.region && job.country !== '온라인' ? ' · ' + job.region : ''}</span>
+      <span class="tag">${modeIcon(job.mode)} ${job.mode}</span>
+      <span class="tag">🏫 ${job.type}</span>
+      <span class="tag">📄 ${job.employment}</span>
+    </div>
+    <div class="modal-section">
+      <h4>핵심 정보</h4>
+      <div class="modal-grid">
+        <div class="modal-grid-item"><div class="label">기관 유형</div><div class="value">${job.type}</div></div>
+        <div class="modal-grid-item"><div class="label">고용 형태</div><div class="value">${job.employment}</div></div>
+        <div class="modal-grid-item"><div class="label">급여</div><div class="value">${job.salaryDisclosed ? job.salary : '비공개'}</div></div>
+        <div class="modal-grid-item"><div class="label">마감일</div><div class="value" style="color:${dl.urgent?'var(--accent)':'inherit'}">${dl.text}</div></div>
+        <div class="modal-grid-item"><div class="label">자격증</div><div class="value">${job.cert}</div></div>
+        <div class="modal-grid-item"><div class="label">학위</div><div class="value">${job.degree} 이상</div></div>
+        <div class="modal-grid-item"><div class="label">경력</div><div class="value">${job.experience === '신입가능' ? '신입 가능' : '경력 필수'}</div></div>
+        <div class="modal-grid-item"><div class="label">비자 지원</div><div class="value">${job.visa ? '지원' : '해당없음'}</div></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>담당 업무</h4>
+      <p class="rich-text">${formatRichText(job.desc)}</p>
+    </div>
+    <div class="modal-section">
+      <h4>자격 요건</h4>
+      <p class="rich-text">${formatRichText(job.quals)}</p>
+    </div>
+    <div class="modal-section">
+      <h4>우대 사항</h4>
+      <p class="rich-text">${formatRichText(job.preferred)}</p>
+    </div>
+    <div class="modal-section">
+      <h4>지원 방법</h4>
+      <p class="rich-text">${formatRichText(job.apply)}</p>
+    </div>
+    <div style="font-size:12px; color:var(--text-light); margin-bottom:12px;">
+      등록: ${job.posted}
+    </div>
+    <div class="modal-cta">
+      ${job.apply_url
+        ? `<a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="primary-cta">원문 보기 / 지원하기 ↗</a>`
+        : `<span class="primary-cta" style="opacity:0.5; cursor:not-allowed;" title="원문 링크가 등록되지 않았습니다. 위 '지원 방법' 안내를 참고해주세요.">원문 링크 없음</span>`
+      }
+    </div>
+  `;
+  document.getElementById('jobModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
 
 
-/* === 기관 둘러보기: 간결 카드 (기관명 + 위치·유형). 홈페이지는 모달에 표시 === */
+/* === 카드 렌더 (기관명 + 위치·유형) === */
 (function(){
   var grid=document.getElementById('instGrid');
-  if(!grid || typeof institutions==='undefined') return;
+  if(!grid||typeof institutions==='undefined')return;
   var jobsArr=(typeof jobs!=='undefined'&&Array.isArray(jobs))?jobs:[];
   var FLAG={'한국':'🇰🇷','미국':'🇺🇸','캐나다':'🇨🇦','일본':'🇯🇵','중국':'🇨🇳','호주':'🇦🇺','베트남':'🇻🇳','영국':'🇬🇧','독일':'🇩🇪','프랑스':'🇫🇷','온라인':'🌐'};
-  function flag(c){return FLAG[c]||'🏫';}
-  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  function rv(t){return /오늘/.test(t)?0:parseInt((String(t).match(/\d+/)||['999'])[0],10);}
-  function recentLabel(key){
-    var my=jobsArr.filter(function(j){return j.inst===key;});
-    if(!my.length) return '준비 중';
-    var b=null,bv=1e9; my.forEach(function(j){var v=rv(j.posted);if(v<bv){bv=v;b=j.posted;}});
-    return '최근 '+(b||'—');
-  }
+  function flag(c){return FLAG[c]||'🏫'}
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+  function rv(t){return /오늘/.test(t)?0:parseInt((String(t).match(/\d+/)||['999'])[0],10)}
+  function recentLabel(key){var my=jobsArr.filter(function(j){return j.inst===key});if(!my.length)return '준비 중';var b=null,bv=1e9;my.forEach(function(j){var v=rv(j.posted);if(v<bv){bv=v;b=j.posted}});return '최근 '+(b||'—')}
   var keys=Object.keys(institutions);
-  keys.sort(function(a,b){return String(institutions[a].name).localeCompare(String(institutions[b].name),'ko');});
+  keys.sort(function(a,b){return String(institutions[a].name).localeCompare(String(institutions[b].name),'ko')});
   grid.innerHTML=keys.map(function(key){
-    var inst=institutions[key];
-    var cnt=jobsArr.filter(function(j){return j.inst===key;}).length;
+    var inst=institutions[key];var cnt=jobsArr.filter(function(j){return j.inst===key}).length;
     var logo=esc((String(inst.name||'·').trim().charAt(0))||'·');
     var meta=flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
     return '<div class="inst-card" data-key="'+esc(key)+'" style="cursor:pointer">'+
       '<div class="inst-card-top"><div class="inst-logo">'+logo+'</div>'+
-      '<div class="inst-info"><div class="inst-name">'+esc(inst.name)+'</div>'+
-      '<div class="inst-meta">'+meta+'</div></div></div>'+
-      '<div class="inst-footer-line" style="display:none"><span>누적 '+cnt+'건</span><span class="last">'+esc(recentLabel(key))+'</span></div>'+
-    '</div>';
+      '<div class="inst-info"><div class="inst-name">'+esc(inst.name)+'</div><div class="inst-meta">'+meta+'</div></div></div>'+
+      '<div class="inst-footer-line" style="display:none"><span>누적 '+cnt+'건</span><span class="last">'+esc(recentLabel(key))+'</span></div></div>';
   }).join('');
-  // 개수 표시 갱신 (하드코딩 12 → 실제 기관 수)
-  var rc=document.getElementById('resultCount'); if(rc) rc.textContent=keys.length;
-  grid.addEventListener('click',function(e){
-    if(e.target.closest('a'))return;
-    var c=e.target.closest('.inst-card');
-    if(c&&c.dataset.key&&typeof openInstitution==='function')openInstitution(c.dataset.key);
-  });
+  var rc=document.getElementById('resultCount');if(rc)rc.textContent=keys.length;
+  grid.addEventListener('click',function(e){if(e.target.closest('a'))return;var c=e.target.closest('.inst-card');if(c&&c.dataset.key&&typeof openInstitution==='function')openInstitution(c.dataset.key)});
   window.showSample=function(){};
 })();
+
+/* === 기관 모달 (공고별 카드 클릭 → openJob, 정정 제보 메일) === */
+function jobMini(j){
+  var act=j.deadline>0;var dl=deadlineText(j.deadline);
+  var qual=[j.degree,j.experience].filter(Boolean).map(escapeHtml).join(' · ');
+  var line2='💰 '+escapeHtml(j.salary||'미기재')+(qual?(' · 🎓 '+qual):'');
+  return '<div class="history-item'+(act?' active-job':'')+'" onclick="closeModal(\'instModal\'); openJob('+j.id+')">'+
+    '<div class="history-item-left"><h5>'+escapeHtml(j.title)+'</h5>'+
+    '<div class="meta">'+escapeHtml(j.employment)+' · '+escapeHtml(j.mode)+' · '+escapeHtml(dl.text)+'</div>'+
+    '<div class="meta">'+line2+'</div></div>'+
+    '<span class="status-pill '+(act?'active':'closed')+'">'+(act?'진행 중':'마감')+'</span></div>';
+}
+function openInstitution(key){
+  var inst=institutions[key];if(!inst)return;
+  var all=jobs.filter(function(j){return j.inst===key});
+  var active=all.filter(function(j){return j.deadline>0});
+  var past=all.filter(function(j){return j.deadline<=0});
+  var foreign=all.some(function(j){return j.visa});
+  var chip=foreign?'<div class="chips"><span class="fchip">🌏 외국인 지원 가능</span></div>':'';
+  var actHtml=active.length?active.map(jobMini).join(''):'<p style="color:var(--text-light);font-size:13px;">현재 진행 중인 공고가 없어요. 새 공고가 올라오면 여기에 떠요.</p>';
+  var pastHtml=past.length?past.map(jobMini).join(''):'<p style="color:var(--text-light);font-size:13px;">아직 마감된 공고 이력이 없어요.</p>';
+  var mailto='mailto:kteacherjobs@gmail.com?subject='+encodeURIComponent('[K-Teacher Jobs] 정보 정정 제보 — '+inst.name)+'&body='+encodeURIComponent('정정할 기관: '+inst.name+'\n수정 내용:\n');
+  document.getElementById('instModalContent').innerHTML=
+    '<button class="modal-close" onclick="closeModal(\'instModal\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>'+
+    '<div class="inst-header"><div class="inst-logo">'+escapeHtml(inst.name.charAt(0))+'</div><div class="inst-info"><h2>'+escapeHtml(inst.name)+'</h2>'+
+      '<p>'+countryIcon(inst.country)+' '+escapeHtml(inst.country)+(inst.city?(' · '+escapeHtml(inst.city)):'')+' · 🏫 '+escapeHtml(inst.type)+(inst.website?(' · 🔗 <a href="https://'+escapeHtml(inst.website)+'" target="_blank" style="color:var(--primary-light)">'+escapeHtml(inst.website)+'</a>'):'')+'</p></div></div>'+
+    chip+
+    '<div class="pattern-box"><h4>📊 채용 현황</h4><div class="pattern-grid">'+
+      '<div class="pattern-item"><div class="num">'+all.length+'</div><div class="label">누적 등록 공고</div></div>'+
+      '<div class="pattern-item"><div class="num">'+active.length+'</div><div class="label">현재 진행 중</div></div>'+
+    '</div><p style="font-size:12.5px;color:#92400E;margin-top:10px;">💡 급여·자격은 공고마다 달라요. 아래 공고를 누르면 상세가 떠요.</p></div>'+
+    '<div class="modal-section"><h4>현재 진행 중인 채용 ('+active.length+'건)</h4><div class="history-list">'+actHtml+'</div></div>'+
+    '<div class="modal-section"><h4>과거 채용 이력 ('+past.length+'건)</h4><div class="history-list">'+pastHtml+'</div></div>'+
+    '<div class="modal-cta" style="justify-content:center"><a class="primary-cta" style="flex:0 0 auto;padding:12px 40px" href="'+mailto+'">✉️ 정보 정정 제보</a></div>';
+  document.getElementById('instModal').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){var el=document.getElementById(id);if(!el)return;el.classList.remove('show');if(!document.querySelector('.modal-overlay.show'))document.body.style.overflow=''}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal('jobModal');closeModal('instModal');}});
 
 function showSample() {
   alert('이 기관의 참고 페이지가 열릴 자리예요 🏫\n\n실제 운영에서는 다음 정보가 모두 정리돼서 나와요:\n\n• 과거 채용 시기 (월별 분포)\n• 시급/월급 레인지 변화\n• 자주 요구하는 자격 / 우대 사항\n• 모집 기간(공고 게시 → 마감) 패턴\n• 지금까지의 모든 채용 이력 목록\n• 다음 채용 예상 시기\n\n채용공고를 찾는 곳이 아니라, "이 기관은 어떤 곳이고 어떻게 준비해야 할까"를 파악하는 참고 페이지예요.\n\n시안에서는 홈 화면에서 기관명을 클릭하면 이 페이지의 기본형을 미리 볼 수 있어요.');
@@ -1047,6 +1122,7 @@ document.getElementById('sortSelect').addEventListener('change', e => {
 </script>
 
 
+<div class="modal-overlay" id="jobModal" onclick="if(event.target===this) closeModal('jobModal')"><div class="modal" id="jobModalContent"></div></div>
 <div class="modal-overlay" id="instModal" onclick="if(event.target===this) closeModal('instModal')">
   <div class="modal" id="instModalContent"></div>
 </div>
