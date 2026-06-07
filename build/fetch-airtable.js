@@ -79,6 +79,7 @@ function mapInstitution(rec) {
     city: f.city || f.region || '',
     website: (f.website || '').replace(/^https?:\/\//, ''),
     desc: f.description || f.desc || '',
+    verified: !!f.verified,
   };
 }
 
