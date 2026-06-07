@@ -501,11 +501,12 @@
   .pattern-rows { text-align: left; }
 
 
-  /* === 실데이터 전환 + 간결 카드 === */
+  /* === 실데이터 전환 + 간결/정렬된 카드 === */
   .construction-banner, .preview-footer { display:none !important; }
-  .inst-card .inst-meta { line-height:1.7; }
-  .inst-site { color:#2563EB; }
-  .inst-site:hover { text-decoration:underline; }
+  .inst-grid { align-items: stretch; }
+  .inst-card { min-height: 92px; display:flex; flex-direction:column; justify-content:center; }
+  .inst-card .inst-name { word-break: keep-all; }
+  .inst-card .inst-meta { word-break: keep-all; line-height:1.6; }
 
   /* === 이식한 기관 모달 CSS === */
   /* === Modal === */
@@ -931,7 +932,7 @@ function closeModal(id){ var el=document.getElementById(id); if(!el)return; el.c
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal('instModal'); });
 
 
-/* === 기관 둘러보기: 간결 카드 (기관명 + 위치·유형·홈페이지) === */
+/* === 기관 둘러보기: 간결 카드 (기관명 + 위치·유형). 홈페이지는 모달에 표시 === */
 (function(){
   var grid=document.getElementById('instGrid');
   if(!grid || typeof institutions==='undefined') return;
@@ -952,17 +953,16 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal
     var inst=institutions[key];
     var cnt=jobsArr.filter(function(j){return j.inst===key;}).length;
     var logo=esc((String(inst.name||'·').trim().charAt(0))||'·');
-    var parts=[ flag(inst.country)+' '+esc(inst.city||inst.country||'') , '🏫 '+esc(inst.type||'') ];
-    if(inst.website) parts.push('🔗 <a class="inst-site" href="https://'+esc(inst.website)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+esc(inst.website)+'</a>');
-    var meta=parts.join(' · ');
+    var meta=flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
     return '<div class="inst-card" data-key="'+esc(key)+'" style="cursor:pointer">'+
       '<div class="inst-card-top"><div class="inst-logo">'+logo+'</div>'+
       '<div class="inst-info"><div class="inst-name">'+esc(inst.name)+'</div>'+
       '<div class="inst-meta">'+meta+'</div></div></div>'+
-      // 정렬용 데이터(숨김)
       '<div class="inst-footer-line" style="display:none"><span>누적 '+cnt+'건</span><span class="last">'+esc(recentLabel(key))+'</span></div>'+
     '</div>';
   }).join('');
+  // 개수 표시 갱신 (하드코딩 12 → 실제 기관 수)
+  var rc=document.getElementById('resultCount'); if(rc) rc.textContent=keys.length;
   grid.addEventListener('click',function(e){
     if(e.target.closest('a'))return;
     var c=e.target.closest('.inst-card');
