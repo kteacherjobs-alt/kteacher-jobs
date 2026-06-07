@@ -501,11 +501,37 @@
   .pattern-rows { text-align: left; }
 
 
-  /* === 실데이터 전환: 공사중 요소 숨김 + 추가 스타일 === */
+  /* === 실데이터 전환 + 기관 요약 팝업 === */
   .construction-banner, .preview-footer { display: none !important; }
   .badge.verified { display:inline-block; font-size:11px; font-weight:600; color:#2A9D8F; background:rgba(42,157,143,.12); padding:1px 7px; border-radius:999px; margin-left:4px; vertical-align:middle; }
   .inst-site { display:inline-block; margin-top:4px; font-size:12px; color:#2563EB; }
   .inst-site:hover { text-decoration:underline; }
+  /* 모달 */
+  .inst-modal { position:fixed; inset:0; background:rgba(17,24,39,.55); display:none; align-items:flex-start; justify-content:center; z-index:1000; padding:48px 16px; overflow:auto; }
+  .inst-modal.show { display:flex; }
+  .inst-modal-panel { position:relative; background:#fff; width:100%; max-width:560px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25); padding:28px 28px 24px; animation:instpop .15s ease-out; }
+  @keyframes instpop { from{ transform:translateY(8px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+  .inst-modal-close { position:absolute; top:14px; right:16px; font-size:26px; line-height:1; color:#9CA3AF; background:none; border:none; cursor:pointer; }
+  .inst-modal-close:hover { color:#374151; }
+  .inst-modal-head { display:flex; gap:14px; align-items:center; margin-bottom:8px; }
+  .inst-modal-logo { width:48px; height:48px; flex:0 0 48px; border-radius:12px; background:linear-gradient(135deg,#1F2937,#475569); color:#fff; font-weight:800; font-size:22px; display:flex; align-items:center; justify-content:center; }
+  .inst-modal-name { font-size:18px; font-weight:800; color:#111827; }
+  .inst-modal-meta { font-size:13px; color:#6B7280; margin-top:2px; }
+  .inst-modal-desc { font-size:13.5px; color:#4B5563; margin:10px 0 0; line-height:1.6; }
+  .inst-modal-site { display:inline-block; margin-top:14px; padding:8px 14px; background:#1F2937; color:#fff; border-radius:8px; font-size:13px; font-weight:600; }
+  .inst-modal-site:hover { background:#111827; }
+  .inst-modal-section { margin-top:20px; border-top:1px solid #F3F4F6; padding-top:16px; }
+  .inst-modal-section h4 { font-size:13px; font-weight:700; color:#374151; margin:0 0 10px; }
+  .inst-modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+  .inst-modal-grid .k { display:block; font-size:11px; color:#9CA3AF; }
+  .inst-modal-grid .v { display:block; font-size:14px; color:#1F2937; font-weight:600; margin-top:2px; }
+  .inst-modal-jobs { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .inst-modal-jobs li { background:#FAFAFA; border:1px solid #F3F4F6; border-radius:10px; padding:10px 12px; }
+  .inst-modal-jobs .jt { font-size:14px; font-weight:600; color:#111827; }
+  .inst-modal-jobs .js { font-size:12.5px; color:#6B7280; margin-top:3px; }
+  .inst-modal-jobs .dd { color:#E76F51; font-weight:700; }
+  .inst-modal-more { display:inline-block; margin-top:12px; font-size:13px; color:#2563EB; font-weight:600; }
+  .inst-modal-empty { font-size:13.5px; color:#6B7280; margin:0; }
 
 </style>
 </head>
@@ -609,8 +635,8 @@
 <script src="data.js"></script>
 <script>
 
-/* === 기관 둘러보기: data.js 기반 실데이터 렌더링 (공고 누적 집계) === */
-(function renderInstitutions(){
+/* === 기관 둘러보기: data.js 기반 렌더링 + 기관 요약 팝업(모달) === */
+(function(){
   var grid = document.getElementById('instGrid');
   if (!grid || typeof institutions === 'undefined') return;
   var jobsArr = (typeof jobs !== 'undefined' && Array.isArray(jobs)) ? jobs : [];
@@ -618,60 +644,116 @@
   function flag(c){ return FLAG[c] || '🏫'; }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function recencyVal(t){ return /오늘/.test(t) ? 0 : parseInt((String(t).match(/\d+/)||['999'])[0],10); }
+  function dlabel(n){ if(n==null||n==='') return ''; n=parseInt(n,10); if(isNaN(n)) return ''; return n>0?('D-'+n):(n===0?'D-DAY':'마감'); }
 
+  // 기관별 공고 집계
+  function agg(key){
+    var my = jobsArr.filter(function(j){ return j.inst === key; });
+    var count = my.length;
+    var recent = '준비 중';
+    if (count){
+      var best=null, bv=1e9;
+      my.forEach(function(j){ var v=recencyVal(j.posted); if(v<bv){bv=v;best=j.posted;} });
+      recent = '최근 ' + (best||'—');
+    }
+    var emps=[]; my.forEach(function(j){ if(j.employment && emps.indexOf(j.employment)<0) emps.push(j.employment); });
+    var latest = count ? my.slice().sort(function(a,b){ return recencyVal(a.posted)-recencyVal(b.posted); })[0] : null;
+    var sal = (latest && latest.salaryDisclosed && latest.salary) ? latest.salary : '공고 참고';
+    var req = count ? ([ (latest&&latest.cert)?('자격증 '+latest.cert):'', (latest&&latest.degree)?latest.degree:'' ].filter(Boolean).join(' · ')||'공고 참고') : '';
+    return { my:my, count:count, recent:recent, emps:emps, sal:sal, req:req };
+  }
+
+  // 카드 렌더 (클릭 시 모달, 외부이동 X)
   var keys = Object.keys(institutions);
   keys.sort(function(a,b){ return String(institutions[a].name).localeCompare(String(institutions[b].name),'ko'); });
-
-  var html = keys.map(function(key){
-    var inst = institutions[key];
-    var myJobs = jobsArr.filter(function(j){ return j.inst === key; });
-    var count = myJobs.length;
-
-    var recentLabel = '준비 중';
-    if (count){
-      var best = null, bestv = 1e9;
-      myJobs.forEach(function(j){ var v = recencyVal(j.posted); if (v < bestv){ bestv = v; best = j.posted; } });
-      recentLabel = '최근 ' + (best || '—');
-    }
-
+  grid.innerHTML = keys.map(function(key){
+    var inst = institutions[key]; var a = agg(key);
     var rows;
-    if (count){
-      var emps = [];
-      myJobs.forEach(function(j){ if (j.employment && emps.indexOf(j.employment) < 0) emps.push(j.employment); });
-      var latest = myJobs.slice().sort(function(a,b){ return recencyVal(a.posted) - recencyVal(b.posted); })[0];
-      var sal = (latest && latest.salaryDisclosed && latest.salary) ? latest.salary : '공고 참고';
-      var req = [ (latest && latest.cert) ? ('자격증 ' + latest.cert) : '', (latest && latest.degree) ? latest.degree : '' ].filter(Boolean).join(' · ') || '공고 참고';
+    if (a.count){
       rows =
-        '<div class="pattern-row"><span class="pat-icon">🧾</span><span class="pat-label">고용 형태</span><span class="pat-value">' + esc(emps.join(' · ') || '—') + '</span></div>' +
-        '<div class="pattern-row"><span class="pat-icon">💰</span><span class="pat-label">최근 급여</span><span class="pat-value">' + esc(sal) + '</span></div>' +
-        '<div class="pattern-row"><span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">' + esc(req) + '</span></div>';
+        '<div class="pattern-row"><span class="pat-icon">🧾</span><span class="pat-label">고용 형태</span><span class="pat-value">'+esc(a.emps.join(' · ')||'—')+'</span></div>'+
+        '<div class="pattern-row"><span class="pat-icon">💰</span><span class="pat-label">최근 급여</span><span class="pat-value">'+esc(a.sal)+'</span></div>'+
+        '<div class="pattern-row"><span class="pat-icon">🎓</span><span class="pat-label">주요 요구</span><span class="pat-value">'+esc(a.req)+'</span></div>';
     } else {
-      var d = inst.desc ? (inst.desc.length > 60 ? inst.desc.slice(0,60) + '…' : inst.desc) : '소개 준비 중';
+      var d = inst.desc ? (inst.desc.length>60?inst.desc.slice(0,60)+'…':inst.desc) : '소개 준비 중';
       rows =
-        '<div class="pattern-row"><span class="pat-icon">🏫</span><span class="pat-label">소개</span><span class="pat-value">' + esc(d) + '</span></div>' +
+        '<div class="pattern-row"><span class="pat-icon">🏫</span><span class="pat-label">소개</span><span class="pat-value">'+esc(d)+'</span></div>'+
         '<div class="pattern-row"><span class="pat-icon">📋</span><span class="pat-label">등록 공고</span><span class="pat-value">아직 없음</span></div>';
     }
-
     var badge = inst.verified ? ' <span class="badge verified">✓ 검수</span>' : '';
-    var site = inst.website ? '<a class="inst-site" href="https://' + esc(inst.website) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + esc(inst.website) + ' ↗</a>' : '';
-    var logoChar = esc((String(inst.name||'·').trim().charAt(0)) || '·');
-    var meta = flag(inst.country) + ' ' + esc(inst.city || inst.country || '') + ' · 🏫 ' + esc(inst.type || '');
-    var onclick = inst.website ? ' onclick="window.open(\'https://' + esc(inst.website) + '\',\'_blank\')" style="cursor:pointer"' : '';
-
-    return '<div class="inst-card"' + onclick + '>' +
-      '<div class="inst-card-top">' +
-        '<div class="inst-logo">' + logoChar + '</div>' +
-        '<div class="inst-info">' +
-          '<div class="inst-name">' + esc(inst.name) + badge + '</div>' +
-          '<div class="inst-meta">' + meta + '</div>' + site +
-        '</div>' +
-      '</div>' +
-      '<div class="pattern-rows">' + rows + '</div>' +
-      '<div class="inst-footer-line"><span>누적 ' + count + '건</span><span class="last">' + esc(recentLabel) + '</span></div>' +
+    var site = inst.website ? '<a class="inst-site" href="https://'+esc(inst.website)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+esc(inst.website)+' ↗</a>' : '';
+    var logoChar = esc((String(inst.name||'·').trim().charAt(0))||'·');
+    var meta = flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
+    return '<div class="inst-card" data-key="'+esc(key)+'" style="cursor:pointer">'+
+      '<div class="inst-card-top"><div class="inst-logo">'+logoChar+'</div>'+
+      '<div class="inst-info"><div class="inst-name">'+esc(inst.name)+badge+'</div>'+
+      '<div class="inst-meta">'+meta+'</div>'+site+'</div></div>'+
+      '<div class="pattern-rows">'+rows+'</div>'+
+      '<div class="inst-footer-line"><span>누적 '+a.count+'건</span><span class="last">'+(a.count?esc(a.recent):'준비 중')+'</span></div>'+
     '</div>';
   }).join('');
 
-  grid.innerHTML = html || '';
+  // 모달 DOM 생성
+  var modal = document.createElement('div');
+  modal.id = 'instModal'; modal.className = 'inst-modal';
+  modal.innerHTML = '<div class="inst-modal-panel" role="dialog" aria-modal="true">'+
+    '<button class="inst-modal-close" aria-label="닫기">×</button>'+
+    '<div class="inst-modal-body"></div></div>';
+  document.body.appendChild(modal);
+  var body = modal.querySelector('.inst-modal-body');
+
+  function openInst(key){
+    var inst = institutions[key]; if(!inst) return;
+    var a = agg(key);
+    var badge = inst.verified ? '<span class="badge verified">✓ 검수</span>' : '';
+    var meta = flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
+    var siteBtn = inst.website ? '<a class="inst-modal-site" href="https://'+esc(inst.website)+'" target="_blank" rel="noopener">홈페이지 바로가기 ↗</a>' : '';
+    var descHtml = inst.desc ? '<p class="inst-modal-desc">'+esc(inst.desc)+'</p>' : '';
+
+    var summary =
+      '<div class="inst-modal-section"><h4>채용 패턴 요약</h4>'+
+        '<div class="inst-modal-grid">'+
+          '<div><span class="k">고용 형태</span><span class="v">'+esc(a.count?(a.emps.join(' · ')||'—'):'—')+'</span></div>'+
+          '<div><span class="k">최근 급여</span><span class="v">'+esc(a.count?a.sal:'—')+'</span></div>'+
+          '<div><span class="k">주요 요구</span><span class="v">'+esc(a.count?a.req:'—')+'</span></div>'+
+          '<div><span class="k">누적 공고</span><span class="v">'+a.count+'건 ('+esc(a.count?a.recent:'없음')+')</span></div>'+
+        '</div></div>';
+
+    var jobsList;
+    if (a.count){
+      jobsList = '<div class="inst-modal-section"><h4>등록 공고 '+a.count+'건</h4><ul class="inst-modal-jobs">'+
+        a.my.slice().sort(function(x,y){ return recencyVal(x.posted)-recencyVal(y.posted); }).map(function(j){
+          var d = dlabel(j.deadline);
+          var sub = [ esc(j.employment||''), d?('<span class="dd">'+d+'</span>'):'', (j.salaryDisclosed&&j.salary)?esc(j.salary):'' ].filter(Boolean).join(' · ');
+          return '<li><div class="jt">'+esc(j.title||'(제목 없음)')+'</div><div class="js">'+sub+'</div></li>';
+        }).join('')+'</ul>'+
+        '<a class="inst-modal-more" href="index.html">채용공고 전체 보기 →</a></div>';
+    } else {
+      jobsList = '<div class="inst-modal-section"><p class="inst-modal-empty">아직 등록된 공고가 없어요. 공고가 올라오면 여기에 모입니다.</p></div>';
+    }
+
+    body.innerHTML =
+      '<div class="inst-modal-head">'+
+        '<div class="inst-modal-logo">'+esc((String(inst.name||'·').trim().charAt(0))||'·')+'</div>'+
+        '<div><div class="inst-modal-name">'+esc(inst.name)+' '+badge+'</div>'+
+        '<div class="inst-modal-meta">'+meta+'</div></div>'+
+      '</div>'+ descHtml + siteBtn + summary + jobsList;
+
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeInst(){ modal.classList.remove('show'); document.body.style.overflow=''; }
+
+  grid.addEventListener('click', function(e){
+    if (e.target.closest('a')) return; // 카드 안 링크 클릭은 그대로 링크 동작
+    var card = e.target.closest('.inst-card');
+    if (card && card.dataset.key) openInst(card.dataset.key);
+  });
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeInst(); });
+  modal.querySelector('.inst-modal-close').addEventListener('click', closeInst);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeInst(); });
+  window.openInst = openInst; // 디버그용
+  function showSample(){} window.showSample = showSample;
 })();
 
 function showSample() {
