@@ -501,37 +501,256 @@
   .pattern-rows { text-align: left; }
 
 
-  /* === 실데이터 전환 + 기관 요약 팝업 === */
-  .construction-banner, .preview-footer { display: none !important; }
+  /* === 실데이터 전환 === */
+  .construction-banner, .preview-footer { display:none !important; }
   .badge.verified { display:inline-block; font-size:11px; font-weight:600; color:#2A9D8F; background:rgba(42,157,143,.12); padding:1px 7px; border-radius:999px; margin-left:4px; vertical-align:middle; }
-  .inst-site { display:inline-block; margin-top:4px; font-size:12px; color:#2563EB; }
-  .inst-site:hover { text-decoration:underline; }
-  /* 모달 */
-  .inst-modal { position:fixed; inset:0; background:rgba(17,24,39,.55); display:none; align-items:flex-start; justify-content:center; z-index:1000; padding:48px 16px; overflow:auto; }
-  .inst-modal.show { display:flex; }
-  .inst-modal-panel { position:relative; background:#fff; width:100%; max-width:560px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.25); padding:28px 28px 24px; animation:instpop .15s ease-out; }
-  @keyframes instpop { from{ transform:translateY(8px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
-  .inst-modal-close { position:absolute; top:14px; right:16px; font-size:26px; line-height:1; color:#9CA3AF; background:none; border:none; cursor:pointer; }
-  .inst-modal-close:hover { color:#374151; }
-  .inst-modal-head { display:flex; gap:14px; align-items:center; margin-bottom:8px; }
-  .inst-modal-logo { width:48px; height:48px; flex:0 0 48px; border-radius:12px; background:linear-gradient(135deg,#1F2937,#475569); color:#fff; font-weight:800; font-size:22px; display:flex; align-items:center; justify-content:center; }
-  .inst-modal-name { font-size:18px; font-weight:800; color:#111827; }
-  .inst-modal-meta { font-size:13px; color:#6B7280; margin-top:2px; }
-  .inst-modal-desc { font-size:13.5px; color:#4B5563; margin:10px 0 0; line-height:1.6; }
-  .inst-modal-site { display:inline-block; margin-top:14px; padding:8px 14px; background:#1F2937; color:#fff; border-radius:8px; font-size:13px; font-weight:600; }
-  .inst-modal-site:hover { background:#111827; }
-  .inst-modal-section { margin-top:20px; border-top:1px solid #F3F4F6; padding-top:16px; }
-  .inst-modal-section h4 { font-size:13px; font-weight:700; color:#374151; margin:0 0 10px; }
-  .inst-modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
-  .inst-modal-grid .k { display:block; font-size:11px; color:#9CA3AF; }
-  .inst-modal-grid .v { display:block; font-size:14px; color:#1F2937; font-weight:600; margin-top:2px; }
-  .inst-modal-jobs { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
-  .inst-modal-jobs li { background:#FAFAFA; border:1px solid #F3F4F6; border-radius:10px; padding:10px 12px; }
-  .inst-modal-jobs .jt { font-size:14px; font-weight:600; color:#111827; }
-  .inst-modal-jobs .js { font-size:12.5px; color:#6B7280; margin-top:3px; }
-  .inst-modal-jobs .dd { color:#E76F51; font-weight:700; }
-  .inst-modal-more { display:inline-block; margin-top:12px; font-size:13px; color:#2563EB; font-weight:600; }
-  .inst-modal-empty { font-size:13.5px; color:#6B7280; margin:0; }
+
+  /* === 이식한 기관 모달 CSS === */
+  /* === Modal === */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 40px 16px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 720px;
+    width: 100%;
+    padding: 32px;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    margin: auto;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+    padding-right: 40px;
+  }
+  .modal-original-title {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: -4px;
+    margin-bottom: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding-left: 8px;
+    border-left: 2px solid var(--border);
+  }
+  .modal-institution {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .modal-section {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .modal-section:last-child { border-bottom: none; }
+  .modal-section h4 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .modal-section p, .modal-section li {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .modal-section ul { padding-left: 18px; }
+  /* === 자동 구조화 텍스트 (지원방법/자격요건 등) === */
+  .rich-text {
+    white-space: pre-line;
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .rich-text .rt-section {
+    display: block;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-size: 13.5px;
+  }
+  .rich-text .rt-section:first-child { margin-top: 0; }
+  .rich-text .rt-note {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    padding-left: 14px;
+    text-indent: -14px;
+  }
+  .rich-text a { color: var(--accent); text-decoration: underline; }
+  .modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 20px;
+  }
+  .modal-grid-item .label {
+    font-size: 11.5px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .modal-grid-item .value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .modal-cta {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .modal-cta a, .modal-cta button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14.5px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .modal-cta .primary-cta {
+    background: var(--primary);
+    color: white;
+  }
+  .modal-cta .primary-cta:hover { background: var(--primary-dark); }
+  .modal-cta .secondary-cta {
+    background: var(--border-soft);
+    color: var(--text);
+  }
+  .modal-cta .secondary-cta:hover { background: var(--border); }
+
+  /* Institution modal */
+  #instModal .inst-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  #instModal .inst-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  #instModal .inst-info h2 { margin-bottom: 4px; padding-right: 0; }
+  #instModal .inst-info p { font-size: 13px; color: var(--text-secondary); }
+  .pattern-box {
+    background: linear-gradient(135deg, #FEF3E2, #FFF7ED);
+    border: 1px solid #FBD7A8;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .pattern-box h4 {
+    color: #92400E;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .pattern-item {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  .pattern-item .num {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .pattern-item .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .history-item {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .history-item:hover { background: var(--border-soft); }
+  .history-item.active-job {
+    border-color: var(--success);
+    background: #F0FDF4;
+  }
+  .history-item-left h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .history-item-left .meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .status-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .status-pill.active { background: #DCFCE7; color: #166534; }
+  .status-pill.closed { background: var(--border-soft); color: var(--text-secondary); }
 
 </style>
 </head>
@@ -635,7 +854,195 @@
 <script src="data.js"></script>
 <script>
 
-/* === 기관 둘러보기: data.js 기반 렌더링 + 기관 요약 팝업(모달) === */
+/* === 채용공고 페이지에서 이식한 기관 모달 === */
+function countryIcon(c) {
+  const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
+  return map[c] || '🌐';
+}
+
+function openInstitution(key) {
+  const inst = institutions[key];
+  const instJobs = jobs.filter(j => j.inst === key);
+  const activeJobs = instJobs.filter(j => j.deadline > 0);
+  // 과거 공고는 가상으로 생성
+  const pastJobs = generatePastJobs(key, inst);
+
+  const allCerts = instJobs.map(j => j.cert);
+  const certRate = allCerts.length ? Math.round(allCerts.filter(c => c==='필수'||c==='우대').length / allCerts.length * 100) : 0;
+
+  const content = document.getElementById('instModalContent');
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal('instModal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="inst-header">
+      <div class="inst-logo">${inst.name.charAt(0)}</div>
+      <div class="inst-info">
+        <h2>${inst.name}</h2>
+        <p>${countryIcon(inst.country)} ${inst.country} · ${inst.city} · 🏫 ${inst.type} · 🔗 <a href="https://${inst.website}" target="_blank" style="color:var(--primary-light)">${inst.website}</a></p>
+      </div>
+    </div>
+    <div class="modal-section">
+      <p style="font-size:14.5px;">${inst.desc}</p>
+    </div>
+    <div class="pattern-box">
+      <h4>📊 이 기관의 채용 패턴</h4>
+      <div class="pattern-grid">
+        <div class="pattern-item">
+          <div class="num">${instJobs.length + pastJobs.length}</div>
+          <div class="label">누적 등록 공고</div>
+        </div>
+        <div class="pattern-item">
+          <div class="num">${activeJobs.length}</div>
+          <div class="label">현재 진행 중</div>
+        </div>
+        <div class="pattern-item">
+          <div class="num">${getAvgDeadline(key)}일</div>
+          <div class="label">평균 모집 기간</div>
+        </div>
+        <div class="pattern-item">
+          <div class="num">${certRate}%</div>
+          <div class="label">교원자격증 필수/우대</div>
+        </div>
+      </div>
+      <p style="font-size:12.5px; color:#92400E; margin-top:12px;">
+        💡 이 기관은 주로 <strong>${getHiringSeason(key)}</strong>에 채용을 진행하는 편이에요. 미리 준비해두면 좋아요.
+      </p>
+    </div>
+
+    <div class="modal-section">
+      <h4>현재 진행 중인 채용 (${activeJobs.length}건)</h4>
+      <div class="history-list">
+        ${activeJobs.length === 0 ? '<p style="color:var(--text-light); font-size:13px;">현재 진행 중인 공고가 없어요. 알림 신청을 해두시면 새 공고가 올라올 때 알려드릴게요.</p>' :
+          activeJobs.map(j => `
+            <div class="history-item active-job" onclick="location.href='index.html'">
+              <div class="history-item-left">
+                <h5>${j.title}</h5>
+                <div class="meta">${j.employment} · ${j.mode} · 마감 D-${j.deadline}</div>
+              </div>
+              <span class="status-pill active">진행 중</span>
+            </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h4>과거 채용 이력 (${pastJobs.length}건)</h4>
+      <div class="history-list">
+        ${pastJobs.map(p => `
+          <div class="history-item">
+            <div class="history-item-left">
+              <h5>${p.title}</h5>
+              <div class="meta">${p.period} · ${p.employment} · ${p.summary}</div>
+            </div>
+            <span class="status-pill closed">마감</span>
+          </div>`).join('')}
+      </div>
+      <p style="font-size:12px; color:var(--text-light); margin-top:10px;">
+        ※ 마감된 공고는 메인 화면에서는 보이지 않지만 기관 페이지에서 이력으로 확인할 수 있어요.
+      </p>
+    </div>
+
+    <div class="modal-cta">
+      <button class="primary-cta" onclick="alert('시안 데모: 이 기관 새 공고 알림 설정')">🔔 이 기관 새 공고 알림 받기</button>
+      <button class="secondary-cta" onclick="alert('시안 데모: 기관 정보 정정 제보')">정보 정정 제보</button>
+    </div>
+  `;
+  document.getElementById('instModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+
+function getAvgDeadline(key) {
+  // 데모용 더미 데이터
+  const map = {snu:24, yonsei:28, ewha:18, sejong:35, ucla:42, toronto:30, waseda:45, sydney:21, hochiminh:60, gangnam:14, italki:0, preply:10, samsung:21};
+  return map[key] || 21;
+}
+
+function getHiringSeason(key) {
+  const map = {
+    snu:'학기 시작 2~3개월 전 (6월, 12월)',
+    yonsei:'분기마다 (3·6·9·12월)',
+    ewha:'여름·겨울방학 직전',
+    sejong:'매년 1월, 6월',
+    ucla:'1월~3월 (가을학기 임용)',
+    toronto:'4월, 10월',
+    waseda:'1월, 7월',
+    sydney:'6월, 12월',
+    hochiminh:'비정기 (2~3년에 1회)',
+    gangnam:'상시 (주로 분기 초)',
+    italki:'상시',
+    preply:'상시',
+    samsung:'연 1~2회 (1월·7월)'
+  };
+  return map[key] || '비정기';
+}
+
+
+function generatePastJobs(key, inst) {
+  // 데모용 — 실제로는 DB에서 조회
+  const templates = {
+    snu: [
+      {title:'2026 봄학기 한국어 정규과정 시간강사', period:'2025.12 ~ 2026.01', employment:'시간강사', summary:'시급 60,000원 · 자격증 필수'},
+      {title:'2025 여름 단기과정 강사', period:'2025.05 ~ 2025.06', employment:'시간강사', summary:'시급 55,000원 · 신입 가능'},
+      {title:'2025 가을학기 한국어 정규과정', period:'2025.06 ~ 2025.07', employment:'시간강사', summary:'시급 58,000원 · 자격증 필수'},
+      {title:'2025 봄학기 한국어 강사', period:'2024.12 ~ 2025.01', employment:'시간강사', summary:'시급 58,000원'},
+    ],
+    yonsei: [
+      {title:'2026 봄학기 비전임 강사', period:'2025.12 ~ 2026.01', employment:'계약직', summary:'월 350~400만원 · 경력 3년+'},
+      {title:'단기과정 (여름) 강사', period:'2025.04 ~ 2025.05', employment:'시간강사', summary:'시급 협의'},
+      {title:'2025 가을학기 비전임 강사', period:'2025.06 ~ 2025.07', employment:'계약직', summary:'월 350~400만원'},
+    ],
+    ewha: [
+      {title:'2026 봄학기 단기과정 강사', period:'2025.12', employment:'시간강사', summary:'협의 · 신입 가능'},
+      {title:'2025 겨울 집중과정 강사', period:'2025.10 ~ 2025.11', employment:'시간강사', summary:'협의'},
+    ],
+    sejong: [
+      {title:'2025 해외 세종학당 파견 한국어교원', period:'2024.10 ~ 2024.11', employment:'계약직', summary:'월 250~330만원 + 항공·체재비'},
+      {title:'2024 해외 세종학당 파견 한국어교원', period:'2023.10 ~ 2023.11', employment:'계약직', summary:'월 230~300만원 + 지원'},
+    ],
+    ucla: [
+      {title:'Korean Language Lecturer (2024-2025)', period:'2024.01 ~ 2024.03', employment:'계약직', summary:'USD 62,000~75,000'},
+    ],
+    toronto: [
+      {title:'Sessional Korean Instructor (Winter 2025)', period:'2024.10 ~ 2024.11', employment:'시간강사', summary:'CAD 9,000 / course'},
+      {title:'Sessional Korean Tutor (Fall 2024)', period:'2024.04 ~ 2024.05', employment:'시간강사', summary:'CAD 8,800 / course'},
+    ],
+    waseda: [
+      {title:'한국어 강의전임강사 2025', period:'2024.06 ~ 2024.08', employment:'계약직', summary:'연봉 협의'},
+    ],
+    sydney: [
+      {title:'Sessional Korean Tutor (Semester 1, 2025)', period:'2024.12 ~ 2025.01', employment:'파트타임', summary:'AUD 72~92 / hour'},
+    ],
+    hochiminh: [
+      {title:'한국학과 전임강사 (2023)', period:'2022.09 ~ 2022.12', employment:'정규직', summary:'월 USD 1,500~2,200'},
+    ],
+    gangnam: [
+      {title:'TOPIK 강사 (1분기)', period:'2026.01 ~ 2026.02', employment:'시간강사', summary:'시급 45,000원'},
+      {title:'비즈니스 한국어 강사', period:'2025.09 ~ 2025.10', employment:'파트타임', summary:'시급 50,000원'},
+      {title:'TOPIK 주말반 강사', period:'2025.06 ~ 2025.07', employment:'파트타임', summary:'시급 45,000원'},
+    ],
+    italki: [],
+    preply: [
+      {title:'한국어 튜터 모집 (2025 4분기)', period:'2025.09 ~ 2025.11', employment:'프리랜서', summary:'수익 분배 모델'},
+    ],
+    samsung: [
+      {title:'주재원 가족 한국어 강사', period:'2025.06 ~ 2025.07', employment:'파트타임', summary:'시급 60,000원'},
+    ],
+  };
+  return templates[key] || [];
+}
+
+
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeModal('instModal'); });
+
+
+/* === 기관 둘러보기: data.js 카드 렌더 (클릭 시 채용공고 페이지와 동일한 기관 모달) === */
 (function(){
   var grid = document.getElementById('instGrid');
   if (!grid || typeof institutions === 'undefined') return;
@@ -644,26 +1051,18 @@
   function flag(c){ return FLAG[c] || '🏫'; }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function recencyVal(t){ return /오늘/.test(t) ? 0 : parseInt((String(t).match(/\d+/)||['999'])[0],10); }
-  function dlabel(n){ if(n==null||n==='') return ''; n=parseInt(n,10); if(isNaN(n)) return ''; return n>0?('D-'+n):(n===0?'D-DAY':'마감'); }
 
-  // 기관별 공고 집계
   function agg(key){
     var my = jobsArr.filter(function(j){ return j.inst === key; });
-    var count = my.length;
-    var recent = '준비 중';
-    if (count){
-      var best=null, bv=1e9;
-      my.forEach(function(j){ var v=recencyVal(j.posted); if(v<bv){bv=v;best=j.posted;} });
-      recent = '최근 ' + (best||'—');
-    }
+    var count = my.length, recent='준비 중';
+    if (count){ var best=null,bv=1e9; my.forEach(function(j){var v=recencyVal(j.posted); if(v<bv){bv=v;best=j.posted;}}); recent='최근 '+(best||'—'); }
     var emps=[]; my.forEach(function(j){ if(j.employment && emps.indexOf(j.employment)<0) emps.push(j.employment); });
-    var latest = count ? my.slice().sort(function(a,b){ return recencyVal(a.posted)-recencyVal(b.posted); })[0] : null;
+    var latest = count ? my.slice().sort(function(a,b){return recencyVal(a.posted)-recencyVal(b.posted);})[0] : null;
     var sal = (latest && latest.salaryDisclosed && latest.salary) ? latest.salary : '공고 참고';
     var req = count ? ([ (latest&&latest.cert)?('자격증 '+latest.cert):'', (latest&&latest.degree)?latest.degree:'' ].filter(Boolean).join(' · ')||'공고 참고') : '';
-    return { my:my, count:count, recent:recent, emps:emps, sal:sal, req:req };
+    return { count:count, recent:recent, emps:emps, sal:sal, req:req };
   }
 
-  // 카드 렌더 (클릭 시 모달, 외부이동 X)
   var keys = Object.keys(institutions);
   keys.sort(function(a,b){ return String(institutions[a].name).localeCompare(String(institutions[b].name),'ko'); });
   grid.innerHTML = keys.map(function(key){
@@ -681,78 +1080,22 @@
         '<div class="pattern-row"><span class="pat-icon">📋</span><span class="pat-label">등록 공고</span><span class="pat-value">아직 없음</span></div>';
     }
     var badge = inst.verified ? ' <span class="badge verified">✓ 검수</span>' : '';
-    var site = inst.website ? '<a class="inst-site" href="https://'+esc(inst.website)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+esc(inst.website)+' ↗</a>' : '';
     var logoChar = esc((String(inst.name||'·').trim().charAt(0))||'·');
     var meta = flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
     return '<div class="inst-card" data-key="'+esc(key)+'" style="cursor:pointer">'+
       '<div class="inst-card-top"><div class="inst-logo">'+logoChar+'</div>'+
       '<div class="inst-info"><div class="inst-name">'+esc(inst.name)+badge+'</div>'+
-      '<div class="inst-meta">'+meta+'</div>'+site+'</div></div>'+
+      '<div class="inst-meta">'+meta+'</div></div></div>'+
       '<div class="pattern-rows">'+rows+'</div>'+
       '<div class="inst-footer-line"><span>누적 '+a.count+'건</span><span class="last">'+(a.count?esc(a.recent):'준비 중')+'</span></div>'+
     '</div>';
   }).join('');
 
-  // 모달 DOM 생성
-  var modal = document.createElement('div');
-  modal.id = 'instModal'; modal.className = 'inst-modal';
-  modal.innerHTML = '<div class="inst-modal-panel" role="dialog" aria-modal="true">'+
-    '<button class="inst-modal-close" aria-label="닫기">×</button>'+
-    '<div class="inst-modal-body"></div></div>';
-  document.body.appendChild(modal);
-  var body = modal.querySelector('.inst-modal-body');
-
-  function openInst(key){
-    var inst = institutions[key]; if(!inst) return;
-    var a = agg(key);
-    var badge = inst.verified ? '<span class="badge verified">✓ 검수</span>' : '';
-    var meta = flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
-    var siteBtn = inst.website ? '<a class="inst-modal-site" href="https://'+esc(inst.website)+'" target="_blank" rel="noopener">홈페이지 바로가기 ↗</a>' : '';
-    var descHtml = inst.desc ? '<p class="inst-modal-desc">'+esc(inst.desc)+'</p>' : '';
-
-    var summary =
-      '<div class="inst-modal-section"><h4>채용 패턴 요약</h4>'+
-        '<div class="inst-modal-grid">'+
-          '<div><span class="k">고용 형태</span><span class="v">'+esc(a.count?(a.emps.join(' · ')||'—'):'—')+'</span></div>'+
-          '<div><span class="k">최근 급여</span><span class="v">'+esc(a.count?a.sal:'—')+'</span></div>'+
-          '<div><span class="k">주요 요구</span><span class="v">'+esc(a.count?a.req:'—')+'</span></div>'+
-          '<div><span class="k">누적 공고</span><span class="v">'+a.count+'건 ('+esc(a.count?a.recent:'없음')+')</span></div>'+
-        '</div></div>';
-
-    var jobsList;
-    if (a.count){
-      jobsList = '<div class="inst-modal-section"><h4>등록 공고 '+a.count+'건</h4><ul class="inst-modal-jobs">'+
-        a.my.slice().sort(function(x,y){ return recencyVal(x.posted)-recencyVal(y.posted); }).map(function(j){
-          var d = dlabel(j.deadline);
-          var sub = [ esc(j.employment||''), d?('<span class="dd">'+d+'</span>'):'', (j.salaryDisclosed&&j.salary)?esc(j.salary):'' ].filter(Boolean).join(' · ');
-          return '<li><div class="jt">'+esc(j.title||'(제목 없음)')+'</div><div class="js">'+sub+'</div></li>';
-        }).join('')+'</ul>'+
-        '<a class="inst-modal-more" href="index.html">채용공고 전체 보기 →</a></div>';
-    } else {
-      jobsList = '<div class="inst-modal-section"><p class="inst-modal-empty">아직 등록된 공고가 없어요. 공고가 올라오면 여기에 모입니다.</p></div>';
-    }
-
-    body.innerHTML =
-      '<div class="inst-modal-head">'+
-        '<div class="inst-modal-logo">'+esc((String(inst.name||'·').trim().charAt(0))||'·')+'</div>'+
-        '<div><div class="inst-modal-name">'+esc(inst.name)+' '+badge+'</div>'+
-        '<div class="inst-modal-meta">'+meta+'</div></div>'+
-      '</div>'+ descHtml + siteBtn + summary + jobsList;
-
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeInst(){ modal.classList.remove('show'); document.body.style.overflow=''; }
-
   grid.addEventListener('click', function(e){
-    if (e.target.closest('a')) return; // 카드 안 링크 클릭은 그대로 링크 동작
+    if (e.target.closest('a')) return;
     var card = e.target.closest('.inst-card');
-    if (card && card.dataset.key) openInst(card.dataset.key);
+    if (card && card.dataset.key && typeof openInstitution === 'function') openInstitution(card.dataset.key);
   });
-  modal.addEventListener('click', function(e){ if (e.target === modal) closeInst(); });
-  modal.querySelector('.inst-modal-close').addEventListener('click', closeInst);
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeInst(); });
-  window.openInst = openInst; // 디버그용
   function showSample(){} window.showSample = showSample;
 })();
 
@@ -831,5 +1174,9 @@ document.getElementById('sortSelect').addEventListener('change', e => {
 });
 </script>
 
+
+<div class="modal-overlay" id="instModal" onclick="if(event.target===this) closeModal('instModal')">
+  <div class="modal" id="instModalContent"></div>
+</div>
 </body>
 </html>
