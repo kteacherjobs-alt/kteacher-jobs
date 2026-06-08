@@ -160,6 +160,17 @@
     color: var(--text-secondary);
     font-weight: 500;
   }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag.kind-cfp { background: #FEF3C7; color: #92400E; }   /* 모집(접수) */
+  .tag.kind-event { background: #E0E7FF; color: #3730A3; } /* 행사 */
   .card-title {
     font-size: 16px;
     font-weight: 700;
@@ -371,22 +382,42 @@
     t.setHours(0,0,0,0);
     return Math.round((t - now) / 86400000);
   }
-  function ddayLabel(deadlineIso) {
-    const d = daysFromToday(deadlineIso);
-    if (d === null) return { text: '상시 모집', cls: 'normal' };
-    if (d < 0) return { text: '마감', cls: 'closed' };
-    if (d === 0) return { text: '오늘 마감', cls: 'urgent' };
-    if (d <= 7) return { text: `D-${d}`, cls: 'urgent' };
-    return { text: `D-${d}`, cls: 'normal' };
+  // 카드 종류 판별: 행사일이 있으면 '행사', 없고 마감만 있으면 '모집(접수)'
+  function eventKind(ev) {
+    if (ev.event_date) return { key: 'event', label: '행사', cls: 'kind-event' };
+    if (ev.deadline)   return { key: 'cfp',   label: '모집', cls: 'kind-cfp' };
+    return { key: 'event', label: '', cls: '' };
+  }
+  // D-day 뱃지: 신청 마감이 있으면 마감 기준, 없으면 행사일 기준
+  function ddayLabel(ev) {
+    if (ev.deadline) {
+      const d = daysFromToday(ev.deadline);
+      if (d === null) return { text: '상시 모집', cls: 'normal' };
+      if (d < 0) return { text: '마감', cls: 'closed' };
+      if (d === 0) return { text: '오늘 마감', cls: 'urgent' };
+      if (d <= 7) return { text: `D-${d}`, cls: 'urgent' };
+      return { text: `D-${d}`, cls: 'normal' };
+    }
+    if (ev.event_date) {
+      const d = daysFromToday(ev.event_date);
+      if (d === null) return { text: '상시', cls: 'normal' };
+      if (d < 0) return { text: '종료', cls: 'closed' };
+      if (d === 0) return { text: '오늘', cls: 'urgent' };
+      if (d <= 7) return { text: `D-${d}`, cls: 'urgent' };
+      return { text: `D-${d}`, cls: 'normal' };
+    }
+    return { text: '상시', cls: 'normal' };
   }
 
   function renderCard(ev) {
-    const dl = ddayLabel(ev.deadline);
+    const dl = ddayLabel(ev);
+    const kind = eventKind(ev);
     const dateRange = formatDateRange(ev.event_date, ev.event_end_date);
     return `
       <div class="card" onclick="openModal(${ev.id})">
         <div class="card-top">
           <span class="card-organizer">${ev.organizer || ''}</span>
+          ${kind.label ? `<span class="tag ${kind.cls}">${kind.label}</span>` : ''}
         </div>
         <h3 class="card-title">${ev.title}</h3>
         <div class="card-meta">
@@ -407,14 +438,14 @@
     let list = [...events];
     if (sort === 'upcoming') {
       list.sort((a, b) => {
-        const da = daysFromToday(a.event_date) ?? 999;
-        const db = daysFromToday(b.event_date) ?? 999;
+        const da = daysFromToday(a.event_date || a.deadline) ?? 999;
+        const db = daysFromToday(b.event_date || b.deadline) ?? 999;
         return da - db;
       });
     } else if (sort === 'deadline') {
       list.sort((a, b) => {
-        const da = daysFromToday(a.deadline) ?? 999;
-        const db = daysFromToday(b.deadline) ?? 999;
+        const da = daysFromToday(a.deadline || a.event_date) ?? 999;
+        const db = daysFromToday(b.deadline || b.event_date) ?? 999;
         return da - db;
       });
     }
@@ -435,12 +466,13 @@
   function openModal(id) {
     const ev = events.find(e => e.id === id);
     if (!ev) return;
-    const dl = ddayLabel(ev.deadline);
+    const dl = ddayLabel(ev);
+    const kind = eventKind(ev);
     const dateRange = formatDateRange(ev.event_date, ev.event_end_date);
     document.getElementById('modalContent').innerHTML = `
       <button class="modal-close" onclick="closeModal()">×</button>
       <h2>${ev.title}</h2>
-      <div class="organizer-line">${ev.organizer || ''}</div>
+      <div class="organizer-line">${ev.organizer || ''}${kind.label ? ` · <span class="tag ${kind.cls}">${kind.label}</span>` : ''}</div>
       <div class="modal-grid">
         ${dateRange ? `<div><div class="label">행사 일자</div><div class="value">${dateRange}</div></div>` : ''}
         ${ev.location ? `<div><div class="label">장소</div><div class="value">${ev.location}</div></div>` : ''}
