@@ -771,6 +771,21 @@
 
   .chips{margin:12px 0 0}
   .fchip{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#EFF6FF;color:#1D4ED8}
+  .sublab{font-size:12.5px;font-weight:700;color:#374151;margin:4px 0 2px}
+  .bars{display:flex;align-items:flex-end;gap:14px;height:104px;padding:8px 6px 0}
+  .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;justify-content:flex-end;height:100%}
+  .bar .b{width:60%;max-width:46px;background:linear-gradient(180deg,#FBBF24,#F59E0B);border-radius:5px 5px 0 0;min-height:4px}
+  .bar .bn{font-size:12px;font-weight:800;color:var(--accent)}
+  .bar .bl{font-size:11px;color:var(--text-secondary);font-weight:600}
+  .trend .delta{font-size:12.5px;color:#2A9D8F;font-weight:700;margin-bottom:6px}
+  #instModalContent svg .ln{fill:none;stroke:#2A9D8F;stroke-width:2.5}
+  #instModalContent svg .pt{fill:#fff;stroke:#2A9D8F;stroke-width:2.5}
+  #instModalContent svg .hit{fill:transparent;cursor:pointer}
+  #instModalContent svg .vlab{font-size:10px;fill:var(--text-secondary);font-weight:600}
+  #instModalContent svg .xlab{font-size:10px;fill:var(--text-light)}
+  .statnote{background:var(--border-soft);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--text-secondary);margin-top:8px}
+  #tip{position:fixed;z-index:200;background:#111827;color:#fff;border-radius:10px;padding:9px 12px;font-size:12px;line-height:1.55;box-shadow:0 8px 24px rgba(0,0,0,.3);pointer-events:none;display:none;max-width:220px}
+  #tip b{color:#FCD34D}
 </style>
 </head>
 <body>
@@ -1018,6 +1033,60 @@ function jobMini(j){
     '<div class="meta">'+line2+'</div></div>'+
     '<span class="status-pill '+(act?'active':'closed')+'">'+(act?'진행 중':'마감')+'</span></div>';
 }
+window.__itip=[];
+function _iesc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function _iyear(j){var d=j.posted_date||j.deadline_date||'';var m=String(d).match(/(\d{4})/);return m?parseInt(m[1],10):null}
+function _iwage(j){if(!/시급/.test(j.salary||''))return null;var m=String(j.salary).match(/[\d,]{4,}/);return m?parseInt(m[0].replace(/,/g,''),10):null}
+function _ilevel(j){var dg=String(j.degree||'');if(/박사/.test(dg))return '박사';if(/석사/.test(dg))return '석사';return '기타'}
+function instFreqBars(all){
+  var years=[];all.forEach(function(j){var y=_iyear(j);if(y&&years.indexOf(y)<0)years.push(y)});years.sort();
+  if(!years.length)return '';
+  var counts=years.map(function(y){return all.filter(function(j){return _iyear(j)===y}).length});
+  var max=Math.max.apply(null,counts)||1;
+  return '<div class="sublab">연도별 채용 공고 수</div><div class="bars">'+years.map(function(y,i){return '<div class="bar"><div class="bn">'+counts[i]+'</div><div class="b" style="height:'+Math.round(counts[i]/max*80)+'px"></div><div class="bl">'+y+'</div></div>'}).join('')+'</div>';
+}
+function instWageTrend(all){
+  var wj=all.filter(function(j){return _iwage(j)&&_iyear(j)});
+  var years=[];wj.forEach(function(j){var y=_iyear(j);if(years.indexOf(y)<0)years.push(y)});years.sort();
+  if(years.length<2)return '';
+  window.__itip=[];
+  var pts=years.map(function(y){
+    var ys=wj.filter(function(j){return _iyear(j)===y});
+    var avg=Math.round(ys.reduce(function(a,b){return a+_iwage(b)},0)/ys.length);
+    var byLv={};ys.forEach(function(j){var L=_ilevel(j);(byLv[L]=byLv[L]||[]).push(_iwage(j))});
+    var rows=Object.keys(byLv).map(function(L){var v=byLv[L].sort(function(a,b){return a-b});var t=v[0]===v[v.length-1]?v[0].toLocaleString()+'원':v[0].toLocaleString()+'~'+v[v.length-1].toLocaleString()+'원';return '<div><b>'+_iesc(L)+'</b>: '+t+(byLv[L].length>1?' ('+byLv[L].length+'건)':'')+'</div>'}).join('');
+    window.__itip.push(rows);
+    return avg;
+  });
+  var W=520,H=130,pL=12,pR=12,pT=18,pB=26;
+  var mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts),sp=(mx-mn)||1;
+  function X(i){return pL+i*((W-pL-pR)/(years.length-1))}
+  function Y(v){return pT+(1-(v-mn)/sp)*(H-pT-pB)}
+  var line=pts.map(function(v,i){return X(i)+','+Y(v)}).join(' ');
+  var marks=pts.map(function(v,i){var vl=(i===0||i===pts.length-1)?'<text class="vlab" x="'+X(i)+'" y="'+(Y(v)-9)+'" text-anchor="middle">'+v.toLocaleString()+'</text>':'';return vl+'<circle class="pt" cx="'+X(i)+'" cy="'+Y(v)+'" r="3.8"/><circle class="hit" data-i="'+i+'" cx="'+X(i)+'" cy="'+Y(v)+'" r="16"/>'}).join('');
+  var xl=years.map(function(y,i){return '<text class="xlab" x="'+X(i)+'" y="'+(H-8)+'" text-anchor="middle">'+y+'</text>'}).join('');
+  var delta=pts[pts.length-1]-pts[0];
+  var dt=(delta>0?'▲ ':delta<0?'▼ ':'– ')+Math.abs(delta).toLocaleString()+'원 '+(delta>0?'상승':delta<0?'하락':'유지')+' ('+pts[0].toLocaleString()+'→'+pts[pts.length-1].toLocaleString()+'원, 연평균)';
+  return '<div class="sublab" style="margin-top:18px">시간강사 시급 추이 (연도별)</div><div class="trend"><div class="delta">'+dt+'</div><svg viewBox="0 0 '+W+' '+H+'" width="100%"><polyline class="ln" points="'+line+'"/>'+marks+xl+'</svg><div style="font-size:11px;color:var(--text-light);margin-top:2px">↑ 점을 누르거나 마우스를 올리면 조건별 시급이 보여요</div></div><div class="statnote">※ 학위·경력·고용형태에 따라 급여가 달라요. 추이선은 시간강사 시급의 연평균이에요. 점을 누르면 조건별 시급을, 전임·연봉제는 아래 과거 채용 이력에서 확인하세요.</div>';
+}
+function instStats(all){
+  if(all.length<4)return '';
+  var bars=instFreqBars(all);
+  if(!bars)return '';
+  return '<div class="modal-section"><h4>📈 채용 통계</h4><div style="font-size:11.5px;color:var(--text-light);margin-bottom:10px">이 기관이 그동안 낸 공고로 자동 집계</div>'+bars+instWageTrend(all)+'</div>';
+}
+function bindInstTip(){
+  var tip=document.getElementById('tip');if(!tip)return;var pinned=-1;
+  function place(c){var r=c.getBoundingClientRect();tip.style.left=(r.left+r.width/2)+'px';tip.style.top=(r.top-10)+'px';tip.style.transform='translate(-50%,-100%)'}
+  function show(i,c){tip.innerHTML=window.__itip[i];place(c);tip.style.display='block'}
+  function hide(){tip.style.display='none'}
+  document.querySelectorAll('#instModalContent svg .hit').forEach(function(c){var i=+c.getAttribute('data-i');
+    c.addEventListener('mouseenter',function(){if(pinned<0)show(i,c)});
+    c.addEventListener('mouseleave',function(){if(pinned<0)hide()});
+    c.addEventListener('click',function(e){e.stopPropagation();if(pinned===i){pinned=-1;hide()}else{pinned=i;show(i,c)}});
+  });
+  document.addEventListener('click',function(){pinned=-1;hide()});
+}
 function openInstitution(key){
   var inst=institutions[key];if(!inst)return;
   var all=jobs.filter(function(j){return j.inst===key});
@@ -1037,10 +1106,12 @@ function openInstitution(key){
       '<div class="pattern-item"><div class="num">'+all.length+'</div><div class="label">누적 등록 공고</div></div>'+
       '<div class="pattern-item"><div class="num">'+active.length+'</div><div class="label">현재 진행 중</div></div>'+
     '</div><p style="font-size:12.5px;color:#92400E;margin-top:10px;">💡 급여·자격은 공고마다 달라요. 아래 공고를 누르면 상세가 떠요.</p></div>'+
+    instStats(all)+
     '<div class="modal-section"><h4>현재 진행 중인 채용 ('+active.length+'건)</h4><div class="history-list">'+actHtml+'</div></div>'+
     '<div class="modal-section"><h4>과거 채용 이력 ('+past.length+'건)</h4><div class="history-list">'+pastHtml+'</div></div>'+
     '<div class="modal-cta" style="justify-content:center"><a class="primary-cta" style="flex:0 0 auto;padding:12px 40px" href="'+mailto+'">✉️ 정보 정정 제보</a></div>';
   document.getElementById('instModal').classList.add('show');
+  if(typeof bindInstTip==='function')bindInstTip();
   document.body.style.overflow='hidden';
 }
 function closeModal(id){var el=document.getElementById(id);if(!el)return;el.classList.remove('show');if(!document.querySelector('.modal-overlay.show'))document.body.style.overflow=''}
@@ -1126,5 +1197,6 @@ document.getElementById('sortSelect').addEventListener('change', e => {
 <div class="modal-overlay" id="instModal" onclick="if(event.target===this) closeModal('instModal')">
   <div class="modal" id="instModalContent"></div>
 </div>
+<div id="tip"></div>
 </body>
 </html>
