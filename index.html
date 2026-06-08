@@ -2059,6 +2059,80 @@ recalcSidebarCounts();
 recalcChipCounts();
 renderGrid();
 updateHeaderBookmarkCount();
+
+// ====================================================================
+// SEO: JobPosting 구조화 데이터 자동 주입 (검색엔진 전용 · 화면 영향 없음)
+// jobs 배열을 읽어 Google이 이해하는 채용공고 JSON-LD를 <head>에 삽입.
+// 마감 지난/마감(closed) 공고는 제외. 급여는 형식 비표준이라 제외.
+// ====================================================================
+(function injectJobPostingSchema() {
+  try {
+    if (typeof jobs === 'undefined' || !Array.isArray(jobs) || !jobs.length) return;
+    var COUNTRY_ISO = {'한국':'KR','대한민국':'KR','미국':'US','캐나다':'CA','일본':'JP','중국':'CN','대만':'TW','호주':'AU','베트남':'VN','영국':'GB','독일':'DE','프랑스':'FR','태국':'TH','인도네시아':'ID','말레이시아':'MY','필리핀':'PH','싱가포르':'SG','인도':'IN','몽골':'MN','우즈베키스탄':'UZ'};
+    function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function nl(s){ return esc(s).replace(/\n/g,'<br>'); }
+    function isoOrNull(v){ return (v && /^\d{4}-\d{2}-\d{2}/.test(String(v))) ? String(v).slice(0,10) : null; }
+    function empType(s){
+      s = s || ''; var out = [];
+      var sf = s.replace(/비전임/g,'').replace(/비정규/g,'');
+      if (/전임|정규/.test(sf)) out.push('FULL_TIME');
+      if (/시간강사|시간제|파트/.test(s)) out.push('PART_TIME');
+      if (/계약|초빙|비전임|대우/.test(s)) out.push('CONTRACTOR');
+      if (/인턴/.test(s)) out.push('INTERN');
+      if (!out.length) out.push('OTHER');
+      return out;
+    }
+    function htmlDesc(job){
+      var p = [];
+      if (job.desc) p.push('<p>'+nl(job.desc)+'</p>');
+      if (job.quals) p.push('<p><b>자격 요건</b><br>'+nl(job.quals)+'</p>');
+      if (job.preferred) p.push('<p><b>우대 사항</b><br>'+nl(job.preferred)+'</p>');
+      if (job.apply) p.push('<p><b>지원 방법</b><br>'+nl(job.apply)+'</p>');
+      return p.join('') || ('<p>'+esc(job.title||'')+'</p>');
+    }
+    function buildOne(job){
+      if (job.verified === false) return null;               // status closed 제외
+      if (typeof job.deadline === 'number' && job.deadline < 0) return null; // 마감 지남 제외
+      var posted = isoOrNull(job.posted_date);
+      if (!posted) return null;                              // datePosted는 Google 필수
+      var inst = (typeof institutions !== 'undefined' && institutions[job.inst]) || null;
+      var orgName = (inst && inst.name) || job.inst || 'K-Teacher Jobs';
+      var obj = {
+        '@context':'https://schema.org/', '@type':'JobPosting',
+        'title': job.original_title || job.title || '',
+        'description': htmlDesc(job),
+        'datePosted': posted,
+        'employmentType': empType(job.employment),
+        'hiringOrganization': { '@type':'Organization', 'name': orgName },
+        'identifier': { '@type':'PropertyValue', 'name': orgName, 'value': 'ktj-'+job.id }
+      };
+      var vt = isoOrNull(job.deadline_date);
+      if (vt) obj.validThrough = vt;
+      if (inst && inst.website) obj.hiringOrganization.sameAs = 'https://'+String(inst.website).replace(/^https?:\/\//,'');
+      if (job.apply_url) obj.url = job.apply_url;
+      var remote = /온라인|재택/.test(job.mode||'') || /온라인/.test(job.country||'');
+      if (remote) {
+        obj.jobLocationType = 'TELECOMMUTE';
+        obj.applicantLocationRequirements = { '@type':'Country', 'name': COUNTRY_ISO[job.country] || 'KR' };
+      } else {
+        obj.jobLocation = { '@type':'Place', 'address': { '@type':'PostalAddress',
+          'addressLocality': job.region || (inst && inst.city) || '',
+          'addressCountry': COUNTRY_ISO[job.country] || job.country || 'KR' } };
+      }
+      return obj;
+    }
+    var frag = document.createDocumentFragment(), n = 0;
+    jobs.forEach(function(job){
+      var o = buildOne(job); if (!o) return;
+      var s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.text = JSON.stringify(o);
+      frag.appendChild(s); n++;
+    });
+    if (n) document.head.appendChild(frag);
+  } catch (e) { /* 구조화 데이터 실패는 사이트 동작에 영향 없음 */ }
+})();
+
 </script>
 
 </body>
