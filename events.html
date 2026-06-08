@@ -108,6 +108,39 @@
     color: var(--text-secondary);
   }
 
+  /* === Filter toggle === */
+  .toggle-wrap { text-align: center; padding: 0 24px 8px; }
+  .mode-toggle {
+    display: inline-flex;
+    gap: 4px;
+    background: var(--border-soft);
+    padding: 4px;
+    border-radius: 10px;
+    margin: 0 auto;
+  }
+  .mode-btn {
+    padding: 8px 18px;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+  }
+  .mode-btn:hover { color: var(--text); }
+  .mode-btn.active {
+    background: white;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .mode-btn .mode-count {
+    font-size: 11.5px;
+    opacity: 0.75;
+    margin-left: 2px;
+  }
+
   /* === Results bar === */
   .results-wrap { max-width: 1280px; margin: 0 auto; padding: 12px 24px 48px; }
   .results-header {
@@ -336,6 +369,14 @@
     <p>한국어교육 관련 학회, 세미나, 워크숍 소식을 한곳에서</p>
   </section>
 
+  <div class="toggle-wrap">
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-filter="all">전체 <span class="mode-count" id="cnt-all"></span></button>
+      <button class="mode-btn" data-filter="cfp">모집 <span class="mode-count" id="cnt-cfp"></span></button>
+      <button class="mode-btn" data-filter="event">행사 <span class="mode-count" id="cnt-event"></span></button>
+    </div>
+  </div>
+
   <section class="results-wrap">
     <div class="results-header">
       <div class="results-count">총 <strong id="resultCount">0</strong>건</div>
@@ -433,9 +474,21 @@
       </div>`;
   }
 
+  let currentFilter = 'all';
+
+  function updateCounts() {
+    const cfp = events.filter(e => eventKind(e).key === 'cfp').length;
+    const ev = events.filter(e => eventKind(e).key === 'event').length;
+    document.getElementById('cnt-all').textContent = events.length;
+    document.getElementById('cnt-cfp').textContent = cfp;
+    document.getElementById('cnt-event').textContent = ev;
+  }
+
   function renderGrid() {
     const sort = document.getElementById('sortSelect').value;
-    let list = [...events];
+    let list = currentFilter === 'all'
+      ? [...events]
+      : events.filter(e => eventKind(e).key === currentFilter);
     if (sort === 'upcoming') {
       list.sort((a, b) => {
         const da = daysFromToday(a.event_date || a.deadline) ?? 999;
@@ -498,6 +551,15 @@
   });
   document.getElementById('sortSelect').addEventListener('change', renderGrid);
 
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentFilter = btn.dataset.filter;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderGrid();
+    });
+  });
+
+  updateCounts();
   renderGrid();
 </script>
 </body>
