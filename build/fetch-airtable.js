@@ -132,6 +132,8 @@ function mapJob(rec, idx, instLookup) {
     visa: !!f.visa_support,
     deadline: daysFromToday(f.deadline),
     posted: daysAgoLabel(f.posted_date),
+    posted_date: f.posted_date || '',
+    deadline_date: f.deadline || '',
     verified: f.status !== 'closed',
     desc: f.description || '',
     quals: f.qualifications || '',
