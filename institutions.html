@@ -892,6 +892,9 @@ function deadlineText(d) {
   if (d <= 7) return { text: `D-${d}`, urgent: true };
   return { text: `D-${d}`, urgent: false };
 }
+function isClosedJob(job) {
+  return !!(job && (job.closed || ['closed', '마감', '모집완료', '접수마감', 'completed', 'done'].includes(String(job.status || '').toLowerCase())));
+}
 function countryIcon(c) {
   const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
   return map[c] || '🌐';
@@ -937,7 +940,7 @@ function formatRichText(s) {
 function openJob(id) {
   const job = jobs.find(j => j.id === id);
   const inst = institutions[job.inst];
-  const dl = deadlineText(job.deadline);
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline);
   const content = document.getElementById('jobModalContent');
   content.innerHTML = `
     <button class="modal-close" onclick="closeModal('jobModal')">
@@ -1024,7 +1027,7 @@ function openJob(id) {
 
 /* === 기관 모달 (공고별 카드 클릭 → openJob, 정정 제보 메일) === */
 function jobMini(j){
-  var act=j.deadline>0;var dl=deadlineText(j.deadline);
+  var act=j.deadline>0&&!isClosedJob(j);var dl=isClosedJob(j)?{text:'마감',urgent:false}:deadlineText(j.deadline);
   var qual=[j.degree,j.experience].filter(Boolean).map(escapeHtml).join(' · ');
   var line2='💰 '+escapeHtml(j.salary||'미기재')+(qual?(' · 🎓 '+qual):'');
   return '<div class="history-item'+(act?' active-job':'')+'" onclick="closeModal(\'instModal\'); openJob('+j.id+')">'+
@@ -1090,8 +1093,8 @@ function bindInstTip(){
 function openInstitution(key){
   var inst=institutions[key];if(!inst)return;
   var all=jobs.filter(function(j){return j.inst===key});
-  var active=all.filter(function(j){return j.deadline>0});
-  var past=all.filter(function(j){return j.deadline<=0});
+  var active=all.filter(function(j){return j.deadline>0&&!isClosedJob(j)});
+  var past=all.filter(function(j){return j.deadline<=0||isClosedJob(j)});
   var foreign=all.some(function(j){return j.visa});
   var chip=foreign?'<div class="chips"><span class="fchip">🌏 외국인 지원 가능</span></div>':'';
   var actHtml=active.length?active.map(jobMini).join(''):'<p style="color:var(--text-light);font-size:13px;">현재 진행 중인 공고가 없어요. 새 공고가 올라오면 여기에 떠요.</p>';

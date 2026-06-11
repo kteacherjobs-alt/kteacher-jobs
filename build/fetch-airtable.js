@@ -10,6 +10,7 @@ const BASE_ID = process.env.AIRTABLE_BASE_ID;
 const JOBS_TABLE = process.env.AIRTABLE_JOBS_TABLE || 'Jobs';
 const INST_TABLE = process.env.AIRTABLE_INSTITUTIONS_TABLE || 'Institutions';
 const EVENTS_TABLE = process.env.AIRTABLE_EVENTS_TABLE || 'Events';
+const JOB_LIST_GRACE_DAYS = Number(process.env.JOB_LIST_GRACE_DAYS || 0);
 
 if (!PAT || !BASE_ID) {
   console.log('⚠️  Airtable 환경변수 없음 (AIRTABLE_PAT / AIRTABLE_BASE_ID).');
@@ -38,8 +39,9 @@ async function fetchAll(table) {
 
 function daysFromToday(dateStr) {
   if (!dateStr) return 0;
-  const target = new Date(dateStr);
+  const target = new Date(`${String(dateStr).slice(0, 10)}T00:00:00`);
   const now = new Date();
+  now.setHours(0, 0, 0, 0);
   const diff = Math.round((target - now) / 86400000);
   return diff;
 }
@@ -113,6 +115,11 @@ function mapJob(rec, idx, instLookup) {
   } else {
     inst = 'unknown';
   }
+  const deadlineDays = daysFromToday(f.deadline);
+  const status = String(f.status || '').trim() || (deadlineDays < 0 ? 'closed' : 'open');
+  const statusKey = status.toLowerCase();
+  const isClosedStatus = ['closed', '마감', '모집완료', '접수마감', 'completed', 'done'].includes(statusKey);
+  const visibleInJobs = !isClosedStatus && (!f.deadline || deadlineDays >= -JOB_LIST_GRACE_DAYS);
   return {
     id: idx + 1,
     inst,
@@ -130,11 +137,14 @@ function mapJob(rec, idx, instLookup) {
     degree: f.degree_required || '',
     experience: f.experience_required || '',
     visa: !!f.visa_support,
-    deadline: daysFromToday(f.deadline),
+    deadline: deadlineDays,
     posted: daysAgoLabel(f.posted_date),
     posted_date: f.posted_date || '',
     deadline_date: f.deadline || '',
-    verified: f.status !== 'closed',
+    status,
+    closed: isClosedStatus || deadlineDays < 0,
+    visible_in_jobs: visibleInJobs,
+    verified: !isClosedStatus,
     desc: f.description || '',
     quals: f.qualifications || '',
     preferred: f.preferred || '',

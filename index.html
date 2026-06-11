@@ -1506,6 +1506,12 @@ function deadlineText(d) {
   if (d <= 7) return { text: `D-${d}`, urgent: true };
   return { text: `D-${d}`, urgent: false };
 }
+function isClosedJob(job) {
+  return !!(job && (job.closed || ['closed', '마감', '모집완료', '접수마감', 'completed', 'done'].includes(String(job.status || '').toLowerCase())));
+}
+function isVisibleJob(job) {
+  return job && job.visible_in_jobs !== false;
+}
 function countryIcon(c) {
   const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
   return map[c] || '🌐';
@@ -1553,7 +1559,7 @@ function formatRichText(s) {
 
 function renderCard(job) {
   const inst = institutions[job.inst];
-  const dl = deadlineText(job.deadline);
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline);
   return `
     <div class="card" data-id="${job.id}">
       <div class="card-top">
@@ -1623,6 +1629,7 @@ function compareByDeadline(a, b) {
 }
 
 function matchesFilters(job) {
+  if (!isVisibleJob(job)) return false;
   // 모드 매칭 (A안: 강사 vs 기타직)
   if (currentMode === 'teacher' && job.category !== '강사') return false;
   if (currentMode === 'other' && job.category === '강사') return false;
@@ -1712,7 +1719,7 @@ document.getElementById('sortSelect').addEventListener('change', renderGrid);
 function openJob(id) {
   const job = jobs.find(j => j.id === id);
   const inst = institutions[job.inst];
-  const dl = deadlineText(job.deadline);
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline);
   const content = document.getElementById('jobModalContent');
   content.innerHTML = `
     <button class="modal-close" onclick="closeModal('jobModal')">
