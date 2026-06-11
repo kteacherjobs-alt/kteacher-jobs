@@ -1583,8 +1583,10 @@ function renderGrid() {
 
   // sort
   const sort = document.getElementById('sortSelect').value;
-  if (sort === 'deadline') filtered.sort((a,b) => a.deadline - b.deadline);
-  // latest = 기본 순서 유지
+  filtered.sort((a, b) => {
+    if (sort === 'deadline') return compareByDeadline(a, b);
+    return compareByLatest(a, b);
+  });
 
   if (filtered.length === 0) {
     grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><p>조건에 맞는 공고가 없어요</p><p style="margin-top:8px; font-size:13px;">필터를 줄이거나 다른 조건으로 검색해보세요</p></div>`;
@@ -1594,6 +1596,30 @@ function renderGrid() {
       card.addEventListener('click', () => openJob(parseInt(card.dataset.id)));
     });
   }
+}
+
+function dateValue(dateStr) {
+  if (!dateStr) return 0;
+  const t = Date.parse(String(dateStr).slice(0, 10));
+  return Number.isNaN(t) ? 0 : t;
+}
+function activeDeadlineValue(job) {
+  const d = typeof job.deadline === 'number' ? job.deadline : Number(job.deadline);
+  return Number.isFinite(d) && d > 0 ? d : 999999;
+}
+function compareByLatest(a, b) {
+  const postedDiff = dateValue(b.posted_date) - dateValue(a.posted_date);
+  if (postedDiff !== 0) return postedDiff;
+  const deadlineDiff = dateValue(b.deadline_date) - dateValue(a.deadline_date);
+  if (deadlineDiff !== 0) return deadlineDiff;
+  return (b.id || 0) - (a.id || 0);
+}
+function compareByDeadline(a, b) {
+  const deadlineDiff = activeDeadlineValue(a) - activeDeadlineValue(b);
+  if (deadlineDiff !== 0) return deadlineDiff;
+  const dateDiff = dateValue(a.deadline_date) - dateValue(b.deadline_date);
+  if (dateDiff !== 0) return dateDiff;
+  return compareByLatest(a, b);
 }
 
 function matchesFilters(job) {
