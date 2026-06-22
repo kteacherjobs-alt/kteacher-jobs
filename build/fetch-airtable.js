@@ -62,6 +62,12 @@ const BADGE_MAP = {
   '마감임박': 'urgent',
 };
 const normBadges = (arr) => Array.isArray(arr) ? arr.map(b => BADGE_MAP[b] || b) : [];
+function hasSupport(value) {
+  const text = String(value || '').trim().toLowerCase();
+  if (!text) return false;
+  if (['없음', '미기재', '해당없음', '해당 없음', 'n/a', 'na', 'no', 'none', 'false'].includes(text)) return false;
+  return /지원|제공|가능|협의|있음|yes|true/.test(text);
+}
 
 function instSlug(rec) {
   const f = rec.fields;
@@ -136,7 +142,7 @@ function mapJob(rec, idx, instLookup) {
     cert: f.cert_required || '',
     degree: f.degree_required || '',
     experience: f.experience_required || '',
-    visa: !!f.visa_support,
+    visa: hasSupport(f.visa_support),
     deadline: deadlineDays,
     posted: daysAgoLabel(f.posted_date),
     posted_date: f.posted_date || '',
