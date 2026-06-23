@@ -4,7 +4,10 @@
   "private": true,
   "description": "K-Teacher Jobs — 한국어 강사 채용공고 허브",
   "scripts": {
-    "build": "node build/fetch-airtable.js"
+    "build": "node build/fetch-supabase.js",
+    "build:airtable": "node build/fetch-airtable.js",
+    "build:supabase": "node build/fetch-supabase.js",
+    "migrate:supabase": "node scripts/migrate-airtable-to-supabase.js"
   },
   "engines": {
     "node": ">=18"
