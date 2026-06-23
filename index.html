@@ -1466,10 +1466,63 @@ document.getElementById('resetBtn').addEventListener('click', () => {
 document.getElementById('searchInput').addEventListener('input', renderGrid);
 document.getElementById('sortSelect').addEventListener('change', renderGrid);
 
+function normalizeExternalUrl(url) {
+  const value = String(url || '').trim();
+  if (!value) return '';
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+
+function getJobIdFromUrl() {
+  const id = Number(new URLSearchParams(window.location.search).get('job'));
+  return Number.isFinite(id) && id > 0 ? id : null;
+}
+
+function getJobPermalink(id) {
+  const url = new URL(window.location.origin + window.location.pathname);
+  url.searchParams.set('job', String(id));
+  return url.toString();
+}
+
+function updateJobUrl(id) {
+  if (!window.history || !window.history.pushState) return;
+  const next = getJobPermalink(id);
+  if (window.location.href !== next) window.history.pushState({ jobId: id }, '', next);
+}
+
+function clearJobUrl() {
+  if (!window.history || !window.history.pushState) return;
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has('job')) return;
+  url.searchParams.delete('job');
+  const query = url.searchParams.toString();
+  window.history.pushState({}, '', `${url.pathname}${query ? `?${query}` : ''}${url.hash}`);
+}
+
+function openJobFromCurrentUrl() {
+  const id = getJobIdFromUrl();
+  if (id !== null) openJob(id, { updateUrl: false });
+}
+
+async function copyJobLink(id, button) {
+  const link = getJobPermalink(id);
+  try {
+    await navigator.clipboard.writeText(link);
+    if (button) {
+      const original = button.textContent;
+      button.textContent = '링크 복사됨';
+      setTimeout(() => { button.textContent = original; }, 1400);
+    }
+  } catch (error) {
+    window.prompt('게시물 링크', link);
+  }
+}
+
 // === Job Modal ===
-function openJob(id) {
+function openJob(id, options = {}) {
   const job = jobs.find(j => j.id === id);
+  if (!job) return;
   const inst = institutions[job.inst];
+  if (options.updateUrl !== false) updateJobUrl(id);
   const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline, job);
   const content = document.getElementById('jobModalContent');
   content.innerHTML = `
@@ -1522,6 +1575,7 @@ function openJob(id) {
         ? `<a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="primary-cta">원문 보기 / 지원하기 ↗</a>`
         : `<span class="primary-cta" style="opacity:0.5; cursor:not-allowed;" title="원문 링크가 등록되지 않았습니다. 위 '지원 방법' 안내를 참고해주세요.">원문 링크 없음</span>`
       }
+      <button type="button" class="secondary-cta" onclick="copyJobLink(${job.id}, this)">게시물 링크 복사</button>
     </div>
   `;
   document.getElementById('jobModal').classList.add('show');
@@ -1564,7 +1618,7 @@ function openInstitution(key) {
       <div class="inst-logo">${inst.name.charAt(0)}</div>
       <div class="inst-info">
         <h2>${inst.name}</h2>
-        <p>${countryIcon(inst.country)} ${inst.country} · ${inst.city} · 🏫 ${inst.type} · 🔗 <a href="https://${inst.website}" target="_blank" style="color:var(--primary-light)">${inst.website}</a></p>
+        <p>${countryIcon(inst.country)} ${inst.country} · ${inst.city} · 🏫 ${inst.type}${inst.website ? ` · 🔗 <a href="${normalizeExternalUrl(inst.website)}" target="_blank" style="color:var(--primary-light)">${inst.website}</a>` : ''}</p>
       </div>
     </div>
     <div class="modal-section">
@@ -1644,15 +1698,21 @@ function getHiringSeasonLabel(instJobs) {
   return `이 기관은 현재 데이터 기준으로 주로 <strong>${label}</strong>에 채용 이력이 있어요. 데이터가 쌓이면 더 정확해집니다.`;
 }
 
-function closeModal(id) {
+function closeModal(id, options = {}) {
   document.getElementById(id).classList.remove('show');
-  document.body.style.overflow = '';
+  if (!document.querySelector('.modal-overlay.show')) document.body.style.overflow = '';
+  if (id === 'jobModal' && options.updateUrl !== false) clearJobUrl();
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModal('jobModal');
     closeModal('instModal');
   }
+});
+window.addEventListener('popstate', () => {
+  const id = getJobIdFromUrl();
+  if (id !== null) openJob(id, { updateUrl: false });
+  else closeModal('jobModal', { updateUrl: false });
 });
 
 // === Theme Switcher ===
@@ -1820,6 +1880,7 @@ recalcSidebarCounts();
 recalcChipCounts();
 renderGrid();
 updateHeaderBookmarkCount();
+openJobFromCurrentUrl();
 
 // ====================================================================
 // SEO: JobPosting 구조화 데이터 자동 주입 (검색엔진 전용 · 화면 영향 없음)
