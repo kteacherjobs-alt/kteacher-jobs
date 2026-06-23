@@ -1118,7 +1118,7 @@
       <div class="filter-panel">
         <div class="filter-list">
           <label class="filter-item"><input type="checkbox" data-filter="cert" value="필수">자격증 필수 <span class="count">0</span></label>
-          <label class="filter-item"><input type="checkbox" data-filter="cert" value="우대">자격증 무관 <span class="count">0</span></label>
+          <label class="filter-item"><input type="checkbox" data-filter="cert" value="무관">우대·무관·미기재 <span class="count">0</span></label>
         </div>
       </div>
     </details>
@@ -1126,7 +1126,7 @@
       <summary>학위</summary>
       <div class="filter-panel">
         <div class="filter-list">
-          <label class="filter-item"><input type="checkbox" data-filter="degree" value="무관">무관 <span class="count">0</span></label>
+          <label class="filter-item"><input type="checkbox" data-filter="degree" value="무관">학사 이하·무관 <span class="count">0</span></label>
           <label class="filter-item"><input type="checkbox" data-filter="degree" value="석사이상">석사 이상 <span class="count">0</span></label>
           <label class="filter-item"><input type="checkbox" data-filter="degree" value="박사수료이상">박사수료 이상 <span class="count">0</span></label>
           <label class="filter-item"><input type="checkbox" data-filter="degree" value="박사이상">박사 이상 <span class="count">0</span></label>
@@ -1146,7 +1146,7 @@
 
   <section>
     <div class="results-header">
-      <div class="results-count">총 <strong id="resultCount">14</strong>개의 공고</div>
+      <div class="results-count">총 <strong id="resultCount">0</strong>개의 공고</div>
       <select class="sort-select" id="sortSelect">
         <option value="latest">최신순</option>
         <option value="deadline">마감 임박순</option>
@@ -1171,292 +1171,8 @@
 </div>
 
 <script>
-// === 로컬 미리보기용 fallback 데이터 ===
-var institutions = {
-  snu: { name: '서울대학교 언어교육원', type: '대학 어학당', country: '한국', city: '서울 관악구', website: 'lei.snu.ac.kr', desc: '서울대학교 부설 한국어 교육기관. 외국인 유학생 대상 정규/단기 한국어 과정을 운영합니다.' },
-  yonsei: { name: '연세대학교 한국어학당', type: '대학 어학당', country: '한국', city: '서울 서대문구', website: 'ko.yonsei.ac.kr', desc: '국내 최대 규모의 한국어 교육기관 중 하나. 정규 과정과 다양한 특별 과정을 운영합니다.' },
-  ewha: { name: '이화여자대학교 언어교육원', type: '대학 어학당', country: '한국', city: '서울 서대문구', website: 'elc.ewha.ac.kr', desc: '이화여자대학교 부설 어학원으로 한국어 교육 과정을 운영합니다.' },
-  sejong: { name: '세종학당재단', type: '세종학당', country: '한국', city: '서울 종로구', website: 'ksif.or.kr', desc: '전 세계 84개국 244개소의 세종학당을 운영하는 한국어 보급 공공기관.' },
-  ucla: { name: 'UCLA Asian Languages & Cultures', type: '대학·대학원', country: '미국', city: 'Los Angeles, CA', website: 'alc.ucla.edu', desc: 'UCLA의 아시아 언어·문화학과. 한국학 전공 학생 대상 한국어 강의 운영.' },
-  toronto: { name: 'University of Toronto, East Asian Studies', type: '대학·대학원', country: '캐나다', city: 'Toronto, ON', website: 'eas.utoronto.ca', desc: '캐나다 최대 한국학 프로그램 중 하나를 운영하는 동아시아학과.' },
-  waseda: { name: '와세다대학 한국어교육연구센터', type: '대학·대학원', country: '일본', city: '도쿄', website: 'waseda.jp', desc: '와세다대학에서 한국어 교육과 한국학 연구를 진행하는 센터.' },
-  sydney: { name: 'University of Sydney, Korean Studies', type: '대학·대학원', country: '호주', city: 'Sydney, NSW', website: 'sydney.edu.au', desc: '호주 시드니대학교 아시아학과 내 한국학 프로그램.' },
-  hochiminh: { name: '호치민 인문사회과학대학 한국학과', type: '대학·대학원', country: '베트남', city: '호치민', website: 'hcmussh.edu.vn', desc: '베트남 호치민 지역의 대표적인 한국학 학과.' },
-  gangnam: { name: '강남 토픽 한국어학원', type: '사설 어학원', country: '한국', city: '서울 강남구', website: 'gangnamtopik.kr', desc: 'TOPIK 시험 대비 및 비즈니스 한국어 전문 어학원.' },
-  italki: { name: 'Lingoo Korean (온라인 플랫폼)', type: '온라인 플랫폼', country: '온라인', city: '온라인', website: 'lingookorean.com', desc: '전 세계 학습자와 한국어 튜터를 연결하는 1:1 화상 수업 플랫폼.' },
-  preply: { name: 'KoreanGo (온라인 플랫폼)', type: '온라인 플랫폼', country: '온라인', city: '온라인', website: 'koreango.com', desc: '한국어 학습 전문 1:1 온라인 튜터링 플랫폼.' },
-  samsung: { name: '삼성전자 글로벌인재개발팀', type: '기업 출강', country: '한국', city: '경기 수원', website: 'samsung.com', desc: '삼성전자 임직원 및 해외 주재원·외국인 직원 대상 한국어 교육 운영.' },
-  goyang: { name: '고양초등학교', type: '초등학교', country: '한국', city: '경기 고양시 덕양구', website: 'goyang.es.kr', desc: '경기도 고양시 소재 초등학교. 중도입국자녀·다문화학생 대상 한국어교실을 운영합니다.' },
-  caritas: { name: '인천 까리따스 이주민문화센터', type: '다문화·가족센터', country: '한국', city: '인천', website: 'caritas-ic.or.kr', desc: '인천 지역 이주민·결혼이민자 대상 사회통합프로그램과 한국어 교육을 운영하는 다문화센터.' },
-  darakwon: { name: '다락원 한국어교재', type: '출판사', country: '한국', city: '서울 마포', website: 'darakwon.co.kr', desc: '한국어 교재 출판 전문 출판사. 외국인 학습자용 다양한 한국어 교재 발간.' },
-  ebs: { name: 'EBS 한국어 콘텐츠팀', type: '방송사', country: '한국', city: '경기 고양', website: 'ebs.co.kr', desc: 'EBS 한국어 학습 콘텐츠(방송·온라인) 기획·제작 부서.' },
-  nikl: { name: '국립국어원', type: '연구기관', country: '한국', city: '서울 강서', website: 'korean.go.kr', desc: '국립국어원 한국어교육 정책 연구 및 TOPIK·교재 평가.' },
-  kccuk: { name: '주영국 한국문화원', type: '공공기관', country: '영국', city: 'London', website: 'kccuk.org.uk', desc: '주영국 한국문화원 한국어 강좌 운영 및 교육 프로그램 기획.' },
-  kef: { name: '한국어교육진흥재단', type: '연구기관', country: '한국', city: '서울', website: 'kef.or.kr', desc: '한국어교육 정책 연구·사업 기획 재단법인.' },
-};
-
-var jobs = [
-  {
-    id: 1, inst: 'snu',
-    title: '한국어 정규과정 시간강사 모집 (2026 가을학기)',
-    country: '한국', region: '서울', type: '대학 어학당', employment: '시간강사', category: '강사', mode: '대면',
-    salary: '시급 60,000원 (수업 기준)', salaryDisclosed: true,
-    cert: '필수', degree: '석사', experience: '경력필수', visa: false,
-    deadline: 8, posted: '3일 전', verified: true,
-    desc: '서울대학교 언어교육원 한국어 정규과정에서 외국인 학습자를 대상으로 한국어를 강의할 시간강사를 모집합니다.',
-    quals: '- 한국어교원자격증 2급 이상 소지자\n- 한국어교육학(또는 외국어로서의 한국어교육) 석사 학위 소지자\n- 외국인 대상 한국어 강의 경력 2년 이상',
-    preferred: '박사 학위 소지자, 영어 가능자, 3급 이상 자격증 소지자',
-    apply: '본 기관 홈페이지 채용공고 게시판에서 지원서·자기소개서·이력서를 이메일로 접수',
-    badges: ['salary','urgent','verified']
-  },
-  {
-    id: 2, inst: 'yonsei',
-    title: '한국어학당 비전임 강사 채용 (영주권자 포함)',
-    country: '한국', region: '서울', type: '대학 어학당', employment: '초빙·비전임', category: '강사', mode: '대면',
-    salary: '월 350~400만원 (경력 협의)', salaryDisclosed: true,
-    cert: '필수', degree: '석사', experience: '경력필수', visa: false,
-    deadline: 21, posted: '5일 전', verified: true,
-    desc: '연세대학교 한국어학당 정규과정 및 특별과정 강의를 담당할 비전임 강사를 모집합니다.',
-    quals: '- 한국어교육 관련 석사 이상\n- 한국어교원자격증 2급 이상\n- 외국인 대상 한국어 강의 경력 3년 이상',
-    preferred: '영어·중국어·일본어 등 외국어 가능자',
-    apply: '한국어학당 홈페이지 양식 다운로드 후 이메일 제출',
-    badges: ['salary','verified']
-  },
-  {
-    id: 3, inst: 'ewha',
-    title: '이화여대 한국어 단기과정 강사 (여름학기)',
-    country: '한국', region: '서울', type: '대학 어학당', employment: '시간강사', category: '강사', mode: '하이브리드',
-    salary: '협의', salaryDisclosed: false,
-    cert: '우대', degree: '석사', experience: '신입가능', visa: false,
-    deadline: 4, posted: '1일 전', verified: true,
-    desc: '여름 단기 한국어 집중과정 강의를 담당할 시간강사를 모집합니다. 일부 수업은 온라인 병행 운영.',
-    quals: '- 한국어교육 관련 석사 과정 이수 중 또는 수료\n- 외국인 대상 한국어 수업 경험',
-    preferred: '한국어교원자격증 보유자',
-    apply: '언어교육원 채용 페이지에서 지원',
-    badges: ['urgent','junior','verified']
-  },
-  {
-    id: 4, inst: 'sejong',
-    title: '2026년 해외 세종학당 파견 한국어교원 모집',
-    country: '한국', region: '해외 파견', type: '세종학당', employment: '센터 강사', category: '강사', mode: '대면',
-    salary: '월 250~350만원 + 항공·체재비 지원', salaryDisclosed: true,
-    cert: '필수', degree: '학사', experience: '경력필수', visa: true,
-    deadline: 35, posted: '오늘', verified: true,
-    desc: '전 세계 세종학당에 파견되어 한국어 및 한국문화 강의를 담당할 한국어교원을 모집합니다. (총 60명)',
-    quals: '- 대한민국 국적자\n- 한국어교원자격증 2급 이상\n- 외국인 대상 한국어 강의 경력 1년 이상',
-    preferred: '파견 국가 언어 가능자, 해외 거주·체류 경험자',
-    apply: '세종학당재단 채용 시스템(ksif.or.kr) 온라인 지원',
-    badges: ['salary','visa','verified']
-  },
-  {
-    id: 5, inst: 'ucla',
-    title: 'Korean Language Lecturer (Full-time)',
-    country: '미국', region: 'Los Angeles, CA', type: '대학·대학원', employment: '초빙·비전임', category: '강사', mode: '대면',
-    salary: 'USD 65,000~78,000 / year', salaryDisclosed: true,
-    cert: '우대', degree: '박사', experience: '경력필수', visa: true,
-    deadline: 28, posted: '2일 전', verified: true,
-    desc: 'UCLA Asian Languages & Cultures 학부에서 학부생 대상 한국어 강의(초급~고급)를 담당할 정년 트랙 외 강사를 모집합니다.',
-    quals: '- 한국어교육·한국학 박사 학위 (또는 임용 시점 박사 학위 예정자)\n- 대학에서 한국어 강의 경력 3년 이상\n- 영어 강의 가능자',
-    preferred: '미국 대학 강의 경험, 교재 개발 경험',
-    apply: 'UCLA Recruit 시스템에서 CV, Teaching Statement, Reference 3인 제출',
-    badges: ['salary','visa','verified']
-  },
-  {
-    id: 6, inst: 'toronto',
-    title: 'Sessional Korean Language Instructor',
-    country: '캐나다', region: 'Toronto, ON', type: '대학·대학원', employment: '시간강사', category: '강사', mode: '대면',
-    salary: 'CAD 9,200 / course', salaryDisclosed: true,
-    cert: '우대', degree: '석사', experience: '경력필수', visa: false,
-    deadline: 14, posted: '4일 전', verified: true,
-    desc: 'University of Toronto 동아시아학과에서 한국어 강의를 담당할 Sessional Instructor를 모집합니다.',
-    quals: '- 한국어 교육 관련 석사 이상\n- 캐나다 영주권 또는 시민권 (또는 합법적 근로 비자 보유자)\n- 영어 강의 가능',
-    preferred: '북미 대학 강의 경험자',
-    apply: '학과 홈페이지에서 CV, Cover letter, Reference 제출',
-    badges: ['salary','verified']
-  },
-  {
-    id: 7, inst: 'waseda',
-    title: '와세다대학 한국어 강의전임강사 (객원)',
-    country: '일본', region: '도쿄', type: '대학·대학원', employment: '초빙·비전임', category: '강사', mode: '대면',
-    salary: '협의 (연봉제)', salaryDisclosed: false,
-    cert: '필수', degree: '석사', experience: '경력필수', visa: true,
-    deadline: 45, posted: '6일 전', verified: true,
-    desc: '와세다대학교 한국어 강의를 담당할 객원 강의전임강사를 모집합니다. 1년 계약 후 갱신 가능.',
-    quals: '- 한국어교육 또는 한국학 석사 이상\n- 대학 강의 경력 2년 이상\n- 일본어 또는 영어로 강의 가능',
-    preferred: '일본어 능력 N1 이상, 일본 대학 강의 경험자',
-    apply: '학과 사무실 이메일 제출, 서류 통과 시 화상 면접',
-    badges: ['visa','verified']
-  },
-  {
-    id: 8, inst: 'sydney',
-    title: 'Sessional Korean Tutor (Part-time, Semester 2)',
-    country: '호주', region: 'Sydney, NSW', type: '대학·대학원', employment: '시간강사', category: '강사', mode: '대면',
-    salary: 'AUD 75~95 / hour', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
-    deadline: 18, posted: '오늘', verified: true,
-    desc: '시드니대학교 한국학 프로그램에서 학부생 한국어 튜토리얼을 담당할 시간강사를 모집합니다.',
-    quals: '- 한국어 또는 한국학 관련 학사 이상\n- 호주 합법 근로 비자\n- 영어 가능',
-    preferred: '한국어교원자격증 보유자, 한국어 교육 경력자',
-    apply: 'Sydney Careers 포털에서 지원',
-    badges: ['salary','junior','verified']
-  },
-  {
-    id: 9, inst: 'hochiminh',
-    title: '호치민 한국학과 정규 교수 채용 (정년트랙)',
-    country: '베트남', region: '호치민', type: '대학·대학원', employment: '전임교원', category: '강사', mode: '대면',
-    salary: '월 USD 1,800~2,500 + 주거 지원', salaryDisclosed: true,
-    cert: '필수', degree: '박사', experience: '경력필수', visa: true,
-    deadline: 60, posted: '7일 전', verified: false,
-    desc: '베트남 호치민 인문사회과학대학 한국학과에서 한국어·한국학 강의를 담당할 정규 교수를 모집합니다.',
-    quals: '- 한국학·한국어교육 박사 학위\n- 대학 강의 경력 5년 이상\n- 영어 강의 가능',
-    preferred: '베트남어 가능자, 동남아 거주 경험자',
-    apply: '학과 이메일로 CV·연구실적·자기소개서 제출',
-    badges: ['salary','visa']
-  },
-  {
-    id: 10, inst: 'gangnam',
-    title: 'TOPIK 전문 한국어 강사 (강남)',
-    country: '한국', region: '서울 강남구', type: '사설 어학원', employment: '시간강사', category: '강사', mode: '대면',
-    salary: '시급 45,000~55,000원', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
-    deadline: 12, posted: '2일 전', verified: false,
-    desc: '강남 토픽 한국어학원에서 TOPIK 시험 대비반 강사를 모집합니다. 평일 저녁 및 주말 수업.',
-    quals: '- 한국어 또는 한국어교육 관련 전공 학사 이상\n- TOPIK 시험 또는 시험 대비 강의 경험',
-    preferred: '한국어교원자격증 소지자, 영어·중국어 가능자',
-    apply: '학원 홈페이지 채용 양식 제출',
-    badges: ['salary','junior']
-  },
-  {
-    id: 11, inst: 'italki',
-    title: '온라인 1:1 한국어 튜터 모집 (전 세계 학습자 대상)',
-    country: '온라인', region: '온라인', type: '온라인 플랫폼', employment: '프리랜서', category: '강사', mode: '온라인',
-    salary: '시급 본인 설정 (USD 15~40 권장)', salaryDisclosed: false,
-    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
-    deadline: 90, posted: '오늘', verified: false,
-    desc: '전 세계 한국어 학습자와 1:1 화상 수업을 진행할 한국어 튜터를 상시 모집합니다. 본인이 일정·수업료를 자유롭게 설정.',
-    quals: '- 한국어 원어민 또는 그에 준하는 능력\n- 영어 의사소통 가능\n- 안정적인 화상 수업 환경 (PC, 마이크, 인터넷)',
-    preferred: '한국어교원자격증, 외국어 교습 경력',
-    apply: '플랫폼 홈페이지에서 튜터 신청 → 영상 자기소개 업로드',
-    badges: ['junior']
-  },
-  {
-    id: 12, inst: 'preply',
-    title: 'KoreanGo 정식 튜터 모집 (수업 매칭 지원)',
-    country: '온라인', region: '온라인', type: '온라인 플랫폼', employment: '프리랜서', category: '강사', mode: '온라인',
-    salary: '시급 USD 20~35 (수익 분배 모델)', salaryDisclosed: true,
-    cert: '필수', degree: '학사', experience: '경력필수', visa: false,
-    deadline: 6, posted: '4일 전', verified: false,
-    desc: '한국어 학습 전문 플랫폼 KoreanGo의 정식 인증 튜터를 모집합니다. 플랫폼이 학습자 매칭과 결제를 관리합니다.',
-    quals: '- 한국어교원자격증 보유자\n- 1:1 또는 그룹 한국어 수업 경력 1년 이상\n- 영어 소통 가능',
-    preferred: 'TOPIK 대비, 비즈니스 한국어 가능자',
-    apply: '플랫폼 가입 → 수업 시연 영상 제출 → 심사 통과',
-    badges: ['salary','urgent']
-  },
-  {
-    id: 13, inst: 'goyang',
-    title: '고양초등학교 중도입국자녀·다문화학생 한국어교실 지도강사 채용',
-    country: '한국', region: '경기 고양시', type: '초등학교', employment: '학교 강사', category: '강사', mode: '대면',
-    salary: '시간당 32,000원', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '신입가능', visa: false,
-    deadline: 6, posted: '오늘', verified: true,
-    desc: '고양초등학교에서 중도입국자녀 및 다문화학생을 대상으로 한국어교실을 운영할 지도강사를 모집합니다. 학교 일과 시간 중 진행.',
-    quals: '- 한국어 학습지도가 가능한 자\n- 한국어교원 자격증 소지자 또는 한국어교실 강사 경력자 우대\n- 퇴직교원 또는 관련 교원자격증 소지자',
-    preferred: '맞춤형 한국어 학습지도 및 기초학력 지도 가능자',
-    apply: '이메일 접수: pignet76@korea.kr (우편·방문도 가능)',
-    badges: ['salary','urgent','junior']
-  },
-  {
-    id: 14, inst: 'caritas',
-    title: '인천 까리따스 이주민문화센터 사회통합프로그램 강사 모집',
-    country: '한국', region: '인천', type: '다문화·가족센터', employment: '센터 강사', category: '강사', mode: '대면',
-    salary: '협의 (사회통합프로그램 강사 보수 기준)', salaryDisclosed: false,
-    cert: '필수', degree: '학사', experience: '경력필수', visa: false,
-    deadline: 10, posted: '3일 전', verified: false,
-    desc: '인천 까리따스 이주민문화센터에서 결혼이민자·이주민을 대상으로 사회통합프로그램 한국어 강의를 담당할 강사를 모집합니다.',
-    quals: '- 한국어교원자격증 필수\n- 사회통합프로그램 강사 양성과정 이수자 우대\n- 외국인 대상 한국어 강의 경력 1년 이상',
-    preferred: '다양한 국적 학습자 대상 강의 경험자, 영어·중국어 등 외국어 가능자',
-    apply: '센터 이메일로 이력서·자기소개서 제출',
-    badges: ['junior']
-  }  ,
-  {
-    id: 15, inst: 'sejong',
-    title: '세종학당재단 본부 한국어교육사업 운영원',
-    country: '한국', region: '서울 종로', type: '세종학당', employment: '계약직', category: '행정·운영', mode: '대면',
-    salary: '월 280~320만원', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '경력필수', visa: false,
-    deadline: 14, posted: '3일 전', verified: true,
-    desc: '세종학당재단 본부에서 해외 세종학당 교원 파견·운영 등 한국어교육 사업 행정을 담당할 직원을 모집합니다.',
-    quals: '- 학사 이상\n- 한국어교육 또는 행정 관련 경력 2년 이상\n- 영어 가능자',
-    preferred: '한국어교원자격증 보유자, 해외 거주 경험자',
-    apply: '재단 채용 시스템 온라인 지원',
-    badges: ['salary']
-  },
-  {
-    id: 16, inst: 'darakwon',
-    title: '다락원 한국어 교재 편집자 (정규직)',
-    country: '한국', region: '서울 마포', type: '출판사', employment: '정규직', category: '교재·출판', mode: '대면',
-    salary: '연봉 3,800~4,500만원', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '경력필수', visa: false,
-    deadline: 21, posted: '5일 전', verified: true,
-    desc: '외국인 학습자용 한국어 교재 편집·기획을 담당할 편집자를 모집합니다. 신간 교재 개발 + 기존 교재 개정.',
-    quals: '- 한국어교육·국문학·교육공학 학사 이상\n- 출판 또는 교재 기획 경력 2년 이상',
-    preferred: '한국어교원자격증, 출판사 근무 경험',
-    apply: '이메일 지원: jobs@darakwon.co.kr',
-    badges: ['salary']
-  },
-  {
-    id: 17, inst: 'ebs',
-    title: 'EBS 한국어 학습 콘텐츠 PD (계약직)',
-    country: '한국', region: '경기 고양', type: '방송사', employment: '계약직', category: '콘텐츠 제작', mode: '대면',
-    salary: '월 350~400만원', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '경력필수', visa: false,
-    deadline: 10, posted: '2일 전', verified: true,
-    desc: 'EBS 한국어 학습 콘텐츠 기획·제작을 담당할 PD. 방송, 유튜브, 학습 앱 콘텐츠 등.',
-    quals: '- 학사 이상\n- 방송·영상 제작 경력 또는 한국어교육 경력 3년 이상',
-    preferred: '한국어교육 콘텐츠 기획 경험, 영상 편집 가능자',
-    apply: 'EBS 채용 페이지에서 지원',
-    badges: ['salary','urgent']
-  },
-  {
-    id: 18, inst: 'nikl',
-    title: '국립국어원 한국어교육 전문연구원',
-    country: '한국', region: '서울 강서', type: '연구기관', employment: '계약직', category: '연구·평가', mode: '대면',
-    salary: '월 320~400만원', salaryDisclosed: true,
-    cert: '필수', degree: '박사', experience: '경력필수', visa: false,
-    deadline: 28, posted: '오늘', verified: true,
-    desc: '국립국어원에서 한국어교육 정책 연구, TOPIK 시험 개발, 교재 평가 등을 담당할 전문연구원을 모집합니다.',
-    quals: '- 한국어교육·국어학 박사 학위\n- 한국어교육 관련 연구·논문 실적\n- 한국어교원자격증 보유',
-    preferred: 'TOPIK 출제 경험, 영어 가능자',
-    apply: '국립국어원 채용 공고 페이지',
-    badges: ['salary']
-  },
-  {
-    id: 19, inst: 'kccuk',
-    title: '주영국 한국문화원 한국어 교육 코디네이터',
-    country: '영국', region: 'London', type: '공공기관', employment: '계약직', category: '정책·국제교류', mode: '대면',
-    salary: 'GBP 28,000~32,000 / year', salaryDisclosed: true,
-    cert: '우대', degree: '학사', experience: '경력필수', visa: true,
-    deadline: 35, posted: '4일 전', verified: true,
-    desc: '주영국 한국문화원에서 한국어 강좌 운영, 강사 관리, 한국어교육 프로그램 기획을 담당할 코디네이터.',
-    quals: '- 학사 이상\n- 한국어교육 또는 국제교류 경력 2년 이상\n- 영어 능통',
-    preferred: '한국어교원자격증, 해외 거주·근무 경험',
-    apply: '문화원 이메일 지원',
-    badges: ['salary','visa']
-  },
-  {
-    id: 20, inst: 'kef',
-    title: '한국어교육진흥재단 정책 연구원 (정규직)',
-    country: '한국', region: '서울', type: '연구기관', employment: '정규직', category: '연구·평가', mode: '대면',
-    salary: '연봉 4,500~5,500만원', salaryDisclosed: true,
-    cert: '우대', degree: '석사', experience: '경력필수', visa: false,
-    deadline: 45, posted: '6일 전', verified: true,
-    desc: '한국어교육 진흥 재단에서 정책 연구, 사업 기획, 보고서 작성 등을 담당할 정규직 연구원을 모집합니다.',
-    quals: '- 한국어교육·교육정책 석사 이상\n- 정책 연구·보고서 작성 경력 3년 이상',
-    preferred: '한국어교육 관련 학회 활동 경험, 영어 가능자',
-    apply: '재단 홈페이지에서 지원',
-    badges: ['salary']
-  }
-];
+var institutions = {};
+var jobs = [];
 </script>
 <script>
 document.write('<script src="data.js?v=' + Date.now() + '"><\/script>');
@@ -1504,7 +1220,8 @@ function showBookmarkToast() {
 }
 
 // === Helpers ===
-function deadlineText(d) {
+function deadlineText(d, job) {
+  if (job && !job.deadline_date && !isClosedJob(job)) return { text: '상시 모집', urgent: false };
   if (d <= 0) return { text: '마감', urgent: false };
   if (d <= 7) return { text: `D-${d}`, urgent: true };
   return { text: `D-${d}`, urgent: false };
@@ -1514,6 +1231,35 @@ function isClosedJob(job) {
 }
 function isVisibleJob(job) {
   return job && job.visible_in_jobs !== false;
+}
+function normText(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+function jobPoolForCurrentMode() {
+  return jobs.filter(job => {
+    if (!isVisibleJob(job)) return false;
+    if (currentMode === 'teacher') return job.category === '강사';
+    if (currentMode === 'other') return job.category !== '강사';
+    return true;
+  });
+}
+function certFilterValue(job) {
+  const text = normText(job.cert);
+  if (!text || /미기재|무관|필수\s*아님|지원\s*시\s*필수\s*아님/.test(text)) return '무관';
+  if (/필수|보유자|소지자|한국어교원\s*\d급\s*이상|자격증\s*소지|자격증\s*보유/.test(text)) return '필수';
+  return '무관';
+}
+function degreeRank(job) {
+  const text = normText(job.degree);
+  if (!text || /미기재|무관|학력\s*무관|원문/.test(text)) return 0;
+  if (/박사/.test(text)) return /수료/.test(text) ? 3 : 4;
+  if (/석사|master|korean studies/i.test(text)) return 2;
+  if (/학사|대졸|4년제|대학교졸업|초대졸|전문대/.test(text)) return 1;
+  return 0;
+}
+function isJuniorFriendly(job) {
+  const text = normText(job.experience);
+  return /신입|경력\s*무관|경력무관|무관|지원\s*가능/.test(text);
 }
 function countryIcon(c) {
   const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
@@ -1562,7 +1308,7 @@ function formatRichText(s) {
 
 function renderCard(job) {
   const inst = institutions[job.inst];
-  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline);
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline, job);
   return `
     <div class="card" data-id="${job.id}">
       <div class="card-top">
@@ -1640,7 +1386,7 @@ function matchesFilters(job) {
   const q = document.getElementById('searchInput').value.toLowerCase().trim();
   if (q) {
     const inst = institutions[job.inst];
-    const haystack = (job.title + ' ' + inst.name + ' ' + job.region + ' ' + job.type + ' ' + job.country).toLowerCase();
+    const haystack = (job.title + ' ' + (inst ? inst.name : '') + ' ' + job.region + ' ' + job.type + ' ' + job.country).toLowerCase();
     if (!haystack.includes(q)) return false;
   }
   // quick filter (chips)
@@ -1663,9 +1409,9 @@ function matchesFilters(job) {
       if (!ok) return false;
     }
     if (key === 'employment' && !vals.includes(job.employment)) return false;
-    if (key === 'cert' && !vals.includes(job.cert)) return false;
+    if (key === 'cert' && !vals.includes(certFilterValue(job))) return false;
     if (key === 'degree' && !vals.some(v => matchesDegree(job, v))) return false;
-    if (key === 'experience' && !vals.includes(job.experience)) return false;
+    if (key === 'experience' && !vals.some(v => v === '신입가능' && isJuniorFriendly(job))) return false;
     if (key === 'badge' && !vals.some(b => job.badges.includes(b))) return false;
   }
   return true;
@@ -1677,15 +1423,15 @@ function getSido(region) {
   return region.trim().split(/\s+/)[0];
 }
 function matchesDegree(job, val) {
-  const j = job.degree || '무관';
-  if (val === '무관') return j === '무관' || j === '학사';
-  if (val === '석사이상') return j === '석사' || j === '박사수료' || j === '박사';
-  if (val === '박사수료이상') return j === '박사수료' || j === '박사';
-  if (val === '박사이상') return j === '박사';
+  const rank = degreeRank(job);
+  if (val === '무관') return rank <= 1;
+  if (val === '석사이상') return rank >= 2;
+  if (val === '박사수료이상') return rank >= 3;
+  if (val === '박사이상') return rank >= 4;
   return false;
 }
 function regionMatches(job, val) {
-  if (val === 'online') return job.country === '온라인';
+  if (val === 'online') return job.country === '온라인' || job.region === '온라인' || job.mode === '온라인' || job.type === '온라인';
   if (val.startsWith('kr-')) {
     if (job.country !== '한국') return false;
     return getSido(job.region) === val.slice(3);
@@ -1709,10 +1455,12 @@ document.querySelectorAll('.chip').forEach(chip => {
 document.getElementById('resetBtn').addEventListener('click', () => {
   document.querySelectorAll('.filter-item input').forEach(i => i.checked = false);
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('.chip[data-quick="all"]').classList.add('active');
+  const modeAllChip = document.querySelector(`.chip[data-modegroup="${currentMode}"][data-quick="all"]`);
+  if (modeAllChip) modeAllChip.classList.add('active');
   activeFilters = {};
   activeQuickFilter = 'all';
   document.getElementById('searchInput').value = '';
+  recalcSidebarCounts();
   renderGrid();
 });
 document.getElementById('searchInput').addEventListener('input', renderGrid);
@@ -1722,7 +1470,7 @@ document.getElementById('sortSelect').addEventListener('change', renderGrid);
 function openJob(id) {
   const job = jobs.find(j => j.id === id);
   const inst = institutions[job.inst];
-  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline);
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline, job);
   const content = document.getElementById('jobModalContent');
   content.innerHTML = `
     <button class="modal-close" onclick="closeModal('jobModal')">
@@ -1781,15 +1529,31 @@ function openJob(id) {
 }
 
 // === Institution Modal ===
+function jobHistoryItem(job, isActive) {
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline, job);
+  return `
+    <div class="history-item ${isActive ? 'active-job' : ''}" onclick="closeModal('instModal'); openJob(${job.id})">
+      <div class="history-item-left">
+        <h5>${job.title}</h5>
+        <div class="meta">${job.employment || '고용형태 미기재'} · ${job.mode || '근무방식 미기재'} · ${dl.text}</div>
+        <div class="meta">${job.salary || '급여 미기재'}</div>
+      </div>
+      <span class="status-pill ${isActive ? 'active' : 'closed'}">${isActive ? '진행 중' : '마감'}</span>
+    </div>`;
+}
+
 function openInstitution(key) {
   const inst = institutions[key];
   const instJobs = jobs.filter(j => j.inst === key);
-  const activeJobs = instJobs.filter(j => j.deadline > 0);
-  // 과거 공고는 가상으로 생성
-  const pastJobs = generatePastJobs(key, inst);
+  const activeJobs = instJobs.filter(j => isVisibleJob(j) && !isClosedJob(j));
+  const pastJobs = instJobs.filter(j => !activeJobs.some(a => a.id === j.id));
 
   const allCerts = instJobs.map(j => j.cert);
-  const certRate = Math.round(allCerts.filter(c => c==='필수'||c==='우대').length / allCerts.length * 100);
+  const certRate = instJobs.length ? Math.round(instJobs.filter(j => certFilterValue(j) === '필수').length / instJobs.length * 100) : 0;
+  const reportUrl = 'mailto:kteacherjobs@gmail.com?subject='
+    + encodeURIComponent('[K-Teacher Jobs] 기관 정보 정정 제보 — ' + inst.name)
+    + '&body='
+    + encodeURIComponent('정정할 기관: ' + inst.name + '\n수정 내용:\n');
 
   const content = document.getElementById('instModalContent');
   content.innerHTML = `
@@ -1810,7 +1574,7 @@ function openInstitution(key) {
       <h4>📊 이 기관의 채용 패턴</h4>
       <div class="pattern-grid">
         <div class="pattern-item">
-          <div class="num">${instJobs.length + pastJobs.length}</div>
+          <div class="num">${instJobs.length}</div>
           <div class="label">누적 등록 공고</div>
         </div>
         <div class="pattern-item">
@@ -1818,7 +1582,7 @@ function openInstitution(key) {
           <div class="label">현재 진행 중</div>
         </div>
         <div class="pattern-item">
-          <div class="num">${getAvgDeadline(key)}일</div>
+          <div class="num">${getAvgDeadlineLabel(instJobs)}</div>
           <div class="label">평균 모집 기간</div>
         </div>
         <div class="pattern-item">
@@ -1827,7 +1591,7 @@ function openInstitution(key) {
         </div>
       </div>
       <p style="font-size:12.5px; color:#92400E; margin-top:12px;">
-        💡 이 기관은 주로 <strong>${getHiringSeason(key)}</strong>에 채용을 진행하는 편이에요. 미리 준비해두면 좋아요.
+        💡 ${getHiringSeasonLabel(instJobs)}
       </p>
     </div>
 
@@ -1835,28 +1599,15 @@ function openInstitution(key) {
       <h4>현재 진행 중인 채용 (${activeJobs.length}건)</h4>
       <div class="history-list">
         ${activeJobs.length === 0 ? '<p style="color:var(--text-light); font-size:13px;">현재 진행 중인 공고가 없어요. 알림 신청을 해두시면 새 공고가 올라올 때 알려드릴게요.</p>' :
-          activeJobs.map(j => `
-            <div class="history-item active-job" onclick="closeModal('instModal'); openJob(${j.id})">
-              <div class="history-item-left">
-                <h5>${j.title}</h5>
-                <div class="meta">${j.employment} · ${j.mode} · 마감 D-${j.deadline}</div>
-              </div>
-              <span class="status-pill active">진행 중</span>
-            </div>`).join('')}
+          activeJobs.map(j => jobHistoryItem(j, true)).join('')}
       </div>
     </div>
 
     <div class="modal-section">
       <h4>과거 채용 이력 (${pastJobs.length}건)</h4>
       <div class="history-list">
-        ${pastJobs.map(p => `
-          <div class="history-item">
-            <div class="history-item-left">
-              <h5>${p.title}</h5>
-              <div class="meta">${p.period} · ${p.employment} · ${p.summary}</div>
-            </div>
-            <span class="status-pill closed">마감</span>
-          </div>`).join('')}
+        ${pastJobs.length === 0 ? '<p style="color:var(--text-light); font-size:13px;">아직 마감된 이력이 없어요.</p>' :
+          pastJobs.map(j => jobHistoryItem(j, false)).join('')}
       </div>
       <p style="font-size:12px; color:var(--text-light); margin-top:10px;">
         ※ 마감된 공고는 메인 화면에서는 보이지 않지만 기관 페이지에서 이력으로 확인할 수 있어요.
@@ -1864,90 +1615,33 @@ function openInstitution(key) {
     </div>
 
     <div class="modal-cta">
-      <button class="primary-cta" onclick="alert('시안 데모: 이 기관 새 공고 알림 설정')">🔔 이 기관 새 공고 알림 받기</button>
-      <button class="secondary-cta" onclick="alert('시안 데모: 기관 정보 정정 제보')">정보 정정 제보</button>
+      <a class="secondary-cta" href="${reportUrl}">정보 정정 제보</a>
     </div>
   `;
   document.getElementById('instModal').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
 
-function getAvgDeadline(key) {
-  // 데모용 더미 데이터
-  const map = {snu:24, yonsei:28, ewha:18, sejong:35, ucla:42, toronto:30, waseda:45, sydney:21, hochiminh:60, gangnam:14, italki:0, preply:10, samsung:21};
-  return map[key] || 21;
+function getAvgDeadlineLabel(instJobs) {
+  const values = instJobs
+    .filter(j => j.posted_date && j.deadline_date)
+    .map(j => Math.max(0, Math.round((Date.parse(j.deadline_date) - Date.parse(j.posted_date)) / 86400000)))
+    .filter(Number.isFinite);
+  if (!values.length) return '-';
+  return `${Math.round(values.reduce((sum, v) => sum + v, 0) / values.length)}일`;
 }
-function getHiringSeason(key) {
-  const map = {
-    snu:'학기 시작 2~3개월 전 (6월, 12월)',
-    yonsei:'분기마다 (3·6·9·12월)',
-    ewha:'여름·겨울방학 직전',
-    sejong:'매년 1월, 6월',
-    ucla:'1월~3월 (가을학기 임용)',
-    toronto:'4월, 10월',
-    waseda:'1월, 7월',
-    sydney:'6월, 12월',
-    hochiminh:'비정기 (2~3년에 1회)',
-    gangnam:'상시 (주로 분기 초)',
-    italki:'상시',
-    preply:'상시',
-    samsung:'연 1~2회 (1월·7월)'
-  };
-  return map[key] || '비정기';
-}
-
-function generatePastJobs(key, inst) {
-  // 데모용 — 실제로는 DB에서 조회
-  const templates = {
-    snu: [
-      {title:'2026 봄학기 한국어 정규과정 시간강사', period:'2025.12 ~ 2026.01', employment:'시간강사', summary:'시급 60,000원 · 자격증 필수'},
-      {title:'2025 여름 단기과정 강사', period:'2025.05 ~ 2025.06', employment:'시간강사', summary:'시급 55,000원 · 신입 가능'},
-      {title:'2025 가을학기 한국어 정규과정', period:'2025.06 ~ 2025.07', employment:'시간강사', summary:'시급 58,000원 · 자격증 필수'},
-      {title:'2025 봄학기 한국어 강사', period:'2024.12 ~ 2025.01', employment:'시간강사', summary:'시급 58,000원'},
-    ],
-    yonsei: [
-      {title:'2026 봄학기 비전임 강사', period:'2025.12 ~ 2026.01', employment:'계약직', summary:'월 350~400만원 · 경력 3년+'},
-      {title:'단기과정 (여름) 강사', period:'2025.04 ~ 2025.05', employment:'시간강사', summary:'시급 협의'},
-      {title:'2025 가을학기 비전임 강사', period:'2025.06 ~ 2025.07', employment:'계약직', summary:'월 350~400만원'},
-    ],
-    ewha: [
-      {title:'2026 봄학기 단기과정 강사', period:'2025.12', employment:'시간강사', summary:'협의 · 신입 가능'},
-      {title:'2025 겨울 집중과정 강사', period:'2025.10 ~ 2025.11', employment:'시간강사', summary:'협의'},
-    ],
-    sejong: [
-      {title:'2025 해외 세종학당 파견 한국어교원', period:'2024.10 ~ 2024.11', employment:'계약직', summary:'월 250~330만원 + 항공·체재비'},
-      {title:'2024 해외 세종학당 파견 한국어교원', period:'2023.10 ~ 2023.11', employment:'계약직', summary:'월 230~300만원 + 지원'},
-    ],
-    ucla: [
-      {title:'Korean Language Lecturer (2024-2025)', period:'2024.01 ~ 2024.03', employment:'계약직', summary:'USD 62,000~75,000'},
-    ],
-    toronto: [
-      {title:'Sessional Korean Instructor (Winter 2025)', period:'2024.10 ~ 2024.11', employment:'시간강사', summary:'CAD 9,000 / course'},
-      {title:'Sessional Korean Tutor (Fall 2024)', period:'2024.04 ~ 2024.05', employment:'시간강사', summary:'CAD 8,800 / course'},
-    ],
-    waseda: [
-      {title:'한국어 강의전임강사 2025', period:'2024.06 ~ 2024.08', employment:'계약직', summary:'연봉 협의'},
-    ],
-    sydney: [
-      {title:'Sessional Korean Tutor (Semester 1, 2025)', period:'2024.12 ~ 2025.01', employment:'파트타임', summary:'AUD 72~92 / hour'},
-    ],
-    hochiminh: [
-      {title:'한국학과 전임강사 (2023)', period:'2022.09 ~ 2022.12', employment:'정규직', summary:'월 USD 1,500~2,200'},
-    ],
-    gangnam: [
-      {title:'TOPIK 강사 (1분기)', period:'2026.01 ~ 2026.02', employment:'시간강사', summary:'시급 45,000원'},
-      {title:'비즈니스 한국어 강사', period:'2025.09 ~ 2025.10', employment:'파트타임', summary:'시급 50,000원'},
-      {title:'TOPIK 주말반 강사', period:'2025.06 ~ 2025.07', employment:'파트타임', summary:'시급 45,000원'},
-    ],
-    italki: [],
-    preply: [
-      {title:'한국어 튜터 모집 (2025 4분기)', period:'2025.09 ~ 2025.11', employment:'프리랜서', summary:'수익 분배 모델'},
-    ],
-    samsung: [
-      {title:'주재원 가족 한국어 강사', period:'2025.06 ~ 2025.07', employment:'파트타임', summary:'시급 60,000원'},
-    ],
-  };
-  return templates[key] || [];
+function getHiringSeasonLabel(instJobs) {
+  const months = instJobs
+    .map(j => j.posted_date && String(j.posted_date).slice(5, 7))
+    .filter(Boolean);
+  if (!months.length) return '아직 채용 시기 패턴을 계산할 만큼 데이터가 충분하지 않아요.';
+  const counts = months.reduce((acc, m) => (acc[m] = (acc[m] || 0) + 1, acc), {});
+  const label = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 2)
+    .map(([m]) => `${Number(m)}월`)
+    .join(', ');
+  return `이 기관은 현재 데이터 기준으로 주로 <strong>${label}</strong>에 채용 이력이 있어요. 데이터가 쌓이면 더 정확해집니다.`;
 }
 
 function closeModal(id) {
@@ -1979,6 +1673,9 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     });
     document.querySelector(`.chip[data-modegroup="${currentMode}"][data-quick="all"]`).classList.add('active');
     activeQuickFilter = 'all';
+    activeFilters = {};
+    document.querySelectorAll('.filter-item input').forEach(i => i.checked = false);
+    recalcSidebarCounts();
     renderGrid();
   });
 });
@@ -2006,6 +1703,7 @@ function buildRegionFilters() {
 
 // === Sidebar 카운트 자동 계산 + 0건 숨김 + 정렬 ===
 function recalcSidebarCounts() {
+  const baseJobs = jobPoolForCurrentMode();
   document.querySelectorAll('.filter-bar .filter-list').forEach(list => {
     const items = Array.from(list.querySelectorAll('.filter-item'));
     items.forEach(item => {
@@ -2013,12 +1711,12 @@ function recalcSidebarCounts() {
       const key = input.dataset.filter;
       const val = input.value;
       let count = 0;
-      jobs.forEach(job => {
+      baseJobs.forEach(job => {
         if (key === 'region' && regionMatches(job, val)) count++;
         else if (key === 'employment' && job.employment === val) count++;
-        else if (key === 'cert' && job.cert === val) count++;
+        else if (key === 'cert' && certFilterValue(job) === val) count++;
         else if (key === 'degree' && matchesDegree(job, val)) count++;
-        else if (key === 'experience' && job.experience === val) count++;
+        else if (key === 'experience' && val === '신입가능' && isJuniorFriendly(job)) count++;
         else if (key === 'badge' && job.badges && job.badges.includes(val)) count++;
       });
       const countEl = item.querySelector('.count');
@@ -2041,9 +1739,9 @@ function recalcSidebarCounts() {
   });
   // 지역 그룹 카운트(국내/해외/온라인 합계) 갱신
   let krCount = 0, ovCount = 0, onCount = 0;
-  jobs.forEach(job => {
-    if (job.country === '한국') krCount++;
-    else if (job.country === '온라인') onCount++;
+  baseJobs.forEach(job => {
+    if (regionMatches(job, 'online')) onCount++;
+    else if (job.country === '한국') krCount++;
     else ovCount++;
   });
   const groupCounts = [krCount, ovCount, onCount];

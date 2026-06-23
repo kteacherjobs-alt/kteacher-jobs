@@ -62,6 +62,31 @@ const BADGE_MAP = {
   '마감임박': 'urgent',
 };
 const normBadges = (arr) => Array.isArray(arr) ? arr.map(b => BADGE_MAP[b] || b) : [];
+const TYPE_ALIASES = {
+  '대학어학당': '대학 어학당',
+  '대학교어학당': '대학 어학당',
+  '대학부설어학당': '대학 어학당',
+  '다문화가족센터': '다문화·가족센터',
+  '다문화센터': '다문화·가족센터',
+  '가족센터': '다문화·가족센터',
+  '세종학당': '해외 파견',
+  '해외파견': '해외 파견',
+  '사설어학원': '사설 어학원',
+  '민간학원': '사설 어학원',
+  '기업교육': '기업교육·출강',
+  '기업출강': '기업교육·출강',
+  '기업교육출강': '기업교육·출강',
+  '온라인플랫폼': '온라인',
+  '온라인강의': '온라인',
+  '초등': '초등학교',
+  '중고등학교': '중·고등학교',
+};
+function normalizeInstitutionType(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  const compact = text.replace(/[\s·-]/g, '');
+  return TYPE_ALIASES[compact] || text;
+}
 function hasSupport(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return false;
@@ -82,7 +107,7 @@ function mapInstitution(rec) {
   return {
     name: f.name_ko || f.name_en || f.name || '',
     name_en: f.name_en || '',
-    type: f.institution_type || f.type || '',
+    type: normalizeInstitutionType(f.institution_type || f.type || ''),
     country: f.country || '',
     city: f.city || f.region || '',
     website: (f.website || '').replace(/^https?:\/\//, ''),
@@ -133,7 +158,7 @@ function mapJob(rec, idx, instLookup) {
     original_title: f.original_title || '',
     country: f.country || '',
     region: f.region || '',
-    type: f.institution_type || '',
+    type: normalizeInstitutionType(f.institution_type || ''),
     employment: f.employment_type || '',
     category: f.job_category || '강사',
     mode: f.work_mode || '대면',

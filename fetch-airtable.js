@@ -9,6 +9,8 @@ const PAT = process.env.AIRTABLE_PAT;
 const BASE_ID = process.env.AIRTABLE_BASE_ID;
 const JOBS_TABLE = process.env.AIRTABLE_JOBS_TABLE || 'Jobs';
 const INST_TABLE = process.env.AIRTABLE_INSTITUTIONS_TABLE || 'Institutions';
+const EVENTS_TABLE = process.env.AIRTABLE_EVENTS_TABLE || 'Events';
+const JOB_LIST_GRACE_DAYS = Number(process.env.JOB_LIST_GRACE_DAYS || 0);
 
 if (!PAT || !BASE_ID) {
   console.log('⚠️  Airtable 환경변수 없음 (AIRTABLE_PAT / AIRTABLE_BASE_ID).');
@@ -37,8 +39,9 @@ async function fetchAll(table) {
 
 function daysFromToday(dateStr) {
   if (!dateStr) return 0;
-  const target = new Date(dateStr);
+  const target = new Date(`${String(dateStr).slice(0, 10)}T00:00:00`);
   const now = new Date();
+  now.setHours(0, 0, 0, 0);
   const diff = Math.round((target - now) / 86400000);
   return diff;
 }
@@ -59,6 +62,31 @@ const BADGE_MAP = {
   '마감임박': 'urgent',
 };
 const normBadges = (arr) => Array.isArray(arr) ? arr.map(b => BADGE_MAP[b] || b) : [];
+const TYPE_ALIASES = {
+  '대학어학당': '대학 어학당',
+  '대학교어학당': '대학 어학당',
+  '대학부설어학당': '대학 어학당',
+  '다문화가족센터': '다문화·가족센터',
+  '다문화센터': '다문화·가족센터',
+  '가족센터': '다문화·가족센터',
+  '세종학당': '해외 파견',
+  '해외파견': '해외 파견',
+  '사설어학원': '사설 어학원',
+  '민간학원': '사설 어학원',
+  '기업교육': '기업교육·출강',
+  '기업출강': '기업교육·출강',
+  '기업교육출강': '기업교육·출강',
+  '온라인플랫폼': '온라인',
+  '온라인강의': '온라인',
+  '초등': '초등학교',
+  '중고등학교': '중·고등학교',
+};
+function normalizeInstitutionType(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  const compact = text.replace(/[\s·-]/g, '');
+  return TYPE_ALIASES[compact] || text;
+}
 function hasSupport(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return false;
@@ -68,29 +96,61 @@ function hasSupport(value) {
 
 function instSlug(rec) {
   const f = rec.fields;
+  if (f.institution_id) return String(f.institution_id);
   if (f.inst_id) return String(f.inst_id);
   if (f.slug) return String(f.slug);
-  // fallback: name 영문이면 그대로, 한글이면 ID 사용
   return rec.id;
 }
 
 function mapInstitution(rec) {
   const f = rec.fields;
   return {
-    name: f.name || '',
-    type: f.institution_type || f.type || '',
+    name: f.name_ko || f.name_en || f.name || '',
+    name_en: f.name_en || '',
+    type: normalizeInstitutionType(f.institution_type || f.type || ''),
     country: f.country || '',
     city: f.city || f.region || '',
     website: (f.website || '').replace(/^https?:\/\//, ''),
     desc: f.description || f.desc || '',
+    verified: !!f.verified,
+  };
+}
+
+function mapEvent(rec, idx) {
+  const f = rec.fields;
+  return {
+    id: idx + 1,
+    title: f.title || '',
+    organizer: f.organizer || f.host || '',
+    event_date: f.event_date || f.date || '',
+    event_end_date: f.event_end_date || f.end_date || '',
+    location: f.location || f.venue || '',
+    format: f.format || f.event_format || '',
+    deadline: f.registration_deadline || f.deadline || '',
+    registration_url: f.registration_url || f.url || '',
+    description: f.description || '',
+    status: f.status || 'open',
   };
 }
 
 function mapJob(rec, idx, instLookup) {
   const f = rec.fields;
-  const linked = f.institution || f.Institutions || [];
-  const instRecId = Array.isArray(linked) ? linked[0] : linked;
-  const inst = instLookup[instRecId] || 'unknown';
+  const linked = f.institution || f.Institutions || '';
+  let inst;
+  if (Array.isArray(linked)) {
+    // linked record case: array of record IDs
+    inst = instLookup[linked[0]] || linked[0] || 'unknown';
+  } else if (typeof linked === 'string' && linked) {
+    // text slug case (e.g. "tukorea")
+    inst = linked;
+  } else {
+    inst = 'unknown';
+  }
+  const deadlineDays = daysFromToday(f.deadline);
+  const status = String(f.status || '').trim() || (deadlineDays < 0 ? 'closed' : 'open');
+  const statusKey = status.toLowerCase();
+  const isClosedStatus = ['closed', '마감', '모집완료', '접수마감', 'completed', 'done'].includes(statusKey);
+  const visibleInJobs = !isClosedStatus && (!f.deadline || deadlineDays >= -JOB_LIST_GRACE_DAYS);
   return {
     id: idx + 1,
     inst,
@@ -98,7 +158,7 @@ function mapJob(rec, idx, instLookup) {
     original_title: f.original_title || '',
     country: f.country || '',
     region: f.region || '',
-    type: f.institution_type || '',
+    type: normalizeInstitutionType(f.institution_type || ''),
     employment: f.employment_type || '',
     category: f.job_category || '강사',
     mode: f.work_mode || '대면',
@@ -108,13 +168,19 @@ function mapJob(rec, idx, instLookup) {
     degree: f.degree_required || '',
     experience: f.experience_required || '',
     visa: hasSupport(f.visa_support),
-    deadline: daysFromToday(f.deadline),
+    deadline: deadlineDays,
     posted: daysAgoLabel(f.posted_date),
-    verified: f.status !== 'closed',
+    posted_date: f.posted_date || '',
+    deadline_date: f.deadline || '',
+    status,
+    closed: isClosedStatus || deadlineDays < 0,
+    visible_in_jobs: visibleInJobs,
+    verified: !isClosedStatus,
     desc: f.description || '',
     quals: f.qualifications || '',
     preferred: f.preferred || '',
     apply: f.how_to_apply || '',
+    apply_url: f.application_url || '',
     badges: normBadges(f.quality_badges),
   };
 }
@@ -128,6 +194,7 @@ function mapJob(rec, idx, instLookup) {
     instRecs.forEach(rec => {
       const slug = instSlug(rec);
       instLookup[rec.id] = slug;
+      instLookup[slug] = slug; // also map slug → slug so text-based institution refs work
       institutions[slug] = mapInstitution(rec);
     });
     console.log(`   ${instRecs.length}개 기관`);
@@ -145,6 +212,23 @@ function mapJob(rec, idx, instLookup) {
       `var jobs = ${JSON.stringify(jobs, null, 2)};\n`;
     fs.writeFileSync(out, content, 'utf8');
     console.log(`✅ data.js 저장 완료 (${content.length} bytes, ${jobRecs.length}공고 + ${instRecs.length}기관)`);
+
+    // Events 테이블은 선택사항 — 없으면 빈 배열로 진행
+    console.log('📥 Events 가져오는 중...');
+    let events = [];
+    try {
+      const eventRecs = await fetchAll(EVENTS_TABLE);
+      events = eventRecs.map((rec, idx) => mapEvent(rec, idx));
+      console.log(`   ${events.length}개 행사`);
+    } catch (e) {
+      console.log(`   ⚠️  Events 테이블 없음 또는 접근 불가 — 빈 events.js 생성. (${e.message})`);
+    }
+    const eventsOut = path.join(__dirname, '..', 'events.js');
+    const eventsContent =
+      `// events.js — Airtable에서 자동 생성됨 (${new Date().toISOString()})\n` +
+      `var events = ${JSON.stringify(events, null, 2)};\n`;
+    fs.writeFileSync(eventsOut, eventsContent, 'utf8');
+    console.log(`✅ events.js 저장 완료 (${events.length}건)`);
   } catch (e) {
     console.error('❌ 빌드 실패:', e.message);
     process.exit(1);

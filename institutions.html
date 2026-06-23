@@ -79,48 +79,6 @@
     border-radius: 8px;
   }
 
-  /* Construction banner */
-  .construction-banner {
-    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-    border-bottom: 1px solid #FCD34D;
-    padding: 18px 24px;
-  }
-  .construction-banner .inner {
-    max-width: 720px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .cone-icon {
-    display: block;
-    font-size: 32px;
-    margin-bottom: 8px;
-  }
-  .construction-text strong {
-    display: block;
-    font-size: 15px;
-    font-weight: 700;
-    color: #78350F;
-    margin-bottom: 4px;
-  }
-  .construction-text p {
-    font-size: 13.5px;
-    color: #92400E;
-    line-height: 1.55;
-  }
-
-  /* Preview tag (붙어다님) */
-  .preview-tag {
-    display: inline-block;
-    padding: 3px 10px;
-    background: var(--text);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    border-radius: 4px;
-    letter-spacing: 0.04em;
-    margin-bottom: 16px;
-  }
-
   /* Hero */
   .hub-hero {
     background: linear-gradient(180deg, #FFFFFF 0%, var(--bg) 100%);
@@ -344,41 +302,6 @@
   .ribbon-always { background: var(--accent); }
   .ribbon-irregular { background: var(--text-light); }
 
-  /* Coming-soon notice at bottom of preview */
-  .preview-footer {
-    text-align: center;
-    padding: 40px 24px;
-    background: var(--border-soft);
-    border-radius: 16px;
-    margin-bottom: 64px;
-  }
-  .preview-footer h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .preview-footer p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    max-width: 540px;
-    margin: 0 auto 20px;
-  }
-  .preview-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 22px;
-    background: var(--primary);
-    color: white;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: background 0.2s;
-  }
-  .preview-cta:hover { background: var(--primary-dark); }
-
   /* Hero search (big) */
   .hero-search {
     max-width: 600px;
@@ -471,8 +394,6 @@
 
   /* Responsive */
   @media (max-width: 800px) {
-    .construction-banner .inner { flex-direction: column; align-items: flex-start; text-align: left; }
-    .cone-icon { font-size: 28px; }
     .inst-stats { grid-template-columns: repeat(2, 1fr); }
     .hub-hero h1 { font-size: 26px; }
     nav { display: none; }
@@ -502,7 +423,6 @@
 
 
   /* === 실데이터 전환 + 간결/정렬된 카드 === */
-  .construction-banner, .preview-footer { display:none !important; }
   .inst-grid { align-items: stretch; }
   .inst-card { min-height: 92px; display:flex; flex-direction:column; justify-content:center; }
   .inst-card .inst-name { word-break: keep-all; }
@@ -874,13 +794,17 @@
 document.write('<script src="data.js?v=' + Date.now() + '"><\/script>');
 </script>
 <script>
-function deadlineText(d) {
+function deadlineText(d, job) {
+  if (job && !job.deadline_date && !isClosedJob(job)) return { text: '상시 모집', urgent: false };
   if (d <= 0) return { text: '마감', urgent: false };
   if (d <= 7) return { text: `D-${d}`, urgent: true };
   return { text: `D-${d}`, urgent: false };
 }
 function isClosedJob(job) {
   return !!(job && (job.closed || ['closed', '마감', '모집완료', '접수마감', 'completed', 'done'].includes(String(job.status || '').toLowerCase())));
+}
+function isActiveJob(job) {
+  return !!(job && job.visible_in_jobs !== false && !isClosedJob(job));
 }
 function countryIcon(c) {
   const map = { '한국': '🇰🇷', '미국': '🇺🇸', '일본': '🇯🇵', '캐나다': '🇨🇦', '호주': '🇦🇺', '베트남': '🇻🇳', '영국': '🇬🇧', '온라인': '💻' };
@@ -927,7 +851,7 @@ function formatRichText(s) {
 function openJob(id) {
   const job = jobs.find(j => j.id === id);
   const inst = institutions[job.inst];
-  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline);
+  const dl = isClosedJob(job) ? { text: '마감', urgent: false } : deadlineText(job.deadline, job);
   const content = document.getElementById('jobModalContent');
   content.innerHTML = `
     <button class="modal-close" onclick="closeModal('jobModal')">
@@ -1014,7 +938,7 @@ function openJob(id) {
 
 /* === 기관 모달 (공고별 카드 클릭 → openJob, 정정 제보 메일) === */
 function jobMini(j){
-  var act=j.deadline>0&&!isClosedJob(j);var dl=isClosedJob(j)?{text:'마감',urgent:false}:deadlineText(j.deadline);
+  var act=isActiveJob(j);var dl=isClosedJob(j)?{text:'마감',urgent:false}:deadlineText(j.deadline,j);
   var qual=[j.degree,j.experience].filter(Boolean).map(escapeHtml).join(' · ');
   var line2='💰 '+escapeHtml(j.salary||'미기재')+(qual?(' · 🎓 '+qual):'');
   return '<div class="history-item'+(act?' active-job':'')+'" onclick="closeModal(\'instModal\'); openJob('+j.id+')">'+
@@ -1080,8 +1004,8 @@ function bindInstTip(){
 function openInstitution(key){
   var inst=institutions[key];if(!inst)return;
   var all=jobs.filter(function(j){return j.inst===key});
-  var active=all.filter(function(j){return j.deadline>0&&!isClosedJob(j)});
-  var past=all.filter(function(j){return j.deadline<=0||isClosedJob(j)});
+  var active=all.filter(isActiveJob);
+  var past=all.filter(function(j){return !isActiveJob(j)});
   var foreign=all.some(function(j){return j.visa});
   var chip=foreign?'<div class="chips"><span class="fchip">🌏 외국인 지원 가능</span></div>':'';
   var actHtml=active.length?active.map(jobMini).join(''):'<p style="color:var(--text-light);font-size:13px;">현재 진행 중인 공고가 없어요. 새 공고가 올라오면 여기에 떠요.</p>';
@@ -1107,9 +1031,7 @@ function openInstitution(key){
 function closeModal(id){var el=document.getElementById(id);if(!el)return;el.classList.remove('show');if(!document.querySelector('.modal-overlay.show'))document.body.style.overflow=''}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal('jobModal');closeModal('instModal');}});
 
-function showSample() {
-  alert('이 기관의 참고 페이지가 열릴 자리예요 🏫\n\n실제 운영에서는 다음 정보가 모두 정리돼서 나와요:\n\n• 과거 채용 시기 (월별 분포)\n• 시급/월급 레인지 변화\n• 자주 요구하는 자격 / 우대 사항\n• 모집 기간(공고 게시 → 마감) 패턴\n• 지금까지의 모든 채용 이력 목록\n• 다음 채용 예상 시기\n\n채용공고를 찾는 곳이 아니라, "이 기관은 어떤 곳이고 어떻게 준비해야 할까"를 파악하는 참고 페이지예요.\n\n시안에서는 홈 화면에서 기관명을 클릭하면 이 페이지의 기본형을 미리 볼 수 있어요.');
-}
+function showSample() {}
 
 // === Search & filter ===
 const searchInput = document.getElementById('searchInput');
@@ -1131,7 +1053,7 @@ const cardData = cards.map(card => ({
 function applyFilter() {
   const q = searchInput.value.toLowerCase().trim();
   let visible = 0;
-  cardData.forEach(({el, name, meta, patterns}) => {
+  cardData.forEach(({el, name, meta, type, patterns}) => {
     const matchesQuery = !q || name.includes(q) || meta.includes(q) || patterns.includes(q);
     let matchesCategory = true;
     if (activeCategory !== 'all') {
@@ -1155,7 +1077,7 @@ document.querySelectorAll('.chip').forEach(chip => {
   });
 });
 
-// Sort (demo)
+// Sort
 document.getElementById('sortSelect').addEventListener('change', e => {
   const sort = e.target.value;
   const grid = document.getElementById('instGrid');
