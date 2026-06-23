@@ -811,16 +811,6 @@
   </div>
 </header>
 
-<div class="construction-banner">
-  <div class="inner">
-    <span class="cone-icon">🚧</span>
-    <div class="construction-text">
-      <strong>이 페이지는 공사 중이에요</strong>
-      <p>기관 정보가 100곳 이상 모이면 정식 오픈할 예정이에요. 아래는 어떤 화면이 될지 미리 보여드리는 예시입니다.</p>
-    </div>
-  </div>
-</div>
-
 <section class="hub-hero">
   <div class="hub-hero-inner">
     <span class="hub-eyebrow">🏫 기관 정보</span>
@@ -828,7 +818,7 @@
     <p>기관별 채용 시기·시급 레인지·요구 자격 같은 패턴을 정리했어요.</p>
     <div class="hero-search">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" placeholder="예: 서울대학교, 세종학당, UCLA, 와세다대학...">
+      <input type="text" id="searchInput" placeholder="예: 김해대학교, 에스네에듀케이션, 서강대학교, 온라인...">
       <button class="hero-search-btn" onclick="document.getElementById('searchInput').focus()">검색</button>
     </div>
   </div>
@@ -851,7 +841,7 @@
   </div>
 
   <div class="inst-toolbar">
-    <div class="meta"><strong id="resultCount">12</strong>곳의 기관</div>
+    <div class="meta"><strong id="resultCount">0</strong>곳의 기관</div>
     <select class="sort-select" id="sortSelect">
       <option value="alpha">가나다순</option>
       <option value="recent">최근 채용 활발한 순</option>
@@ -859,19 +849,13 @@
     </select>
   </div>
 
-  <div class="inst-grid" id="instGrid">
+  <div class="inst-grid" id="instGrid"></div>
 
   <div class="empty-state" id="emptyState">
     <div class="empty-icon">🔍</div>
     <h3>찾으시는 기관이 아직 등록되어 있지 않아요</h3>
     <p>K-Teacher Jobs는 아직 기관 데이터를 모으는 중이에요. 알고 계신 기관이 빠져 있다면 알려주세요!</p>
     <a href="about.html#feedback" class="empty-cta">의견 보내기 →</a>
-  </div>
-
-  <div class="preview-footer">
-    <h3>🚧 진짜로는 이렇게 됩니다</h3>
-    <p>실제 운영 시점에는 등록 기관 100곳 이상, 누적 공고 500건 이상의 데이터가 쌓일 예정이에요. 그때부터 이 페이지가 진짜 가치를 발휘해요 — “미국에서 한국어 강의하는 대학은 어디 어디지?”, “세종학당은 보통 언제 채용하지?” 같은 궁금증을 풀 수 있어요. 그때까진 채용공고에서 기관명을 누르면 기관별 페이지를 볼 수 있어요.</p>
-    <a href="index.html" class="preview-cta">채용공고로 돌아가기 →</a>
   </div>
 
 </div>
