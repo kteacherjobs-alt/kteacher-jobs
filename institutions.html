@@ -847,7 +847,7 @@
     <button class="chip" data-cat="기업교육·출강">기업교육·출강</button>
     <button class="chip" data-cat="해외 파견">해외 파견</button>
     <button class="chip" data-cat="국제학교">국제학교</button>
-    <button class="chip" data-cat="온라인 플랫폼">온라인</button>
+    <button class="chip" data-cat="온라인">온라인</button>
   </div>
 
   <div class="inst-toolbar">
@@ -1018,7 +1018,7 @@ function openJob(id) {
     var inst=institutions[key];var cnt=jobsArr.filter(function(j){return j.inst===key}).length;
     var logo=esc((String(inst.name||'·').trim().charAt(0))||'·');
     var meta=flag(inst.country)+' '+esc(inst.city||inst.country||'')+' · 🏫 '+esc(inst.type||'');
-    return '<div class="inst-card" data-key="'+esc(key)+'" style="cursor:pointer">'+
+    return '<div class="inst-card" data-key="'+esc(key)+'" data-type="'+esc(inst.type||'')+'" style="cursor:pointer">'+
       '<div class="inst-card-top"><div class="inst-logo">'+logo+'</div>'+
       '<div class="inst-info"><div class="inst-name">'+esc(inst.name)+'</div><div class="inst-meta">'+meta+'</div></div></div>'+
       '<div class="inst-footer-line" style="display:none"><span>누적 '+cnt+'건</span><span class="last">'+esc(recentLabel(key))+'</span></div></div>';
@@ -1139,6 +1139,7 @@ const cardData = cards.map(card => ({
   el: card,
   name: card.querySelector('.inst-name').textContent.toLowerCase(),
   meta: card.querySelector('.inst-meta').textContent.toLowerCase(),
+  type: card.dataset.type || '',
   // 패턴 row 안 텍스트도 검색 대상에 포함
   patterns: Array.from(card.querySelectorAll('.pat-value')).map(e => e.textContent.toLowerCase()).join(' '),
 }));
@@ -1150,7 +1151,7 @@ function applyFilter() {
     const matchesQuery = !q || name.includes(q) || meta.includes(q) || patterns.includes(q);
     let matchesCategory = true;
     if (activeCategory !== 'all') {
-      matchesCategory = meta.includes(activeCategory);
+      matchesCategory = type === activeCategory;
     }
     const show = matchesQuery && matchesCategory;
     el.style.display = show ? '' : 'none';
