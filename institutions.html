@@ -886,7 +886,9 @@
   </div>
 </footer>
 
-<script src="data.js"></script>
+<script>
+document.write('<script src="data.js?v=' + Date.now() + '"><\/script>');
+</script>
 <script>
 function deadlineText(d) {
   if (d <= 0) return { text: '마감', urgent: false };
