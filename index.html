@@ -1148,8 +1148,8 @@
     <div class="results-header">
       <div class="results-count">총 <strong id="resultCount">0</strong>개의 공고</div>
       <select class="sort-select" id="sortSelect">
-        <option value="latest">최신순</option>
         <option value="deadline">마감 임박순</option>
+        <option value="latest">최신순</option>
       </select>
     </div>
     <div class="grid" id="grid"></div>
@@ -1751,11 +1751,36 @@ function recalcSidebarCounts() {
   });
 }
 
-// === 위쪽 칩은 항상 표시 (기관 둘러보기와 일관성) ===
-// 데이터가 0건이어도 칩을 숨기지 않습니다.
 function recalcChipCounts() {
-  // 칩 카테고리는 사이트의 정보 구조이므로 데이터 유무와 무관하게 고정 노출.
-  // (모드 토글 시 강사/기타 직군 그룹 전환은 별도 로직에서 처리)
+  const baseJobs = jobs.filter(isVisibleJob);
+  document.querySelectorAll('.chip[data-modegroup]').forEach(chip => {
+    const quick = chip.dataset.quick;
+    let count = 0;
+
+    if (quick === 'all') {
+      count = baseJobs.filter(job => {
+        if (chip.dataset.modegroup === 'teacher') return job.category === '강사';
+        if (chip.dataset.modegroup === 'other') return job.category !== '강사';
+        return true;
+      }).length;
+    } else if (quick && quick.startsWith('type:')) {
+      const type = quick.slice(5);
+      count = baseJobs.filter(job => job.category === '강사' && job.type === type).length;
+    } else {
+      const categoryByQuick = {
+        admin: '행정·운영',
+        publishing: '교재·출판',
+        content: '콘텐츠 제작',
+        research: '연구·평가',
+        policy: '정책·국제교류',
+      };
+      count = baseJobs.filter(job => job.category === categoryByQuick[quick]).length;
+    }
+
+    chip.dataset.count = String(count);
+    chip.dataset.zero = quick !== 'all' && count === 0 ? '1' : '0';
+    chip.style.display = chip.dataset.modegroup === currentMode && chip.dataset.zero !== '1' ? '' : 'none';
+  });
 }
 
 // === 사이드바 input 이벤트 위임 (동적 생성 대응) ===

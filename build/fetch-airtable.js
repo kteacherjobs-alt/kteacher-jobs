@@ -87,6 +87,12 @@ function normalizeInstitutionType(value) {
   const compact = text.replace(/[\s·-]/g, '');
   return TYPE_ALIASES[compact] || text;
 }
+function normalizeJobCategory(value) {
+  const text = String(value || '').trim();
+  const compact = text.replace(/\s+/g, '');
+  if (!compact || ['채용', '강사채용', '한국어강사'].includes(compact)) return '강사';
+  return text;
+}
 function hasSupport(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return false;
@@ -160,7 +166,7 @@ function mapJob(rec, idx, instLookup) {
     region: f.region || '',
     type: normalizeInstitutionType(f.institution_type || ''),
     employment: f.employment_type || '',
-    category: f.job_category || '강사',
+    category: normalizeJobCategory(f.job_category),
     mode: f.work_mode || '대면',
     salary: f.salary_text || '협의',
     salaryDisclosed: !!f.salary_disclosed,
