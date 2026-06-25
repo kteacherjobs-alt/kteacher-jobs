@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1F2937">
 <title>K-Teacher Jobs · 한국어교육 채용정보 허브</title>
 <meta name="google-site-verification" content="2KTkiuJpuJAvTd_PjW2RVSqkSHu0ucOYZuAfYNLPcqw" />
 <meta name="naver-site-verification" content="9e0532a26fdf59df7dd12854b00306912eefa3f0" />
@@ -1008,6 +1010,7 @@
   /* === Theme Switcher === */@media (max-width: 768px) {}
 
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -1517,6 +1520,12 @@ async function copyJobLink(id, button) {
   }
 }
 
+function toggleModalBookmark(id, button) {
+  toggleBookmark(id);
+  if (!button) return;
+  button.textContent = isBookmarked(id) ? '저장됨' : '공고 저장하기';
+}
+
 // === Job Modal ===
 function openJob(id, options = {}) {
   const job = jobs.find(j => j.id === id);
@@ -1575,7 +1584,7 @@ function openJob(id, options = {}) {
         ? `<a href="${job.apply_url}" target="_blank" rel="noopener noreferrer" class="primary-cta">원문 보기 / 지원하기 ↗</a>`
         : `<span class="primary-cta" style="opacity:0.5; cursor:not-allowed;" title="원문 링크가 등록되지 않았습니다. 위 '지원 방법' 안내를 참고해주세요.">원문 링크 없음</span>`
       }
-      <button type="button" class="secondary-cta" onclick="copyJobLink(${job.id}, this)">게시물 링크 복사</button>
+      <button type="button" class="secondary-cta" onclick="toggleModalBookmark(${job.id}, this)">${isBookmarked(job.id) ? '저장됨' : '공고 저장하기'}</button>
     </div>
   `;
   document.getElementById('jobModal').classList.add('show');

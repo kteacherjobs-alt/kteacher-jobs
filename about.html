@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1F2937">
 <title>소개 · 의견 · K-Teacher Jobs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -383,6 +385,36 @@
   .form-col { min-width: 0; text-align: left; }
   .form-col-right .form-group:last-of-type { margin-bottom: 16px; }
   .form-card .submit-btn { width: 100%; }
+  .feedback-card {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .feedback-card p {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .feedback-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 15px 24px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+  .feedback-cta:hover { background: var(--primary-dark); }
+  .feedback-note {
+    margin-top: 16px;
+    font-size: 12.5px;
+    color: var(--text-light);
+  }
   @media (max-width: 820px) {
     .form-card form {
       grid-template-columns: 1fr;
@@ -547,6 +579,7 @@
     nav { display: none; }
   }
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -575,8 +608,8 @@
   <div class="hub-hero-inner">
     <span class="hub-eyebrow">📖 소개 · 의견</span>
     <h1>K-Teacher Jobs 이야기</h1>
-    <p>이 사이트가 어떤 곳이고 어떻게 운영되는지 소개할게요.<br>그리고 함께 만들어가실 수 있는 방법도 알려드려요.</p>
-    <a href="#feedback" class="hero-cta">의견부터 바로 보내기 →</a>
+    <p>이 사이트가 어떤 곳이고 어떻게 운영되는지 소개할게요.<br>더 좋은 사이트로 만들어가기 위해 여러분의 의견과 제보를 기다리고 있어요.</p>
+    <a href="#feedback" class="hero-cta">의견보내기 · 제보하기 →</a>
   </div>
 </section>
 
@@ -589,29 +622,35 @@
       <div class="feature">
         <span class="feature-icon">🎯</span>
         <h3>한국어 강사 전용 분류</h3>
-        <p>근무지, 기관 유형, 고용 형태, 자격 요건, 비자 지원 여부까지 — 한국어 교육자에게 꼭 필요한 조건으로 정밀하게 필터링할 수 있어요.</p>
+        <p>근무지, 기관 유형, 고용 형태, 자격 요건 등 한국어 교육자에게 필요한 조건을 기준으로 살펴볼 수 있어요.</p>
       </div>
       <div class="feature">
         <span class="feature-icon">📊</span>
         <h3>기관별 채용 패턴</h3>
-        <p>각 기관이 언제, 어떤 자격으로, 어떤 시급에 채용해왔는지 한눈에 비교할 수 있어요. 다음 채용을 미리 준비하는 데 도움이 돼요.</p>
+        <p>기관별 공고를 모아 보며, 자주 나오는 직무와 요구 조건을 확인할 수 있어요. 다음 채용을 준비하는 데 참고가 됩니다.</p>
       </div>
       <div class="feature">
         <span class="feature-icon">📚</span>
-        <h3>커리어 자료실</h3>
-        <p>한국어 강사가 되는 법, 자격증, 비자, 이력서 작성 등 한국어 교육자에게 필요한 정보를 한곳에서 정리해서 제공해요.</p>
+        <h3>자료실</h3>
+        <p>한국어 강사로 일하며 쌓은 경험을 바탕으로 지원 준비와 수업 현장에 도움이 되는 내용을 하나씩 정리해가고 있어요.</p>
       </div>
+    </div>
+    <div class="data-policy">
+      <h4>📌 안내</h4>
+      <ul>
+        <li>K-Teacher Jobs는 아직 정보를 쌓아가는 중이에요. 기관별 이력과 자료실 콘텐츠는 새 공고와 제보를 바탕으로 계속 보완해가고 있어요.</li>
+      </ul>
     </div>
   </section>
 
   <section class="block">
     <h2>어떻게 운영되나요?</h2>
-    <p class="lead">한 명의 운영자가 직접 채용공고를 수집하고 검수합니다.</p>
+    <p class="lead">운영자가 직접 채용공고를 수집하고 검수합니다.</p>
     <div class="steps-grid">
       <div class="step">
         <span class="step-num">1</span>
-        <h3>매주 수집</h3>
-        <p>대학 한국어교육원, 세종학당, 해외 한국학과, 온라인 플랫폼의 채용 페이지를 매주 모니터링해요.</p>
+        <h3>정기적으로 수집</h3>
+        <p>대학 한국어교육원, 세종학당, 해외 한국학과, 온라인 플랫폼의 채용 페이지를 정기적으로 모니터링해요.</p>
       </div>
       <div class="step">
         <span class="step-num">2</span>
@@ -621,23 +660,27 @@
       <div class="step">
         <span class="step-num">3</span>
         <h3>발행·자동 관리</h3>
-        <p>새 공고는 등록 후 곧바로 노출되고, 마감된 공고는 자동으로 기관 페이지 이력으로 이동해요.</p>
+        <p>새 공고는 채용공고 메뉴에서 확인할 수 있고, 마감된 공고는 기관별 이력에서 모아볼 수 있어요.</p>
       </div>
     </div>
     <div class="data-policy">
       <h4>📌 데이터 정책</h4>
       <ul>
-        <li>모든 공고는 원문 출처와 함께 표시합니다</li>
-        <li>기관 요청 시 공고는 즉시 삭제됩니다</li>
+        <li>모든 공고는 원문 출처와 함께 표시합니다.</li>
+        <li>지원 전에는 반드시 원문 링크에서 최신 내용을 확인해 주세요.</li>
+        <li>관심 있는 공고는 카드의 책갈피 버튼이나 상세 화면의 공고 저장하기 버튼으로 저장하고, 화면 오른쪽 위 저장함에서 다시 볼 수 있어요.</li>
+        <li>책갈피는 사용자의 브라우저에만 저장됩니다.</li>
+        <li>기관 요청 시 공고는 즉시 삭제됩니다.</li>
       </ul>
     </div>
   </section>
 
   <section class="block">
     <div class="operator-card">
-      <p>한국어 강사에 특화된 채용 정보가 없어서 직접 만들기 시작한 1인 프로젝트예요.</p>
-      <p>부족한 부분은 사용자 의견 받아가며 천천히 키워가고 싶어요.</p>
-      <p>같은 길 걷고 계신 분들의 응원과 제보가 큰 힘이 됩니다.</p>
+      <p>한국어 강사로 일하며 정보를 찾고 준비하는 과정에서 여러 어려움을 경험했습니다.</p>
+      <p>같은 길을 걸어가는 분들이 조금 덜 헤매고, 필요한 정보를 더 쉽게 찾는 데 도움이 되었으면 하는 마음으로 이 사이트를 만들게 되었습니다.</p>
+      <p>혼자 운영하는 사이트라 아직 부족한 부분이 많지만, 개선할 점이나 더 필요한 정보에 대한 의견을 보내주시면 가능한 범위에서 최대한 반영해가겠습니다.</p>
+      <p>여러분의 의견이 사이트 운영에 큰 도움이 됩니다. 아래에서 자유롭게 의견과 제보를 남겨주세요.</p>
       <p class="signature">— 운영자 드림</p>
     </div>
   </section>
@@ -645,78 +688,14 @@
   <section class="block" id="feedback">
     <div class="form-section-head">
       <span class="hub-eyebrow">💌 의견 보내기</span>
-      <h2>여러분의 의견을 들려주세요</h2>
-      <p class="lead">제안, 아이디어, 부족한 점 — 운영자에게 직접 전달돼요.<br>작은 의견 하나가 사이트를 키워가는 큰 힘이 됩니다.</p>
+      <h2>의견과 제보를 남겨주세요</h2>
+      <p class="lead">채용공고 제보, 정보 오류, 자료실 주제 제안 등 무엇이든 편하게 보내주세요.</p>
     </div>
 
-    <div class="form-card">
-      <form id="feedbackForm">
-
-        <div class="form-col form-col-left">
-          <div class="form-group">
-            <label class="form-label">어떤 종류의 의견인가요?</label>
-            <div class="cat-options">
-              <label class="cat-option">
-                <input type="radio" name="category" value="job" checked>
-                <div>
-                  <strong>📢 새 채용공고 제보</strong>
-                  <span>이 사이트에 추가됐으면 하는 채용공고가 있어요</span>
-                </div>
-              </label>
-              <label class="cat-option">
-                <input type="radio" name="category" value="feature">
-                <div>
-                  <strong>🛠️ 사이트 기능 제안</strong>
-                  <span>이런 기능 있었으면 좋겠어요 · 이게 불편해요</span>
-                </div>
-              </label>
-              <label class="cat-option">
-                <input type="radio" name="category" value="content">
-                <div>
-                  <strong>📚 자료실 주제 제안</strong>
-                  <span>자료실에서 다뤄줬으면 하는 주제가 있어요</span>
-                </div>
-              </label>
-              <label class="cat-option">
-                <input type="radio" name="category" value="report">
-                <div>
-                  <strong>⚠️ 잘못된 정보 신고</strong>
-                  <span>채용공고나 기관 정보에 오류가 있어요</span>
-                </div>
-              </label>
-              <label class="cat-option">
-                <input type="radio" name="category" value="other">
-                <div>
-                  <strong>💬 자유 의견</strong>
-                  <span>그 외 자유로운 한 마디</span>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-col form-col-right">
-          <div class="form-group">
-            <label class="form-label" for="msg">내용</label>
-            <textarea id="msg" placeholder="자유롭게 작성해주세요. 채용공고 제보라면 기관명, 직무, 마감일, 원문 링크를 함께 알려주시면 큰 도움이 돼요."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="email">이메일 (선택)</label>
-            <input type="email" id="email" placeholder="답변이 꼭 필요한 내용이라면 남겨주세요">
-            <p class="form-helper">기관 담당자거나 협업·제휴처럼 회신이 필요한 경우에 입력해주세요. 일반 의견은 회신이 어려울 수 있어요. 입력하지 않으셔도 의견은 잘 전달돼요.</p>
-          </div>
-
-          <div class="form-group">
-            <label class="checkbox-line">
-              <input type="checkbox" id="anon">
-              <span>익명으로 보내기</span>
-            </label>
-          </div>
-
-          <button type="submit" class="submit-btn">의견 보내기</button>
-        </div>
-      </form>
+    <div class="form-card feedback-card">
+      <p>Google Forms로 연결됩니다. 이메일 주소와 Google 계정은 응답에 포함되지 않아요.</p>
+      <a class="feedback-cta" href="https://docs.google.com/forms/d/e/1FAIpQLScxWQoroJFN-kGSedFb3Gihx3ru1RCb0C72tQIT49QPi0pDrg/viewform" target="_blank" rel="noopener noreferrer">의견 남기기</a>
+      <div class="feedback-note">폼에는 긴 글을 쓸 수 있는 입력칸 하나만 있어요.</div>
     </div>
 
     <div class="reply-info">
@@ -741,26 +720,6 @@
     <a href="#feedback">의견 보내기</a>
   </div>
 </footer>
-
-<script>
-document.getElementById('feedbackForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const cat = document.querySelector('input[name="category"]:checked').nextElementSibling.querySelector('strong').textContent;
-  const msg = document.getElementById('msg').value.trim();
-  const email = document.getElementById('email').value.trim();
-  if (!msg) {
-    alert('내용을 입력해주세요.');
-    return;
-  }
-  const subject = `[K-Teacher Jobs 의견] ${cat}`;
-  const body =
-    `[카테고리] ${cat}\n\n` +
-    `[내용]\n${msg}\n\n` +
-    (email ? `[회신용 이메일] ${email}\n` : '');
-  const mailto = `mailto:jhkim234@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailto;
-});
-</script>
 
 </body>
 </html>
